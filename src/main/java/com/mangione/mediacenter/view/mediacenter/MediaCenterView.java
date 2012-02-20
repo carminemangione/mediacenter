@@ -21,15 +21,16 @@ public class MediaCenterView extends JFrame {
         pack();
 
         setFullScreen();
-        setVisible(true);
     }
 
     private void setFullScreen() {
+        setState(Frame.NORMAL);
         if (!"true".equalsIgnoreCase(System.getProperty("debug"))) {
             graphicsDevice.setFullScreenWindow(this);
         } else {
             setSize(500, 500);
         }
+        setVisible(true);
     }
 
 
@@ -51,9 +52,7 @@ public class MediaCenterView extends JFrame {
     }
 
     public void restoreWindow() {
-        setState(Frame.NORMAL);
         setFullScreen();
-        setVisible(true);
     }
 
 

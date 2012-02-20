@@ -10,7 +10,7 @@ import java.io.File;
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
 public abstract class VideoFile implements Comparable<VideoFile> {
-    private static final ImageIcon IMAGE_NOT_FOUND_ICON = new ImageIcon(VideoFile.class.getClassLoader().getResource("blankimage.jpeg"));
+    private static final ImageIcon IMAGE_NOT_FOUND_ICON = new ImageIcon(VideoFile.class.getClassLoader().getResource("mediaplayerresoruces/blankimage.jpeg"));
 
     private final File currentDirectory;
     private final File imdbFile;

@@ -34,7 +34,7 @@ public class ManageVideoDirectoriesView extends JDialog {
         scrollPane.setPreferredSize(new Dimension(400, 300));
         add(scrollPane, BorderLayout.CENTER);
 
-        ImageIcon icon = new ImageIcon(ManageVideoDirectoriesView.class.getClassLoader().getResource("48px-Crystal_Clear_action_edit_add.png"));
+        ImageIcon icon = new ImageIcon(ManageVideoDirectoriesView.class.getClassLoader().getResource("mediaplayerresoruces/48px-Crystal_Clear_action_edit_add.png"));
         JButton addButton = new JButton(icon);
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -53,7 +53,7 @@ public class ManageVideoDirectoriesView extends JDialog {
         });
 
         JButton removeButton = new JButton(new ImageIcon(
-                ManageVideoDirectoriesView.class.getClassLoader().getResource("48px-Crystal_Clear_action_edit_remove.png")));
+                ManageVideoDirectoriesView.class.getClassLoader().getResource("mediaplayerresoruces/48px-Crystal_Clear_action_edit_remove.png")));
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -66,7 +66,7 @@ public class ManageVideoDirectoriesView extends JDialog {
         });
 
         JButton moviesButton = new JButton(new ImageIcon(
-                ManageVideoDirectoriesView.class.getClassLoader().getResource("48px-Crystal_Clear_app_clean.png").getFile()));
+                ManageVideoDirectoriesView.class.getClassLoader().getResource("mediaplayerresoruces/48px-Crystal_Clear_app_clean.png").getFile()));
         moviesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

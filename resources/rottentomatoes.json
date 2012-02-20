@@ -1,0 +1,44 @@
+{"id":16984,"title":"Eating Out","year":2004,"genres":["Gay & Lesbian","Comedy"],"mpaa_rating":"Unrated","runtime":90,
+    "critics_consensus":"The cast recites lines of forced wit that aren't funny, and the clunky plot has too many contrivances.","release_dates":{
+    "theater":"2004-02-14",
+    "dvd":"2005-07-26"
+},"ratings":{
+    "critics_rating":"Rotten",
+    "critics_score":16,
+    "audience_rating":"Upright",
+    "audience_score":61
+},"synopsis":"","posters":{
+    "thumbnail":"http://content8.flixster.com/movie/28/57/285710_mob.jpg",
+    "profile":"http://content8.flixster.com/movie/28/57/285710_pro.jpg",
+    "detailed":"http://content8.flixster.com/movie/28/57/285710_det.jpg",
+    "original":"http://content8.flixster.com/movie/28/57/285710_ori.jpg"
+},"abridged_cast":[
+    {
+        "name":"Scott Lunsford"
+    },
+    {
+        "name":"Jim Verraros"
+    },
+    {
+        "name":"Emily Stiles"
+    },
+    {
+        "name":"Ryan Carnes"
+    },
+    {
+        "name":"Rebekah Kochan"
+    }
+],"abridged_directors":[
+    {
+        "name":"Q. Allan Brocka"
+    }
+],"studio":"Ariztical Entertainment","alternate_ids":{
+    "imdb":"0372884"
+},"links":{
+    "self":"http://api.rottentomatoes.com/api/public/v1.0/movies/16984.json",
+    "alternate":"http://www.rottentomatoes.com/m/eating_out/",
+    "cast":"http://api.rottentomatoes.com/api/public/v1.0/movies/16984/cast.json",
+    "clips":"http://api.rottentomatoes.com/api/public/v1.0/movies/16984/clips.json",
+    "reviews":"http://api.rottentomatoes.com/api/public/v1.0/movies/16984/reviews.json",
+    "similar":"http://api.rottentomatoes.com/api/public/v1.0/movies/16984/similar.json"
+}}

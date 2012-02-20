@@ -1,5 +1,11 @@
 package com.mangione.mediacenter.model;
 
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.prefs.Preferences;
 
 public class VideoDirectories {
@@ -19,23 +25,26 @@ public class VideoDirectories {
     }
 
     public String[] getVideoDirectories() {
+        CSVReader csvReader = new CSVReader(new StringReader(preferences.get(VIDEO_DIRECTORIES, "")));
         String[] directories = new String[0];
-        String directoriesString = preferences.get(VIDEO_DIRECTORIES, "");
-        if (directoriesString.length() > 0) {
-            directories = directoriesString.split(",");
+        try {
+            directories = csvReader.readNext();
+        } catch (IOException e) {
+            //ignored
         }
         return directories;
     }
 
     public void setDirectories(String[] directories) {
-        StringBuilder commaDelimitedDirectories = new StringBuilder();
-        for (String directory : directories) {
-            if (directory.length() > 0) {
-                commaDelimitedDirectories.append(directory).append(",");
-            }
+        final StringWriter stringWriter = new StringWriter();
+        CSVWriter writer = new CSVWriter(stringWriter);
+        writer.writeNext(directories);
+        try {
+            writer.close();
+        } catch (IOException e) {
+            //ignored
         }
-        if (commaDelimitedDirectories.length() > 1) {
-            preferences.put(VIDEO_DIRECTORIES, commaDelimitedDirectories.substring(0, commaDelimitedDirectories.length() - 1));
-        }
+        final String csvDirectories = stringWriter.toString();
+        preferences.put(VIDEO_DIRECTORIES, csvDirectories);
     }
 }

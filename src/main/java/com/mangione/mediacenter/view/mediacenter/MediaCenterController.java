@@ -143,9 +143,9 @@ public class MediaCenterController implements MediaCenterControllerInterface {
                 panelWithBorder.zoomToLetter(keyPressed);
             } else {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
+                    killCurrentMPlayerX();
                     VideoFile videoFile = panelWithBorder.getCurrentVideoFile();
-                    String command = videoFile.getLaunchMovieCommand();
-                    launchCommand(command);
+                    launchCommand(videoFile.getLaunchMovieCommand());
 
 //                    mediaCenterView.windowToBack(true);
 //                    new MediaPlayer(command, videoFile.getApplicationName(), MediaCenterController.this);
@@ -205,6 +205,10 @@ public class MediaCenterController implements MediaCenterControllerInterface {
                 lastEventWasKeyPressed = true;
             }
         }
+    }
+
+    private void killCurrentMPlayerX() {
+
     }
 
 }

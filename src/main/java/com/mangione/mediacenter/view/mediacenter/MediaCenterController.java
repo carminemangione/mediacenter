@@ -1,6 +1,5 @@
 package com.mangione.mediacenter.view.mediacenter;
 
-import com.mangione.mediacenter.model.MediaPlayer;
 import com.mangione.mediacenter.model.VideoDirectories;
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
@@ -10,6 +9,9 @@ import com.mangione.mediacenter.view.movieimagegrid.MovieImageGrid;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * User: carminemangione
@@ -66,7 +68,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     @Override
     public void showMovieDetails(VideoFile selectedVideoFile, int xPos, int yPos) {
         try {
-            imdbDetailsController = new ImdbDetailsController(selectedVideoFile, panelWithBorder, xPos, yPos);
+//            imdbDetailsController = new ImdbDetailsController(selectedVideoFile, panelWithBorder, xPos, yPos);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,7 +78,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
     @Override
     public void killMovieDetails() {
-        imdbDetailsController.killDetails();
+//        imdbDetailsController.killDetails();
 
     }
 
@@ -133,7 +135,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
         @Override
         public void keyPressed(KeyEvent keyEvent) {
             if (imdbDetailsController != null) {
-                imdbDetailsController.killDetails();
+//                imdbDetailsController.killDetails();
                 imdbDetailsController = null;
             }
             char keyPressed = keyEvent.getKeyChar();
@@ -142,13 +144,40 @@ public class MediaCenterController implements MediaCenterControllerInterface {
             } else {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     VideoFile videoFile = panelWithBorder.getCurrentVideoFile();
-                    String command[] = videoFile.getLaunchMovieCommand();
-                    mediaCenterView.windowToBack(true);
-                    new MediaPlayer(command, videoFile.getApplicationName(), MediaCenterController.this);
+                    String command = videoFile.getLaunchMovieCommand();
+                    launchCommand(command);
+
+//                    mediaCenterView.windowToBack(true);
+//                    new MediaPlayer(command, videoFile.getApplicationName(), MediaCenterController.this);
                 } else {
                     scrollOneLineOrHandleContinual(keyEvent);
                 }
             }
+        }
+
+        private Thread launchCommand(final String command) {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Process process = Runtime.getRuntime().exec(command);
+                        InputStream istrm = process.getInputStream();
+                        InputStreamReader istrmrdr = new InputStreamReader(istrm);
+                        BufferedReader buffrdr = new BufferedReader(istrmrdr);
+
+                        String data;
+                        while ((data = buffrdr.readLine()) != null) {
+                            System.out.println(data);
+                        }
+//                        process.waitFor();
+//                        mediaCenterControllerInterface.playerFinishedPlaying();
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            thread.start();
+            return thread;
         }
 
         @Override

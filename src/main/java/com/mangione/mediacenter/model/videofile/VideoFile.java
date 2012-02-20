@@ -9,25 +9,25 @@ import java.io.File;
  * Time: 10:32:53 PM
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
-public abstract class VideoFile implements Comparable<VideoFile> {
+public  class VideoFile implements Comparable<VideoFile> {
     private static final ImageIcon IMAGE_NOT_FOUND_ICON = new ImageIcon(VideoFile.class.getClassLoader().getResource("blankimage.jpeg"));
 
-    private final File currentDirectory;
-    private final File imdbFile;
+    private final String fullVideoPath;
     private final String videoName;
 
     private File imageFile;
     private ImageIcon imageIcon;
 
 
-    public VideoFile(File currentDirectory, String videoName, File imdbFile) {
-        this.currentDirectory = currentDirectory;
-        this.imdbFile = imdbFile;
+    public VideoFile(File currentDirectory, String videoName) {
+        fullVideoPath = new File(currentDirectory, videoName).getAbsolutePath();
         this.videoName = makeVideoNameDecent(videoName);
     }
 
-    public File getCurrentDirectory() {
-        return currentDirectory;
+    public VideoFile(File currentDirectory) {
+        final File dvdMovieDirectory = currentDirectory.getParentFile();
+        fullVideoPath = dvdMovieDirectory.getAbsolutePath();
+        this.videoName = makeVideoNameDecent(dvdMovieDirectory.getName());
     }
 
     public ImageIcon getImageIcon() {
@@ -51,12 +51,16 @@ public abstract class VideoFile implements Comparable<VideoFile> {
         this.imageFile = imageFile;
     }
 
-    public String getIMDBvideoName() {
-        return videoName.replaceAll(" ", "+");
-    }
+    public String getLaunchMovieCommand() {
+//        String[] command = {"/Applications/VLC.app/Contents/MacOS/VLC",
+//                "file://" + getCurrentDirectory() + "/" + mp4FileName,
+//                "--fullscreen", "--video-on-top", "--force-dolby-surround=1"};
 
-    public abstract String[] getLaunchMovieCommand();
-    public abstract String getApplicationName();
+        //        for (String s : command) {
+//            System.out.print(s.replace(" ", "\\ ") + " ");
+//        }
+        return String.format("open -a MPlayerX.app --args -file %s", escapeFileName(fullVideoPath));
+    }
 
     @Override
     public int compareTo(VideoFile videoFile) {
@@ -96,7 +100,7 @@ public abstract class VideoFile implements Comparable<VideoFile> {
         return mixedCaseWithPeriods;
     }
 
-    public File getImdbFile() {
-        return imdbFile;
+    protected String escapeFileName(String filename) {
+        return filename.replace(" ", "\\ ");
     }
 }

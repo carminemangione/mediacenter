@@ -59,10 +59,9 @@ public class VideoFiles {
             for (File file : files) {
                 String name = file.getName();
                 if (name.endsWith(".mkv") || name.endsWith(".mp4") || name.endsWith(".m4v")) {
-                    foundFile = new Mp4VideoFile(currentDirectory, name, new File(currentDirectory, "imdb.properties"));
-
+                    foundFile = new VideoFile(currentDirectory, name);
                 } else if (name.contains("VIDEO_TS")) {
-                    foundFile = new DvdVideoFile(currentDirectory, new File(currentDirectory, "imdb.properties"));
+                    foundFile = new VideoFile(currentDirectory);
                 } else if (name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".gif")) {
                     imageFile = file;
                 } else {

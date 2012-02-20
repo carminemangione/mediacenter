@@ -1,11 +1,8 @@
 package com.mangione.mediacenter.view.imdbDetails;
 
-import com.mangione.mediacenter.model.imdb.IMDBSearchResult;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * User: carminemangione
@@ -33,21 +30,21 @@ public class ImdbDetailsPanel extends JPanel {
         parent.repaint();
     }
 
-    public synchronized void imdbResultsRetrieved(final IMDBSearchResult imdbSearchResult) {
-        System.out.println("imdbSearchResult = " + imdbSearchResult);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                ImdbDetailsPanel.this.remove(loadingPanel);
-                add(new JLabel("FUCKME"), BorderLayout.NORTH);
-                JTextArea description = new JTextArea(imdbSearchResult.getDescription());
-                add(description, BorderLayout.CENTER);
-                invalidate();
-                validate();
-                repaint();
-            }
-        });
-    }
+//    public synchronized void imdbResultsRetrieved(final IMDBSearchResult imdbSearchResult) {
+//        System.out.println("imdbSearchResult = " + imdbSearchResult);
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                ImdbDetailsPanel.this.remove(loadingPanel);
+//                add(new JLabel("FUCKME"), BorderLayout.NORTH);
+//                JTextArea description = new JTextArea(imdbSearchResult.getDescription());
+//                add(description, BorderLayout.CENTER);
+//                invalidate();
+//                validate();
+//                repaint();
+//            }
+//        });
+//    }
 
     @Override
     public void paint(Graphics graphics) {

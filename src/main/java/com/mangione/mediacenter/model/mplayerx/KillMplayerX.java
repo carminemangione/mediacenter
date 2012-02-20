@@ -1,5 +1,6 @@
-package com.mangione.mediacenter.model.process;
+package com.mangione.mediacenter.model.mplayerx;
 
+import com.mangione.mediacenter.model.process.BlockingExec;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class KillMplayerX extends BlockingExec {
         super("ps -e");
     }
 
-    protected void processFinished(String[] output) {
+    protected void processFinished(Process proces, String[] output) {
         List<String> processesToKill = new ArrayList<String>();
         for (String psLine : output) {
             if(psLine.contains("MPlayerX")){
@@ -27,8 +28,7 @@ public class KillMplayerX extends BlockingExec {
             final String killCommand = "kill -9 " + StringUtils.join(processesToKill, " ");
             new BlockingExec(killCommand){
                 @Override
-                protected void processFinished(String[] output) {
-                    System.out.println(killCommand);
+                protected void processFinished(Process proces, String[] output) {
                 }
             };
         }

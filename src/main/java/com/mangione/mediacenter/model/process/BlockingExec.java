@@ -9,18 +9,19 @@ public abstract class BlockingExec {
 
     public BlockingExec(final String command) {
         final List<String> outputLines = new ArrayList<String>();
+        final Process[] process = {null};
         final Thread execThread = new Thread() {
             @Override
             public void run() {
                 try {
-                    Process process = Runtime.getRuntime().exec(command);
-                    BufferedReader buffrdr = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    process[0] = Runtime.getRuntime().exec(command);
+                    BufferedReader buffrdr = new BufferedReader(new InputStreamReader(process[0].getInputStream()));
 
                     String nextOutputLine;
                     while ((nextOutputLine = buffrdr.readLine()) != null) {
                         outputLines.add(nextOutputLine);
                     }
-
+                    process[0].waitFor();
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -29,11 +30,11 @@ public abstract class BlockingExec {
         execThread.start();
         try {
             execThread.join();
-            processFinished(outputLines.toArray(new String[outputLines.size()]));
+            processFinished(process[0], outputLines.toArray(new String[outputLines.size()]));
         } catch (InterruptedException e) {
             //ignore
         }
     }
 
-    protected abstract void processFinished(String[] output);
+    protected abstract void processFinished(Process proces, String[] output);
 }

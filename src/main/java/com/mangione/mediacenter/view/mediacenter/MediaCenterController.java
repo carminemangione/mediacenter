@@ -1,6 +1,8 @@
 package com.mangione.mediacenter.view.mediacenter;
 
 import com.mangione.mediacenter.model.VideoDirectories;
+import com.mangione.mediacenter.model.mplayerx.KillMplayerX;
+import com.mangione.mediacenter.model.mplayerx.LaunchMplayerXAndWaitForTerminate;
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
 import com.mangione.mediacenter.view.imdbDetails.ImdbDetailsController;
@@ -143,9 +145,10 @@ public class MediaCenterController implements MediaCenterControllerInterface {
                 panelWithBorder.zoomToLetter(keyPressed);
             } else {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
-                    killCurrentMPlayerX();
+                    new KillMplayerX();
                     VideoFile videoFile = panelWithBorder.getCurrentVideoFile();
-                    launchCommand(videoFile.getLaunchMovieCommand());
+                    new LaunchMplayerXAndWaitForTerminate(videoFile);
+//                    launchCommand(videoFile.getLaunchMovieCommand());
 
 //                    mediaCenterView.windowToBack(true);
 //                    new MediaPlayer(command, videoFile.getApplicationName(), MediaCenterController.this);
@@ -205,10 +208,6 @@ public class MediaCenterController implements MediaCenterControllerInterface {
                 lastEventWasKeyPressed = true;
             }
         }
-    }
-
-    private void killCurrentMPlayerX() {
 
     }
-
 }

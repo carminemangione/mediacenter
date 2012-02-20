@@ -17,7 +17,9 @@ public class MediaCenterView extends JFrame {
         add(mediaImageGrid, BorderLayout.CENTER);
 
         setBackground(Color.black);
-        setUndecorated(true);
+        if(!isDebugMode()){
+            setUndecorated(true);
+        }
         pack();
 
         setFullScreen();
@@ -25,12 +27,16 @@ public class MediaCenterView extends JFrame {
 
     private void setFullScreen() {
         setState(Frame.NORMAL);
-        if (!"true".equalsIgnoreCase(System.getProperty("debug"))) {
+        if (!isDebugMode()) {
             graphicsDevice.setFullScreenWindow(this);
         } else {
             setSize(500, 500);
         }
         setVisible(true);
+    }
+
+    private boolean isDebugMode() {
+        return "true".equalsIgnoreCase(System.getProperty("debug"));
     }
 
 

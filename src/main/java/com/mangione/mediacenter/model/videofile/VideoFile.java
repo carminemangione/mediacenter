@@ -59,7 +59,7 @@ public  class VideoFile implements Comparable<VideoFile> {
         //        for (String s : command) {
 //            System.out.print(s.replace(" ", "\\ ") + " ");
 //        }
-        return String.format("open -a MPlayerX.app --args -file %s", escapeFileName(fullVideoPath));
+        return String.format("open -a MPlayerX.app --args -file %s -OnTopMode true -StartByFullScreen 1", escapeFileName(fullVideoPath));
     }
 
     @Override

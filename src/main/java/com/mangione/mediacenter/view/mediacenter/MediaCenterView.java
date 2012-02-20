@@ -7,7 +7,6 @@ import java.awt.*;
  * User: carminemangione
  * Date: Dec 5, 2009
  * Time: 2:27:31 PM
- * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
 public class MediaCenterView extends JFrame {
     private GraphicsDevice graphicsDevice;
@@ -19,13 +18,19 @@ public class MediaCenterView extends JFrame {
 
         setBackground(Color.black);
         setUndecorated(true);
-//        graphicsDevice.setFullScreenWindow(this);
         pack();
 
-       setSize(500, 500);
+        setFullScreen();
         setVisible(true);
     }
 
+    private void setFullScreen() {
+        if (!"true".equalsIgnoreCase(System.getProperty("debug"))) {
+            graphicsDevice.setFullScreenWindow(this);
+        } else {
+            setSize(500, 500);
+        }
+    }
 
 
     public void windowToBack(boolean toBack) {
@@ -47,7 +52,7 @@ public class MediaCenterView extends JFrame {
 
     public void restoreWindow() {
         setState(Frame.NORMAL);
-        graphicsDevice.setFullScreenWindow(this);
+        setFullScreen();
         setVisible(true);
     }
 

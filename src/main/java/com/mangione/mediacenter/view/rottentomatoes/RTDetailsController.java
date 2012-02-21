@@ -1,4 +1,4 @@
-package com.mangione.mediacenter.view.imdbDetails;
+package com.mangione.mediacenter.view.rottentomatoes;
 
 /**
  * User: carminemangione
@@ -6,7 +6,7 @@ package com.mangione.mediacenter.view.imdbDetails;
  * Time: 9:34:16 PM
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
-public class ImdbDetailsController {
+public class RTDetailsController {
 //    implements
 //} IMDBSearchResultListener {
 //    private ImdbDetailsPanel imdbDetailsPanel;

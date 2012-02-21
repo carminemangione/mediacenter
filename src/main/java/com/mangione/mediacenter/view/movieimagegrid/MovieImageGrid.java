@@ -2,6 +2,7 @@ package com.mangione.mediacenter.view.movieimagegrid;
 
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
+import com.mangione.mediacenter.view.panels.GradientPanel;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -19,7 +20,7 @@ import java.net.URL;
  * Time: 4:18:44 PM
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
-public class MovieImageGrid extends JPanel {
+public class MovieImageGrid extends GradientPanel {
     private final static int NUMBER_OF_COLUMNS = 5;
     private final static double ASPECT_RATIO_OF_ICON = 0.70;
     private final static double PERCENT_SCEEN_HEIGHT_OF_FILE_NAME = 0.20;
@@ -144,10 +145,10 @@ public class MovieImageGrid extends JPanel {
 
             int currentBottomOfGradient = heightOfTitle;
             int heightToMask = imageSize.height / 6;
-            addGradient(graphics2d, currentBottomOfGradient, heightToMask, true);
+            addGradient(graphics2d, currentBottomOfGradient, heightToMask, true, Color.black);
 
             currentBottomOfGradient = screenSize.height;
-            addGradient(graphics2d, currentBottomOfGradient, heightToMask, false);
+            addGradient(graphics2d, currentBottomOfGradient, heightToMask, false, Color.black);
 
             graphics2d.setComposite(oldAlphaComposite);
 
@@ -237,19 +238,6 @@ public class MovieImageGrid extends JPanel {
         });
     }
 
-    private void addGradient(Graphics2D graphics2d, int currentBottomOfGradient, int heightToMask, boolean down) {
-        graphics2d.setColor(Color.black);
-        double startingAlphaComposite = 1;
-        for (int i = 0; i < heightToMask; i++) {
-            double alphaComposite = startingAlphaComposite - ((float) i / (float) heightToMask);
-            AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)
-                    alphaComposite);
-            graphics2d.setComposite(ac);
-            graphics2d.setColor(Color.black);
-            graphics2d.fillRect(0, currentBottomOfGradient, screenSize.width, 1);
-            currentBottomOfGradient += (down ? 1 : -1);
-        }
-    }
 
     private void paintOneRowOfImages(Graphics2D graphics2d, int indexOfSelected, int row, int topOfImage) {
         int currentIndex = row * NUMBER_OF_COLUMNS;

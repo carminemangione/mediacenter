@@ -5,7 +5,7 @@ import com.mangione.mediacenter.model.mplayerx.KillMplayerX;
 import com.mangione.mediacenter.model.mplayerx.LaunchMplayerXAndWaitForTerminate;
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
-import com.mangione.mediacenter.view.imdbDetails.ImdbDetailsController;
+import com.mangione.mediacenter.view.rottentomatoes.RTDetailsController;
 import com.mangione.mediacenter.view.managevideodirectories.ManageVideoDirectoriesController;
 import com.mangione.mediacenter.view.movieimagegrid.MovieImageGrid;
 
@@ -22,7 +22,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     private MovieImageGrid panelWithBorder;
 
     private MediaCenterView mediaCenterView;
-    private ImdbDetailsController imdbDetailsController;
+    private RTDetailsController imdbDetailsController;
     private volatile boolean handlingscroll = false;
 
     public static void main(String[] args) throws Exception {

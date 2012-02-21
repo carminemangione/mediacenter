@@ -1,0 +1,99 @@
+{"total":2,"movies":[
+    {
+        "id":"576297406",
+        "title":"The Brady Bunch: Coming Together Under One Roof",
+        "year":2005,
+        "mpaa_rating":"Unrated",
+        "runtime":18,
+        "release_dates":{
+            "theater":"2005-03-01"
+        },
+        "ratings":{
+            "critics_score":-1,
+            "audience_rating":"Spilled",
+            "audience_score":58
+        },
+        "synopsis":"",
+        "posters":{
+            "thumbnail":"http://images.rottentomatoescdn.com/images/redesign/poster_default.gif",
+            "profile":"http://images.rottentomatoescdn.com/images/redesign/poster_default.gif",
+            "detailed":"http://images.rottentomatoescdn.com/images/redesign/poster_default.gif",
+            "original":"http://images.rottentomatoescdn.com/images/redesign/poster_default.gif"
+        },
+        "abridged_cast":[
+            {
+                "name":"Christopher Knight"
+            },
+            {
+                "name":"Maureen McCormick"
+            },
+            {
+                "name":"Sherwood Schwartz"
+            }
+        ],
+        "alternate_ids":{
+            "imdb":"0459221"
+        },
+        "links":{
+            "self":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406.json",
+            "alternate":"http://www.rottentomatoes.com/m/the-brady-bunch-coming-together-under-one-roof/",
+            "cast":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406/cast.json",
+            "clips":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406/clips.json",
+            "reviews":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406/reviews.json",
+            "similar":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406/similar.json"
+        }
+    },
+    {
+        "id":"17414",
+        "title":"Under One Roof",
+        "year":2002,
+        "mpaa_rating":"Unrated",
+        "runtime":74,
+        "release_dates":{
+            "theater":"2002-01-01",
+            "dvd":"2003-04-08"
+        },
+        "ratings":{
+            "critics_score":-1,
+            "audience_rating":"Spilled",
+            "audience_score":27
+        },
+        "synopsis":"",
+        "posters":{
+            "thumbnail":"http://content9.flixster.com/movie/10/91/67/10916739_mob.jpg",
+            "profile":"http://content9.flixster.com/movie/10/91/67/10916739_pro.jpg",
+            "detailed":"http://content9.flixster.com/movie/10/91/67/10916739_det.jpg",
+            "original":"http://content9.flixster.com/movie/10/91/67/10916739_ori.jpg"
+        },
+        "abridged_cast":[
+            {
+                "name":"Jay Wong"
+            },
+            {
+                "name":"Audrey Finer"
+            },
+            {
+                "name":"Erik Ing"
+            },
+            {
+                "name":"James Marks"
+            },
+            {
+                "name":"James Quedado"
+            }
+        ],
+        "alternate_ids":{
+            "imdb":"0337738"
+        },
+        "links":{
+            "self":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414.json",
+            "alternate":"http://www.rottentomatoes.com/m/under_one_roof/",
+            "cast":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414/cast.json",
+            "clips":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414/clips.json",
+            "reviews":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414/reviews.json",
+            "similar":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414/similar.json"
+        }
+    }
+],"links":{
+    "self":"http://api.rottentomatoes.com/api/public/v1.0/movies.json?q=under+one+roof&page_limit=30&page=1"
+},"link_template":"http://api.rottentomatoes.com/api/public/v1.0/movies.json?q={search-term}&page_limit={results-per-page}&page={page-number}"}

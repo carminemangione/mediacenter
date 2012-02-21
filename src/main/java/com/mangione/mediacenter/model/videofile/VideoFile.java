@@ -52,13 +52,6 @@ public  class VideoFile implements Comparable<VideoFile> {
     }
 
     public String getLaunchMovieCommand() {
-//        String[] command = {"/Applications/VLC.app/Contents/MacOS/VLC",
-//                "file://" + getCurrentDirectory() + "/" + mp4FileName,
-//                "--fullscreen", "--video-on-top", "--force-dolby-surround=1"};
-
-        //        for (String s : command) {
-//            System.out.print(s.replace(" ", "\\ ") + " ");
-//        }
         return String.format("open -a MPlayerX.app --args -file %s -OnTopMode true -StartByFullScreen 1", escapeFileName(fullVideoPath));
     }
 

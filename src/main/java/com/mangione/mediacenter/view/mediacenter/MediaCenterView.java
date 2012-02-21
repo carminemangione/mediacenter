@@ -47,7 +47,7 @@ public class MediaCenterView extends JFrame {
             setVisible(false);
             setState(Frame.ICONIFIED);
         } else {
-            restoreWindow();
+            setFullScreen();
         }
     }
 
@@ -55,10 +55,6 @@ public class MediaCenterView extends JFrame {
         dispose();
         setVisible(false);
         setState(Frame.ICONIFIED);
-    }
-
-    public void restoreWindow() {
-        setFullScreen();
     }
 
 

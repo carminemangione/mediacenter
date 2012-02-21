@@ -11,9 +11,6 @@ import com.mangione.mediacenter.view.movieimagegrid.MovieImageGrid;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * User: carminemangione
@@ -147,40 +144,13 @@ public class MediaCenterController implements MediaCenterControllerInterface {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     new KillMplayerX();
                     VideoFile videoFile = panelWithBorder.getCurrentVideoFile();
+                    mediaCenterView.windowToBack(true);
                     new LaunchMplayerXAndWaitForTerminate(videoFile);
-//                    launchCommand(videoFile.getLaunchMovieCommand());
-
-//                    mediaCenterView.windowToBack(true);
-//                    new MediaPlayer(command, videoFile.getApplicationName(), MediaCenterController.this);
+                    mediaCenterView.windowToBack(false);
                 } else {
                     scrollOneLineOrHandleContinual(keyEvent);
                 }
             }
-        }
-
-        private Thread launchCommand(final String command) {
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        Process process = Runtime.getRuntime().exec(command);
-                        InputStream istrm = process.getInputStream();
-                        InputStreamReader istrmrdr = new InputStreamReader(istrm);
-                        BufferedReader buffrdr = new BufferedReader(istrmrdr);
-
-                        String data;
-                        while ((data = buffrdr.readLine()) != null) {
-                            System.out.println(data);
-                        }
-//                        process.waitFor();
-//                        mediaCenterControllerInterface.playerFinishedPlaying();
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            thread.start();
-            return thread;
         }
 
         @Override

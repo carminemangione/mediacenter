@@ -5,10 +5,11 @@ import com.mangione.mediacenter.model.mplayerx.KillMplayerX;
 import com.mangione.mediacenter.model.mplayerx.LaunchMplayerXAndWaitForTerminate;
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
-import com.mangione.mediacenter.view.rottentomatoes.RTDetailsController;
 import com.mangione.mediacenter.view.managevideodirectories.ManageVideoDirectoriesController;
-import com.mangione.mediacenter.view.moviebrowser.MovieBrowser;
+import com.mangione.mediacenter.view.moviebrowser.MovieBrowserController;
+import com.mangione.mediacenter.view.rottentomatoes.RTDetailsController;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -19,7 +20,8 @@ import java.awt.event.*;
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
 public class MediaCenterController implements MediaCenterControllerInterface {
-    private MovieBrowser panelWithBorder;
+    private final MovieBrowserController movieBrowserController;
+    private final JPanel panelWithBorder;
 
     private MediaCenterView mediaCenterView;
     private RTDetailsController imdbDetailsController;
@@ -36,12 +38,13 @@ public class MediaCenterController implements MediaCenterControllerInterface {
         GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
         Dimension maximumWindowSize = new Dimension(graphicsDevice.getDisplayMode().getWidth(), graphicsDevice.getDisplayMode().getHeight());
 
-        panelWithBorder = new MovieBrowser(maximumWindowSize, videoFiles);
+        movieBrowserController = new MovieBrowserController(this, maximumWindowSize, videoFiles);
+        panelWithBorder = movieBrowserController.getMovieBrowser();
 
         mediaCenterView = new MediaCenterView(panelWithBorder, graphicsDevice);
-        mediaCenterView.addKeyListener(new ScrollKeyListener(panelWithBorder));
+        mediaCenterView.addKeyListener(new ScrollKeyListener());
 
-        mediaCenterView.addMouseListener(new PopupMenuMouseListener(panelWithBorder));
+        mediaCenterView.addMouseListener(new PopupMenuMouseListener());
         mediaCenterView.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
                 System.exit(0);
@@ -58,8 +61,8 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     public void videoSelectionFinished() {
         Cursor oldCursor = panelWithBorder.getCursor();
         panelWithBorder.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        panelWithBorder.setVideoFiles(loadVideoFiles());
-        panelWithBorder.setDim(false);
+        movieBrowserController.setVideoFiles(loadVideoFiles());
+        movieBrowserController.setDim(false);
         mediaCenterView.windowToBack(true);
         panelWithBorder.setCursor(oldCursor);
     }
@@ -91,11 +94,6 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     }
 
     private class PopupMenuMouseListener extends MouseAdapter {
-        private final MovieBrowser panelWithBorder;
-
-        public PopupMenuMouseListener(MovieBrowser panelWithBorder) {
-            this.panelWithBorder = panelWithBorder;
-        }
 
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
@@ -109,7 +107,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
         private void showPopupIfTrigger(final MouseEvent mouseEvent) {
             if (mouseEvent.isPopupTrigger()) {
-                panelWithBorder.setDim(true);
+                movieBrowserController.setDim(true);
                 // mediaCenterView.windowToBack(true);
                 new ManageVideoDirectoriesController(mediaCenterView, mouseEvent.getPoint(), MediaCenterController.this);
 
@@ -118,13 +116,11 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     }
 
     private class ScrollKeyListener implements KeyListener {
-        private final MovieBrowser panelWithBorder;
+
         private boolean lastEventWasKeyPressed = false;
         private long lastAutoKeyTimeMillis = 0;
 
-        public ScrollKeyListener(MovieBrowser panelWithBorder) {
-            this.panelWithBorder = panelWithBorder;
-        }
+
 
         @Override
         public void keyTyped(KeyEvent keyEvent) {
@@ -139,11 +135,11 @@ public class MediaCenterController implements MediaCenterControllerInterface {
             }
             char keyPressed = keyEvent.getKeyChar();
             if (Character.isDigit(keyPressed) || Character.isLetter(keyPressed)) {
-                panelWithBorder.zoomToLetter(keyPressed);
+                movieBrowserController.zoomToLetter(keyPressed);
             } else {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                     new KillMplayerX();
-                    VideoFile videoFile = panelWithBorder.getCurrentVideoFile();
+                    VideoFile videoFile = movieBrowserController.getCurrentVideoFile();
                     mediaCenterView.windowToBack(true);
                     new LaunchMplayerXAndWaitForTerminate(videoFile);
                     mediaCenterView.windowToBack(false);
@@ -165,7 +161,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
                         handlingscroll = true;
                         if (!lastEventWasKeyPressed || System.currentTimeMillis() -
                                 lastAutoKeyTimeMillis > 50) {
-                            panelWithBorder.arrowPressed(keyEvent, lastEventWasKeyPressed);
+                            movieBrowserController.arrowPressed(keyEvent, lastEventWasKeyPressed);
                             lastAutoKeyTimeMillis = System.currentTimeMillis();
                             handlingscroll = false;
                         }

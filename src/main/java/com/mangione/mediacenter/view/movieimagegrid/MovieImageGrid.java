@@ -4,15 +4,9 @@ import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
 import com.mangione.mediacenter.view.panels.GradientPanel;
 
-import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 
 /**
  * User: carminemangione
@@ -24,7 +18,6 @@ public class MovieImageGrid extends GradientPanel {
     private final static int NUMBER_OF_COLUMNS = 5;
     private final static double ASPECT_RATIO_OF_ICON = 0.70;
     private final static double PERCENT_SCEEN_HEIGHT_OF_FILE_NAME = 0.20;
-    private final static int FLYOVER = 100;
     private final Dimension imageSize;
     private final Dimension screenSize;
     private final int leftRightBorderSize;
@@ -39,10 +32,6 @@ public class MovieImageGrid extends GradientPanel {
     private Font movieTitleFont;
     private boolean dimm = false;
     private boolean animating = false;
-    private static final int EXTERNAL_BUFFER_SIZE = 524288;
-    private byte[] beepBytes;
-    private int selectionBeforeTimer;
-    private volatile boolean handlingRowChange = false;
 
     public MovieImageGrid(Dimension screenSize, VideoFiles movieDirs) throws Exception {
         this.screenSize = screenSize;
@@ -54,7 +43,6 @@ public class MovieImageGrid extends GradientPanel {
         numberOfLines = movieDirs.getNumberOfVideoFiles() / NUMBER_OF_COLUMNS + 1;
         videoFiles = movieDirs;
         movieTitleFont = new Font(Font.SANS_SERIF, Font.BOLD, 50);
-//        beepBytes = loadBeepBytes();
         setPreferredSize(screenSize);
     }
 
@@ -69,13 +57,10 @@ public class MovieImageGrid extends GradientPanel {
         currentRow = newIndex / NUMBER_OF_COLUMNS;
         currentSelectedRow = currentRow;
         currentColumn = newIndex % NUMBER_OF_COLUMNS;
-        selectionChanged();
         repaint();
     }
 
     public synchronized void arrowPressed(KeyEvent arrowPressedEvent, boolean repeat) throws Exception {
-        handlingRowChange = true;
-        //playBeep();
         int newRow = adjustRowAndCurrentColumnForArrow(arrowPressedEvent);
 
         newRow = moveUpIfScrolledOffLeft(newRow);
@@ -181,28 +166,6 @@ public class MovieImageGrid extends GradientPanel {
         return imageSize.height * (1 + fractionOfImageBetweenImages) / fractionOfImageBetweenImages;
     }
 
-    private void selectionChanged() {
-//        selectionBeforeTimer = getIndexOfSelected();
-//
-//        Timer timer = new Timer(10, new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent actionEvent) {
-//                if (selectionBeforeTimer == getIndexOfSelected()) {
-//                    try {
-//                        int x = getLeftOfImage(currentColumn) + 10;
-//                        int y = heightOfTitle + (screenSize.height - heightOfTitle) / 2 + 10 - imageSize.height / 2;
-//                        mediaCenterController.showMovieDetails(videoFiles.getVideoFile(getIndexOfSelected()), x, y);
-//                     } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        });
-//        timer.setInitialDelay(MovieImageGrid.FLYOVER);
-//        timer.setRepeats(false);
-//        timer.start();
-    }
-
     private int getIndexOfSelected() {
         return Math.min(currentSelectedRow * NUMBER_OF_COLUMNS + currentColumn, videoFiles.getNumberOfVideoFiles() - 1);
     }
@@ -233,7 +196,6 @@ public class MovieImageGrid extends GradientPanel {
                 currentRow = newRow;
                 repaint();
                 animating = false;
-                selectionChanged();
             }
         });
     }
@@ -258,37 +220,6 @@ public class MovieImageGrid extends GradientPanel {
 
     private int getLeftOfImage(int column) {
         return column * (imageSize.width + leftRightBorderSize) + leftRightBorderSize / 2;
-    }
-
-    private void playBeep() throws Exception {
-
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(beepBytes));
-
-        AudioFormat format = audioInputStream.getFormat();
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-
-        SourceDataLine audioLine = (SourceDataLine) AudioSystem.getLine(info);
-        audioLine.open(format);
-
-        audioLine.start();
-        int nBytesRead = 0;
-        byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];
-
-        while (nBytesRead != -1) {
-            nBytesRead = audioInputStream.read(abData, 0, abData.length);
-            if (nBytesRead >= 0)
-                audioLine.write(abData, 0, nBytesRead);
-        }
-    }
-
-    private byte[] loadBeepBytes() throws Exception {
-        URL waveUrl = MovieImageGrid.class.getClassLoader().getResource("click.wav");
-        File waveFile = new File(waveUrl.getFile());
-        InputStream waveStream = waveUrl.openStream();
-        DataInputStream dis = new DataInputStream(waveStream);
-        byte[] beepBytes = new byte[(int)waveFile.length()];
-        dis.readFully(beepBytes);
-        return beepBytes;
     }
 
     private int stopScrollAtTopOrBottom(int newRow) {

@@ -1,4 +1,4 @@
-package com.mangione.mediacenter.view.movieimagegrid;
+package com.mangione.mediacenter.view.moviebrowser;
 
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
  * Time: 4:18:44 PM
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
-public class MovieImageGrid extends GradientPanel {
+public class MovieBrowser extends GradientPanel {
     private final static int NUMBER_OF_COLUMNS = 5;
     private final static double ASPECT_RATIO_OF_ICON = 0.70;
     private final static double PERCENT_SCEEN_HEIGHT_OF_FILE_NAME = 0.20;
@@ -33,7 +33,7 @@ public class MovieImageGrid extends GradientPanel {
     private boolean dimm = false;
     private boolean animating = false;
 
-    public MovieImageGrid(Dimension screenSize, VideoFiles movieDirs) throws Exception {
+    public MovieBrowser(Dimension screenSize, VideoFiles movieDirs) throws Exception {
         this.screenSize = screenSize;
         setOpaque(false);
         heightOfTitle = (int) (screenSize.height * PERCENT_SCEEN_HEIGHT_OF_FILE_NAME);

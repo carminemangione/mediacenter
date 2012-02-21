@@ -7,7 +7,7 @@ import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
 import com.mangione.mediacenter.view.rottentomatoes.RTDetailsController;
 import com.mangione.mediacenter.view.managevideodirectories.ManageVideoDirectoriesController;
-import com.mangione.mediacenter.view.movieimagegrid.MovieImageGrid;
+import com.mangione.mediacenter.view.moviebrowser.MovieBrowser;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -19,7 +19,7 @@ import java.awt.event.*;
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
 public class MediaCenterController implements MediaCenterControllerInterface {
-    private MovieImageGrid panelWithBorder;
+    private MovieBrowser panelWithBorder;
 
     private MediaCenterView mediaCenterView;
     private RTDetailsController imdbDetailsController;
@@ -36,7 +36,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
         GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
         Dimension maximumWindowSize = new Dimension(graphicsDevice.getDisplayMode().getWidth(), graphicsDevice.getDisplayMode().getHeight());
 
-        panelWithBorder = new MovieImageGrid(maximumWindowSize, videoFiles);
+        panelWithBorder = new MovieBrowser(maximumWindowSize, videoFiles);
 
         mediaCenterView = new MediaCenterView(panelWithBorder, graphicsDevice);
         mediaCenterView.addKeyListener(new ScrollKeyListener(panelWithBorder));
@@ -91,9 +91,9 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     }
 
     private class PopupMenuMouseListener extends MouseAdapter {
-        private final MovieImageGrid panelWithBorder;
+        private final MovieBrowser panelWithBorder;
 
-        public PopupMenuMouseListener(MovieImageGrid panelWithBorder) {
+        public PopupMenuMouseListener(MovieBrowser panelWithBorder) {
             this.panelWithBorder = panelWithBorder;
         }
 
@@ -118,11 +118,11 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     }
 
     private class ScrollKeyListener implements KeyListener {
-        private final MovieImageGrid panelWithBorder;
+        private final MovieBrowser panelWithBorder;
         private boolean lastEventWasKeyPressed = false;
         private long lastAutoKeyTimeMillis = 0;
 
-        public ScrollKeyListener(MovieImageGrid panelWithBorder) {
+        public ScrollKeyListener(MovieBrowser panelWithBorder) {
             this.panelWithBorder = panelWithBorder;
         }
 

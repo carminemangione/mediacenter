@@ -12,7 +12,6 @@ import java.awt.event.KeyEvent;
  * User: carminemangione
  * Date: Aug 8, 2009
  * Time: 4:18:44 PM
- * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
 public class MovieBrowser extends GradientPanel {
     private final static int NUMBER_OF_COLUMNS = 5;

@@ -14,6 +14,7 @@ public abstract class BlockingExec {
             @Override
             public void run() {
                 try {
+                    System.out.println("command = " + command);
                     process[0] = Runtime.getRuntime().exec(command);
                     BufferedReader buffrdr = new BufferedReader(new InputStreamReader(process[0].getInputStream()));
 

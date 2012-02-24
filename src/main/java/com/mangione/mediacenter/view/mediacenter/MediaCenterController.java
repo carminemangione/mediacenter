@@ -17,7 +17,6 @@ import java.awt.event.WindowEvent;
  * User: carminemangione
  * Date: Feb 22, 2009
  * Time: 1:58:54 PM
- * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
 public class MediaCenterController implements MediaCenterControllerInterface {
     private final MovieBrowserController movieBrowserController;
@@ -67,18 +66,11 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
     @Override
     public void showMovieDetails(VideoFile selectedVideoFile, int xPos, int yPos) {
-        try {
-//            imdbDetailsController = new ImdbDetailsController(selectedVideoFile, panelWithBorder, xPos, yPos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
     }
 
     @Override
     public void killMovieDetails() {
-//        imdbDetailsController.killDetails();
 
     }
 
@@ -106,7 +98,6 @@ public class MediaCenterController implements MediaCenterControllerInterface {
         private void showPopupIfTrigger(final MouseEvent mouseEvent) {
             if (mouseEvent.isPopupTrigger()) {
                 movieBrowserController.setDim(true);
-                // mediaCenterView.windowToBack(true);
                 new ManageVideoDirectoriesController(mediaCenterView, mouseEvent.getPoint(), MediaCenterController.this);
 
             }

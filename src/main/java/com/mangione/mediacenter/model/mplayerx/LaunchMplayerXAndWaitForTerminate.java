@@ -10,17 +10,22 @@ public class LaunchMplayerXAndWaitForTerminate extends BlockingExec {
     }
 
     @Override
-    protected void processFinished(Process proces, String[] output) {
+    protected void processFinished(Process proces, String[] output, String[] error) {
         final int[] numberOfMPlayersRunning = {3};
         boolean successfulLaunch = false;
 
         while (numberOfMPlayersRunning[0] == 3 || !successfulLaunch) {
             new BlockingExec("ps -e") {
                 @Override
-                protected void processFinished(Process proces, String[] output) {
+                protected void processFinished(Process proces, String[] output, String[] error) {
                     numberOfMPlayersRunning[0] = 0;
+                    System.out.println("System out: ");
                     for (String s : output) {
-                        numberOfMPlayersRunning[0] +=  s.contains("MPlayerX") ? 1 : 0;
+                        System.out.println(s);
+                    }
+                    System.out.println("System err: ");
+                    for (String s : error) {
+                        System.out.println("error = " + s);
                     }
                 }
             };

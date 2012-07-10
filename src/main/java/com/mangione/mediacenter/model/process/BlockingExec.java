@@ -19,8 +19,9 @@ public abstract class BlockingExec {
                 try {
                     process[0] = Runtime.getRuntime().exec(command);
                     final InputStream inputStream = process[0].getInputStream();
+                    final InputStream errorStream = process[0].getErrorStream();
                     Thread outputThread = startThreadToRead(inputStream, outputLines);
-                    Thread errorThread = startThreadToRead(inputStream, errorLines);
+                    Thread errorThread = startThreadToRead(errorStream, errorLines);
 
                     process[0].waitFor();
                     outputThread.join();

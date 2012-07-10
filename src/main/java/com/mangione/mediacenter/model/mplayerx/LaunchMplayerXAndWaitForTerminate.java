@@ -14,7 +14,7 @@ public class LaunchMplayerXAndWaitForTerminate extends BlockingExec {
         final int[] numberOfMPlayersRunning = {2};
         boolean successfulLaunch = false;
 
-        while (numberOfMPlayersRunning[0] == 2 || !successfulLaunch) {
+        while (numberOfMPlayersRunning[0] > 0 || !successfulLaunch) {
             new BlockingExec("ps -e") {
                 @Override
                 protected void processFinished(Process process, String[] output, String[] error) {

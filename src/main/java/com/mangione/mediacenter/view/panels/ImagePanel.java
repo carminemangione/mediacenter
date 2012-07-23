@@ -1,4 +1,4 @@
-package com.mangione.mediacenter.view.rottentomatoes;
+package com.mangione.mediacenter.view.panels;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +11,17 @@ public class ImagePanel extends JPanel {
         this.imageIcon = imageIcon;
     }
 
+    public ImagePanel(ImageIcon imageIcon, int width, int height) {
+        this.imageIcon = new ImageIcon(imageIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
+    }
+
     public ImagePanel(URL posterUrl) {
         this(new ImageIcon(posterUrl));
     }
 
+    public ImagePanel(URL posterUrl, int width, int height) {
+        this(new ImageIcon(posterUrl), width, height);
+    }
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());

@@ -1,7 +1,7 @@
 
-Dvd player to the foreground on launch
-Minimize on launch
-Maximize on launch
+x Dvd player to the foreground on launch
+x Minimize on launch
+x Maximize on launch
 
 
 No refresh on movie add directory

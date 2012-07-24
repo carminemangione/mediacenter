@@ -37,6 +37,7 @@ public class ScrollKeyListener implements KeyListener {
                     new KillMplayerX();
                     VideoFile videoFile = movieBrowserController.getCurrentVideoFile();
                     mediaCenterView.windowToBack(true);
+                    System.out.println(videoFile.getLaunchMovieCommand());
                     new LaunchMplayerXAndWaitForTerminate(videoFile);
                     mediaCenterView.windowToBack(false);
                 } else {

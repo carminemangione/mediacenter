@@ -5,8 +5,13 @@ import com.mangione.mediacenter.model.videofile.VideoFile;
 
 public class LaunchMplayerXAndWaitForTerminate extends BlockingExec {
 
+    public static LaunchMplayerXAndWaitForTerminate launchPlayerAndWait(VideoFile videoFile) {
+        new KillMplayerX();
+        return new LaunchMplayerXAndWaitForTerminate(videoFile);
+    }
+
     public LaunchMplayerXAndWaitForTerminate(VideoFile videoFile) {
-        super(videoFile.getLaunchMovieCommand());
+        super(videoFile.getLaunchMovieCommand(), true);
     }
 
     @Override
@@ -33,8 +38,7 @@ public class LaunchMplayerXAndWaitForTerminate extends BlockingExec {
             }
         }
 
-        new KillMplayerX();
+        System.out.println("MPlayer terminated.");
     }
-
 
 }

@@ -9,22 +9,40 @@ import java.util.List;
 
 public abstract class BlockingExec {
 
+    private final boolean showOutputAndError;
+
     public BlockingExec(final String command) {
+        this(command, false);
+    }
+
+    public BlockingExec(final String command, final boolean showOutputAndError) {
+        this.showOutputAndError = showOutputAndError;
         final List<String> outputLines = new ArrayList<String>();
         final List<String> errorLines = new ArrayList<String>();
         final Process[] process = {null};
         final Thread execThread = new Thread() {
             @Override
             public void run() {
+
                 try {
                     process[0] = Runtime.getRuntime().exec(command);
+                    process[0].waitFor();
                     final InputStream inputStream = process[0].getInputStream();
                     final InputStream errorStream = process[0].getErrorStream();
                     Thread outputThread = startThreadToRead(inputStream, outputLines);
                     Thread errorThread = startThreadToRead(errorStream, errorLines);
 
-                    process[0].waitFor();
                     outputThread.join();
+                    if (showOutputAndError) {
+                        System.out.println("Process output: ");
+                        for (String outputLine : outputLines) {
+                            System.out.println(outputLine);
+                        }
+                        System.out.println("Error output: ");
+                        for (String errorLine : errorLines) {
+                            System.out.println(errorLine);
+                        }
+                    }
                     errorThread.join();
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -42,6 +60,9 @@ public abstract class BlockingExec {
     }
 
     private Thread startThreadToRead(final InputStream inputStream, final List<String> outputLines) {
+        if (showOutputAndError) {
+            System.out.println("BlockingExec.startThreadToRead");
+        }
         Thread outputThread = new Thread() {
             public void run() {
                 BufferedReader buffrdr = new BufferedReader(new InputStreamReader(inputStream));

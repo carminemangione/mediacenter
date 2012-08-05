@@ -57,22 +57,27 @@ public class VideoFiles {
         if (currentDirectory.isDirectory()) {
             File[] files = currentDirectory.listFiles();
             for (File file : files) {
-                String name = file.getName();
-                if (name.endsWith(".mkv") || name.endsWith(".mp4") || name.endsWith(".m4v")) {
-                    foundFile = new VideoFile(currentDirectory, name);
-                } else if (name.contains("VIDEO_TS")) {
-                    foundFile = new VideoFile(currentDirectory);
-                } else if (name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".gif")) {
-                    imageFile = file;
+                if (file.isDirectory()) {
+                 if (file.getName().toUpperCase().contains("VIDEO_TS")) {
+                        foundFile = new VideoFile(file);
+                    }   else {
+                        travelDownDirectoryTreeLookingForVideoFiles(file, videoFiles);
+                    }
+
                 } else {
-                    travelDownDirectoryTreeLookingForVideoFiles(file, videoFiles);
+                    String name = file.getName();
+                    if (name.endsWith(".mkv") || name.endsWith(".mp4") || name.endsWith(".m4v")) {
+                        foundFile = new VideoFile(currentDirectory, name);
+                    } else if (name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".gif")) {
+                        imageFile = file;
+                    }
                 }
             }
+
             if (foundFile != null) {
                 foundFile.setImageFile(imageFile);
                 videoFiles.add(foundFile);
             }
-
         }
     }
 

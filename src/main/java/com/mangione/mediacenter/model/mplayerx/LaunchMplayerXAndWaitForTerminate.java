@@ -11,26 +11,32 @@ public class LaunchMplayerXAndWaitForTerminate extends BlockingExec {
     }
 
     public LaunchMplayerXAndWaitForTerminate(VideoFile videoFile) {
-        super(videoFile.getLaunchMovieCommand(), true);
+        super(videoFile.getLaunchMovieCommand(), false);
     }
 
     @Override
     protected void processFinished(Process proces, String[] output, String[] error) {
         final int[] numberOfMPlayersRunning = {2};
-        boolean successfulLaunch = false;
+        boolean running = true;
 
-        while (numberOfMPlayersRunning[0] > 0 || !successfulLaunch) {
-            new BlockingExec("ps -e") {
+        while (numberOfMPlayersRunning[0] > 0 && running) {
+            new BlockingExec(new String[]{"ps",  "-e"}) {
+                @SuppressWarnings({"EmptyCatchBlock"})
                 @Override
                 protected void processFinished(Process process, String[] output, String[] error) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+
+                    }
                     numberOfMPlayersRunning[0] = 0;
                     for (String anOutput : output) {
-                        numberOfMPlayersRunning[0] += anOutput.contains("MPlayerX") ? 1 : 0;
+                        numberOfMPlayersRunning[0] += anOutput.toUpperCase().contains("VLC") ? 1 : 0;
                     }
                 }
             };
 
-            successfulLaunch = successfulLaunch || numberOfMPlayersRunning[0] > 0;
+            running = numberOfMPlayersRunning[0] > 0;
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -38,7 +44,7 @@ public class LaunchMplayerXAndWaitForTerminate extends BlockingExec {
             }
         }
 
-        System.out.println("MPlayer terminated.");
+        System.out.println("VLC terminated.");
     }
 
 }

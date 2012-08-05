@@ -13,18 +13,10 @@ public class KillMplayerX extends BlockingExec {
     }
 
     public KillMplayerX() {
-        super("ps -e");
+        super(new String[]{"ps", "-e"});
     }
 
-    protected void processFinished(Process proces, String[] output, String[] error) {
-        System.out.println("System out: ");
-        for (String s : output) {
-            System.out.println(s);
-        }
-        System.out.println("System err: ");
-        for (String s : error) {
-            System.out.println("error = " + s);
-        }
+    protected void processFinished(Process process, String[] output, String[] error) {
         List<String> processesToKill = new ArrayList<String>();
         for (String psLine : output) {
             if(psLine.contains("MPlayerX")){
@@ -33,7 +25,7 @@ public class KillMplayerX extends BlockingExec {
         }
 
         if(!processesToKill.isEmpty()){
-            final String killCommand = "kill -9 " + StringUtils.join(processesToKill, " ");
+            final String[] killCommand = new String[]{"kill", "-9 ",  StringUtils.join(processesToKill, " ")};
             new BlockingExec(killCommand){
                 @Override
                 protected void processFinished(Process proces, String[] output, String[] error) {

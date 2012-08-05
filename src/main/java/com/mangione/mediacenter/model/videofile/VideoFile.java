@@ -9,7 +9,7 @@ import java.io.File;
  * Time: 10:32:53 PM
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
-public  class VideoFile implements Comparable<VideoFile> {
+public class VideoFile implements Comparable<VideoFile> {
     private static final ImageIcon IMAGE_NOT_FOUND_ICON = new ImageIcon(VideoFile.class.getClassLoader().getResource("blankimage.jpeg"));
 
     private final String fullVideoPath;
@@ -51,8 +51,13 @@ public  class VideoFile implements Comparable<VideoFile> {
         this.imageFile = imageFile;
     }
 
-    public String getLaunchMovieCommand() {
-        return String.format("open -a MPlayerX.app --args -file %s -OnTopMode true -StartByFullScreen 1", escapeFileName(fullVideoPath));
+    public String[] getLaunchMovieCommand() {
+        String fileFormat = fullVideoPath.toUpperCase().contains("VIDEO_TS") ? "dvdsimple" : "file";
+//        return new String[]{"/Applications/VLC.app/Contents/MacOS/VLC",
+//                fileFormat + "://" + fullVideoPath,
+//                "--fullscreen", "--video-on-top", "--force-dolby-surround=1"};
+       return new String[]{"/Applications/MPlayerX.app/Contents/MacOS/MPlayerX",  "--args -file " + fullVideoPath +" -OnTopMode true -StartByFullScreen 1",
+                escapeFileName(fullVideoPath)};
     }
 
     @Override
@@ -60,7 +65,7 @@ public  class VideoFile implements Comparable<VideoFile> {
         return videoName.compareTo(videoFile.videoName);
     }
 
-    private String makeVideoNameDecent(String videoName)  {
+    private String makeVideoNameDecent(String videoName) {
         StringBuffer mixedCaseWithPeriods = getVideoNameWithSpaces(videoName);
         String mixedCase = mixedCaseWithPeriods.toString();
         if (mixedCase.startsWith("The ")) {
@@ -85,7 +90,7 @@ public  class VideoFile implements Comparable<VideoFile> {
                 } else {
                     mixedCaseWithPeriods.append(Character.toLowerCase(nextChar));
                 }
-            } else if (nextChar == '_' || nextChar == '.'|| nextChar == ' ') {
+            } else if (nextChar == '_' || nextChar == '.' || nextChar == ' ') {
                 leadCharacter = true;
                 mixedCaseWithPeriods.append(" ");
             }
@@ -94,6 +99,6 @@ public  class VideoFile implements Comparable<VideoFile> {
     }
 
     protected String escapeFileName(String filename) {
-        return filename.replace(" ", "\\ ");
+        return "\"" + filename.replace(" ", "\\ ") + "\"";
     }
 }

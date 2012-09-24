@@ -3,6 +3,10 @@ package com.mangione.mediacenter.model.rottentomatoes;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * User: carminemangione
  * Date: Jul 24, 2010
@@ -21,9 +25,18 @@ public class RottenTomatoesSearch {
 
     public RottenTomatoesSearch(String movieName) {
         WebResource resource = Client.create()
-            .resource("http://api.rottentomatoes.com/api/public/v1.0/movies.json")
-            .queryParam("apikey", API_KEY).queryParam("q", movieName);
-        searchResult = RTSearchResult.fromJson(resource.get(String.class));
+                .resource("http://api.rottentomatoes.com/api/public/v1.0/movies.json")
+                .queryParam("apikey", API_KEY).queryParam("q", movieName);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("search_result.json")));
+        StringBuffer json = new StringBuffer();
+        try {
+            while (reader.ready())
+                json.append(reader.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+     //   searchResult = RTSearchResult.fromJson(resource.get(String.class));
+        searchResult = RTSearchResult.fromJson(json.toString());
     }
 
     public RTSearchResult getSearchResult() {

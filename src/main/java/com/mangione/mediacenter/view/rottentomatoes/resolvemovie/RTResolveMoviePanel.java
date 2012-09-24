@@ -12,15 +12,15 @@ public class RTResolveMoviePanel extends JPanel {
 
     public RTResolveMoviePanel(RTMovie movie) throws MalformedURLException {
         final URL posterUrl = new URL(movie.getPosters().getThumbnail());
+        setLayout(new BorderLayout());
+        setOpaque(false);
         ImagePanel imagePanel = new ImagePanel(posterUrl, 50, 100);
-        add(imagePanel);
-
-        JPanel descriptionPanel = new JPanel(new BorderLayout());
-        descriptionPanel.add(new JLabel(movie.getTitle()), BorderLayout.CENTER);
-        descriptionPanel.add(new JLabel(movie.getYear()), BorderLayout.EAST);
-        add(descriptionPanel);
-        setBackground(Color.lightGray);
-        setAlignmentX(FlowLayout.LEFT);
+        add(imagePanel, BorderLayout.WEST);
+        Font font = getFont().deriveFont(Font.TRUETYPE_FONT, 9);
+        final String text = movie.getTitle() + " (" + movie.getYear() + ")";
+        JLabel descriptionPanel = new JLabel(text);
+        descriptionPanel.setFont(font);
+        add(descriptionPanel, BorderLayout.CENTER);
     }
 }
 

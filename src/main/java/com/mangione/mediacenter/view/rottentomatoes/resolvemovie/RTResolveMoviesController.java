@@ -3,6 +3,7 @@ package com.mangione.mediacenter.view.rottentomatoes.resolvemovie;
 import com.mangione.mediacenter.model.rottentomatoes.RTMovie;
 import com.mangione.mediacenter.model.rottentomatoes.RTSearchResult;
 import com.mangione.mediacenter.model.rottentomatoes.RottenTomatoesSearch;
+import com.mangione.mediacenter.view.panels.ImagePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +19,11 @@ public class RTResolveMoviesController {
     private JPanel resolveMoviesPanel;
 
     public static void main(String[] args) throws Exception {
+        final ImageIcon icon = new ImageIcon(RTResolveMoviesController.class.getClassLoader().getResource("folder.jpg"));
 
+        ImagePanel imagePanel = new ImagePanel(icon, 1000, 1000);
         JFrame frame = new JFrame();
-        frame.setPreferredSize(new Dimension(1000, 1000));
+        frame.add(imagePanel);
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -36,5 +39,8 @@ public class RTResolveMoviesController {
     public Component getPanel() {
         return resolveMoviesPanel;
     }
+
+
+
 }
 

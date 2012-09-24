@@ -53,11 +53,12 @@ public class VideoFile implements Comparable<VideoFile> {
 
     public String[] getLaunchMovieCommand() {
         String fileFormat = fullVideoPath.toUpperCase().contains("VIDEO_TS") ? "dvdsimple" : "file";
-//        return new String[]{"/Applications/VLC.app/Contents/MacOS/VLC",
-//                fileFormat + "://" + fullVideoPath,
-//                "--fullscreen", "--video-on-top", "--force-dolby-surround=1"};
-       return new String[]{"/Applications/MPlayerX.app/Contents/MacOS/MPlayerX",  "--args -file " + fullVideoPath +" -OnTopMode true -StartByFullScreen 1",
-                escapeFileName(fullVideoPath)};
+        return new String[]{"/Applications/VLC.app/Contents/MacOS/VLC",
+                fileFormat + "://" + fullVideoPath,
+                "--fullscreen", "--video-on-top", "--force-dolby-surround=1"};
+//       return new String[]{"/Applications/MPlayerX.app/Contents/MacOS/MPlayerX", "--args",  "-file",  escapeFileName(fullVideoPath),
+//               "-OnTopMode", "true",
+//               "-StartByFullScreen", "1"};
     }
 
     @Override
@@ -99,6 +100,6 @@ public class VideoFile implements Comparable<VideoFile> {
     }
 
     protected String escapeFileName(String filename) {
-        return "\"" + filename.replace(" ", "\\ ") + "\"";
+        return  filename.replace(" ", "\\ ");
     }
 }

@@ -17,14 +17,17 @@ public class VideoFile implements Comparable<VideoFile> {
 
     private File imageFile;
     private ImageIcon imageIcon;
+    private final File currentDirectory;
 
 
     public VideoFile(File currentDirectory, String videoName) {
+        this.currentDirectory = currentDirectory;
         fullVideoPath = new File(currentDirectory, videoName).getAbsolutePath();
         this.videoName = makeVideoNameDecent(videoName);
     }
 
     public VideoFile(File currentDirectory) {
+        this.currentDirectory = currentDirectory;
         final File dvdMovieDirectory = currentDirectory.getParentFile();
         fullVideoPath = dvdMovieDirectory.getAbsolutePath();
         this.videoName = makeVideoNameDecent(dvdMovieDirectory.getName());
@@ -99,7 +102,7 @@ public class VideoFile implements Comparable<VideoFile> {
         return mixedCaseWithPeriods;
     }
 
-    protected String escapeFileName(String filename) {
-        return  filename.replace(" ", "\\ ");
+    public File getCurrentDirectory() {
+        return currentDirectory;
     }
 }

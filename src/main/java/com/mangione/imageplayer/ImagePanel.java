@@ -12,7 +12,7 @@ public class ImagePanel extends JPanel {
     private boolean animating = false;
     private int numberOfSteps;
     private boolean fadeOut;
-    private static final int NUMBER_OF_STEPS = 5;
+    private static final int NUMBER_OF_STEPS = 50;
 
 
     public ImagePanel() {
@@ -31,16 +31,16 @@ public class ImagePanel extends JPanel {
                 repaint();
             }
         });
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                if (currentImageFile == null) {
-//                    currentImageFile = imageFileName;
-//                }
-//                numberOfSteps = 0;
-//                fadeOut = true;
-//                animating = true;
-//                currentAlpha = 1.0f;
+        new Thread() {
+            @Override
+            public void run() {
+                if (currentImageFile == null) {
+                    currentImageFile = imageFileName;
+                }
+                numberOfSteps = 0;
+                fadeOut = true;
+                animating = true;
+                currentAlpha = 1.0f;
 //                while (animating) {
 //                    try {
 //                        if (!fadeOut) {
@@ -59,7 +59,7 @@ public class ImagePanel extends JPanel {
 //                                currentAlpha = 0.0f;
 //                                invalidate();
 //                                repaint();
-//                                Thread.sleep(50);
+//                                Thread.sleep(500);
 //                                currentImageFile = imageFileName;
 //                                currentImage = null;
 //                            } else {
@@ -77,14 +77,14 @@ public class ImagePanel extends JPanel {
 //                                repaint();
 //                            }
 //                        });
-//                        Thread.sleep(10);
+//                        Thread.sleep(50);
 //                    } catch (InterruptedException e) {
 //                        // noop
 //                    }
 //                }
-//
-//            }
-//        }.start();
+
+            }
+        }.start();
 
 
     }

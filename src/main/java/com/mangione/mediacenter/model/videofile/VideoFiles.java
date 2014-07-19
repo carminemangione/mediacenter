@@ -17,7 +17,7 @@ public class VideoFiles {
     private static final int NUMBER_OF_IMAGES_TO_PRELOAD = 1;
 
     public VideoFiles(String[] videoDirectories) {
-        final List<VideoFile> videoFiles = Collections.synchronizedList(new ArrayList<VideoFile>());
+        final List<VideoFile> videoFiles = Collections.synchronizedList(new ArrayList<>());
         for (String directory : videoDirectories) {
             if (directory.length() > 0) {
                 final File staringDirectory = new File(directory);
@@ -56,27 +56,29 @@ public class VideoFiles {
         VideoFile foundFile = null;
         if (currentDirectory.isDirectory()) {
             File[] files = currentDirectory.listFiles();
-            for (File file : files) {
-                if (file.isDirectory()) {
-                 if (file.getName().toUpperCase().contains("VIDEO_TS")) {
-                        foundFile = new VideoFile(file);
-                    }   else {
-                        travelDownDirectoryTreeLookingForVideoFiles(file, videoFiles);
-                    }
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        if (file.getName().toUpperCase().contains("VIDEO_TS")) {
+                            foundFile = new DvdVideoFile(file);
+                        } else {
+                            travelDownDirectoryTreeLookingForVideoFiles(file, videoFiles);
+                        }
 
-                } else {
-                    String name = file.getName();
-                    if (name.endsWith(".mkv") || name.endsWith(".mp4") || name.endsWith(".m4v")) {
-                        foundFile = new VideoFile(currentDirectory, name);
-                    } else if (name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".gif")) {
-                        imageFile = file;
+                    } else {
+                        String name = file.getName();
+                        if (name.endsWith(".mkv") || name.endsWith(".mp4") || name.endsWith(".m4v")) {
+                            foundFile = new VideoFile(currentDirectory, name);
+                        } else if (name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".gif")) {
+                            imageFile = file;
+                        }
                     }
                 }
-            }
 
-            if (foundFile != null) {
-                foundFile.setImageFile(imageFile);
-                videoFiles.add(foundFile);
+                if (foundFile != null) {
+                    foundFile.setImageFile(imageFile);
+                    videoFiles.add(foundFile);
+                }
             }
         }
     }

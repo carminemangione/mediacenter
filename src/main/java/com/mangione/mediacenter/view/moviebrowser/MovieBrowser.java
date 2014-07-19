@@ -2,7 +2,7 @@ package com.mangione.mediacenter.view.moviebrowser;
 
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
-import com.mangione.mediacenter.view.panels.GradientPanel;
+import com.mangione.mediacenter.view.components.GradientPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,11 +71,9 @@ public class MovieBrowser extends GradientPanel {
                 if (repeat) {
                     currentRow = newRow;
                     currentSelectedRow = newRow;
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            invalidate();
-                            repaint();
-                        }
+                    SwingUtilities.invokeLater(() -> {
+                        invalidate();
+                        repaint();
                     });
                 } else {
                     animateRowChange(newRow);
@@ -176,26 +174,23 @@ public class MovieBrowser extends GradientPanel {
         int centerOfSelectedRow = (screenSize.height - heightOfTitle) / 2 + heightOfTitle;
         final int topOfFirstRowBeforeScroll = centerOfSelectedRow - imageSize.height *
                 (3 * fractionOfImageBetweenImages + 2) / 2 / fractionOfImageBetweenImages;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                currentTopOfImage = topOfFirstRowBeforeScroll;
-                int moveEachStep = 1;
-                int numberOfSteps = calculateHeightOfOneRow();
-                for (int i = 1; i < numberOfSteps; i++) {
-                    currentTopOfImage += (animateDown ? moveEachStep : -moveEachStep);
-                    repaint();
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        // nowarn
-                    }
-                }
-                currentTopOfImage = topOfFirstRowBeforeScroll;
-                currentRow = newRow;
+        SwingUtilities.invokeLater(() -> {
+            currentTopOfImage = topOfFirstRowBeforeScroll;
+            int moveEachStep = 1;
+            int numberOfSteps = calculateHeightOfOneRow();
+            for (int i = 1; i < numberOfSteps; i++) {
+                currentTopOfImage += (animateDown ? moveEachStep : -moveEachStep);
                 repaint();
-                animating = false;
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    // nowarn
+                }
             }
+            currentTopOfImage = topOfFirstRowBeforeScroll;
+            currentRow = newRow;
+            repaint();
+            animating = false;
         });
     }
 

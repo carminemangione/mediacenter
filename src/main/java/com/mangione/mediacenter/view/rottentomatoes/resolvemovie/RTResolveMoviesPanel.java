@@ -1,11 +1,14 @@
 package com.mangione.mediacenter.view.rottentomatoes.resolvemovie;
 
 
-import com.mangione.mediacenter.model.rottentomatoes.RTMovie;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
+import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTMovie;
 
 import javax.swing.*;
 import java.awt.*;
 import java.net.MalformedURLException;
+import java.util.Arrays;
 
 /**
  * User: carminemangione
@@ -15,31 +18,16 @@ import java.net.MalformedURLException;
  */
 public class RTResolveMoviesPanel extends JPanel {
 
-    private JPanel moviesPanel;
+    public RTResolveMoviesPanel(RTMovie[] movies) throws Exception {
 
-    public RTResolveMoviesPanel(final JComponent parent, final int xLoc, final int yLoc, RTMovie[] movies) throws Exception {
-
-        moviesPanel = createMoviesPanel(movies);
-
+        JComponent moviesPanel = createMoviesPanel(movies);
 
 //        JScrollPane scrollPane = new JScrollPane(moviesPanel);
 //        scrollPane.setPreferredSize(new Dimension(moviesPanel.getPreferredSize().width, 300));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        Insets insets = getInsets();
-        Dimension sizeWithInsets = new Dimension(moviesPanel.getPreferredSize().width + insets.left + insets.right,
-                moviesPanel.getPreferredSize().height + insets.top + insets.bottom);
-
-        parent.add(RTResolveMoviesPanel.this);
-//        DropShadowLayout dropShadowLayout = new DropShadowLayout(4);
-//        setLayout(dropShadowLayout);
-
-        setSize(sizeWithInsets);
         add(moviesPanel);
-        setLocation(xLoc, yLoc);
         setVisible(true);
-        moviesPanel.invalidate();
         validate();
-        parent.repaint();
     }
 
     @Override
@@ -47,80 +35,25 @@ public class RTResolveMoviesPanel extends JPanel {
         super.paint(graphics);
     }
 
-    private JPanel createMoviesPanel(RTMovie[] movies) throws MalformedURLException {
-        final GridLayout gridLayout = new GridLayout(movies.length, 1, 1, 10);
-        JPanel moviesPanel = new JPanel(gridLayout);
-        moviesPanel.setOpaque(true);
-        moviesPanel.setBackground(Color.LIGHT_GRAY);
+    private JList<DisplayableRTMovie> createMoviesPanel(RTMovie[] movies) throws MalformedURLException {
 
-        for (RTMovie movie : movies) {
-            final RTResolveMoviePanel panel = new RTResolveMoviePanel(movie);
-            moviesPanel.add(panel);
-        }
-        return moviesPanel;
+        final ImmutableList<DisplayableRTMovie> displayableRTMovies = FluentIterable
+                .from(Arrays.asList(movies))
+                .transform(rtMovie -> {
+                    try {
+                        return new DisplayableRTMovie(rtMovie);
+                    } catch (MalformedURLException e) {
+                        return null;
+                    }
+                }).toList();
+
+        DisplayableRTMovie[] array = displayableRTMovies.toArray(new DisplayableRTMovie[displayableRTMovies.size()]);
+        final JList<DisplayableRTMovie> rtMovieJList = new JList<>(array);
+        rtMovieJList.setCellRenderer(new RTResolveMovieListCellRender());
+        return rtMovieJList;
     }
 
 
-    private class DropShadowLayout implements LayoutManager2 {
-        private final int dropShadowThickness;
-        private Dimension dimension;
-        private Component component;
-
-        public DropShadowLayout(int dropShadowThickness) {
-            this.dropShadowThickness = dropShadowThickness;
-        }
-
-
-        @Override
-        public void addLayoutComponent(String s, Component component) {
-        }
-
-        @Override
-        public void removeLayoutComponent(Component component) {
-        }
-
-        @Override
-        public Dimension preferredLayoutSize(Container container) {
-            return dimension;
-        }
-
-        @Override
-        public Dimension minimumLayoutSize(Container container) {
-            return dimension;
-        }
-
-        @Override
-        public void layoutContainer(Container container) {
-            component.setLocation(container.getLocation());
-
-        }
-
-        @Override
-        public void addLayoutComponent(Component component, Object o) {
-            dimension = new Dimension(component.getPreferredSize().width + dropShadowThickness, component.getPreferredSize().height + dropShadowThickness);
-            this.component = component;
-        }
-
-        @Override
-        public Dimension maximumLayoutSize(Container container) {
-            return null;
-        }
-
-        @Override
-        public float getLayoutAlignmentX(Container container) {
-            return 0;
-        }
-
-        @Override
-        public float getLayoutAlignmentY(Container container) {
-            return 0;
-        }
-
-        @Override
-        public void invalidateLayout(Container container) {
-
-        }
-    }
 
 }
 

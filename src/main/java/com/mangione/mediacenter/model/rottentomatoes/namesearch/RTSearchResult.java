@@ -1,4 +1,4 @@
-package com.mangione.mediacenter.model.rottentomatoes;
+package com.mangione.mediacenter.model.rottentomatoes.namesearch;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

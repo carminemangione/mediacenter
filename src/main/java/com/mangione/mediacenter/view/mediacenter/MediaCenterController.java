@@ -10,14 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
-/**
- * User: carminemangione
- * Date: Feb 22, 2009
- * Time: 1:58:54 PM
- */
 public class MediaCenterController implements MediaCenterControllerInterface {
     private final MovieBrowserController movieBrowserController;
     private final JPanel panelWithBorder;
@@ -42,11 +35,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
         mediaCenterView.addKeyListener(new ScrollKeyListener(movieBrowserController, mediaCenterView));
 
         mediaCenterView.addMouseListener(new PopupMenuMouseListener());
-        mediaCenterView.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent event) {
-                System.exit(0);
-            }
-        });
+
     }
 
     @Override

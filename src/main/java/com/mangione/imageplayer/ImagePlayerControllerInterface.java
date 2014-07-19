@@ -10,4 +10,5 @@ public interface ImagePlayerControllerInterface {
     void increasePlaybackSpeed();
 
     void decreasePlaybackSpeed();
+
 }

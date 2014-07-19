@@ -10,10 +10,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Random;
 
 /**
  * User: carminemangione
@@ -25,7 +25,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
     private final Random RANDOM = new Random();
     private int currentIndex;
     private boolean pausePressed;
-    private List<FileWithComparString> imageFiles = Collections.synchronizedList(new ArrayList<FileWithComparString>());
+    private List<FileWithCompareString> imageFiles = Collections.synchronizedList(new ArrayList<>());
     private boolean running;
     private Thread thread;
     private ImagePanelController imagePanelController;
@@ -36,9 +36,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
     private ImagePlayerPanel playerFrame;
     private JPanel imagePanelWithTitle;
     private float currentTransparency = 1.0f;
-    private final static Pattern NUMBER_MATCH = Pattern.compile("\\d+");
-    private final static String[] EXTENSIONS = {".jpg", ".jpeg", ".png"};
-
+    private final static String[] EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif"};
 
 
     public ImagePlayerController() {
@@ -46,9 +44,8 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
         imageFileNameLabel.setForeground(Color.DARK_GRAY);
         imageFileNameLabel.setFont(imageFileNameLabel.getFont().deriveFont(Font.ITALIC, 9.0f));
         imageFileNameLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
-        File currentFile = new File("/Users/carminemangione/Pictures/internet/allpics/");
+        File currentFile = new File("/Users/carmine/Pictures/internet/allpics");
         recurseAndCollectFiles(currentFile);
-        System.out.println("currentFile = " + imageFiles.size());
 
         Collections.sort(imageFiles);
 
@@ -65,108 +62,24 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
     }
 
     private void recurseAndCollectFiles(File currentFile) {
-        for (File file : currentFile.listFiles()) {
-            if (file.isDirectory()) {
-                recurseAndCollectFiles(file);
-            } else {
-                String name = file.getName();
-                boolean imageFile = false;
-                for (int i = 0; i < EXTENSIONS.length && !imageFile; i++) {
-                    imageFile = name.endsWith(EXTENSIONS[i]);
-
-                }
-                if (imageFile && !file.getPath().contains("WICThumbs") && !name.contains("DFTTH")) {
-                    imageFiles.add(new FileWithComparString(file));
-                }
-
-            }
-        }
-    }
-
-    private synchronized void createAndDisplayPlayerFrame() {
-        Dimension frameSize;
-        Point location;
-        if (playerFrame == null) {
-            frameSize = new Dimension(300, 400);
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int windowX = Math.max(0, (screenSize.width - frameSize.width));
-            location = new Point(windowX, 0);
-        } else {
-            frameSize = playerFrame.getSize();
-            location = playerFrame.getLocation();
-            playerFrame.dispose();
-        }
-
-        playerFrame = new ImagePlayerPanel(imagePanelWithTitle, undecorated, frameSize, location);
-        playerFrame.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        undecorated = !undecorated;
-                        createAndDisplayPlayerFrame();
+        if (currentFile != null && currentFile.listFiles() != null) {
+            for (File file : currentFile.listFiles()) {
+                if (file.isDirectory()) {
+                    System.out.println(String.format("currentFile %s : %d", file.getAbsolutePath(), file.listFiles().length));
+                    recurseAndCollectFiles(file);
+                } else {
+                    String name = file.getName();
+                    boolean imageFile = false;
+                    for (int i = 0; i < EXTENSIONS.length && !imageFile; i++) {
+                        imageFile = name.toLowerCase().endsWith(EXTENSIONS[i]);
                     }
-                });
-            }
+                    if (imageFile && !file.getPath().contains("WICThumbs") && !name.contains("DFTTH")) {
+                        imageFiles.add(new FileWithCompareString(file));
+                    }
 
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-
-            }
-        });
-        playerFrame.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent event) {
-
-                switch (event.getKeyCode()) {
-                    case KeyEvent.VK_EQUALS:
-                        increasePlaybackSpeed();
-                        break;
-                    case KeyEvent.VK_MINUS:
-                        decreasePlaybackSpeed();
-                        break;
-                    case KeyEvent.VK_COMMA:
-                        currentIndex--;
-                        break;
-                    case KeyEvent.VK_PERIOD:
-                        currentIndex++;
-                        break;
-                    case KeyEvent.VK_T:
-                        currentTransparency = Math.max(0, currentTransparency - 0.02f);
-                        playerFrame.getRootPane().putClientProperty("Window.alpha", currentTransparency);
-                        break;
-                    case KeyEvent.VK_Y:
-                        currentTransparency = Math.min(1, currentTransparency + 0.02f);
-                        playerFrame.getRootPane().putClientProperty("Window.alpha", currentTransparency);
-                        break;
-                    case KeyEvent.VK_D:
-                        if (imageFiles.get(currentIndex).file.delete()) {
-                            imageFileNameLabel.setText("Deleted: " + imageFiles.get(currentIndex).file.getName());
-                        } else {
-                            imageFileNameLabel.setText("Deleted failed for: " + imageFiles.get(currentIndex).file.getName());
-                        }
-                        break;
-                    case KeyEvent.VK_R:
-                        currentIndex = RANDOM.nextInt(imageFiles.size());
-                        break;
                 }
-
             }
-        });
+        }
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -283,45 +196,142 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
         thread.start();
     }
 
-    private class FileWithComparString implements Comparable<FileWithComparString> {
+    private synchronized void createAndDisplayPlayerFrame() {
+        Dimension frameSize;
+        Point location;
+        if (playerFrame == null) {
+            frameSize = new Dimension(300, 400);
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int windowX = Math.max(0, (screenSize.width - frameSize.width));
+            location = new Point(windowX, 0);
+        } else {
+            frameSize = playerFrame.getSize();
+            location = playerFrame.getLocation();
+            playerFrame.dispose();
+        }
+
+
+        playerFrame = new ImagePlayerPanel(imagePanelWithTitle, undecorated, frameSize, location);
+        playerFrame.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                SwingUtilities.invokeLater(() -> {
+                    undecorated = !undecorated;
+                    createAndDisplayPlayerFrame();
+                });
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
+        playerFrame.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent event) {
+
+                switch (event.getKeyCode()) {
+                    case KeyEvent.VK_EQUALS:
+                        increasePlaybackSpeed();
+                        break;
+                    case KeyEvent.VK_MINUS:
+                        decreasePlaybackSpeed();
+                        break;
+                    case KeyEvent.VK_COMMA:
+                        currentIndex--;
+                        break;
+                    case KeyEvent.VK_PERIOD:
+                        currentIndex++;
+                        break;
+                    case KeyEvent.VK_T:
+                        currentTransparency = Math.max(0, currentTransparency - 0.02f);
+                        playerFrame.getRootPane().putClientProperty("Window.alpha", currentTransparency);
+                        break;
+                    case KeyEvent.VK_Y:
+                        currentTransparency = Math.min(1, currentTransparency + 0.02f);
+                        playerFrame.getRootPane().putClientProperty("Window.alpha", currentTransparency);
+                        break;
+                    case KeyEvent.VK_D:
+                        if (imageFiles.get(currentIndex).file.delete()) {
+                            imageFileNameLabel.setText("Deleted: " + imageFiles.get(currentIndex).file.getName());
+                        } else {
+                            imageFileNameLabel.setText("Deleted failed for: " + imageFiles.get(currentIndex).file.getName());
+                        }
+                        break;
+                    case KeyEvent.VK_R:
+                        currentIndex = RANDOM.nextInt(imageFiles.size());
+                        break;
+                }
+
+            }
+        });
+    }
+
+    private class FileWithCompareString implements Comparable<FileWithCompareString> {
         private File file;
         private String compareString;
         private Long number;
 
-        private FileWithComparString(File file) {
+        private FileWithCompareString(File file) {
             this.file = file;
-            this.compareString = getLeadingStringStrippedOfCopyNumber(file.getName());
-            Matcher m = NUMBER_MATCH.matcher(compareString);
-            if (m.matches()) {
-                int startDigit = compareString.length() > 16 ? compareString.length() - 16 : 0;
-                number = Long.parseLong(compareString.substring(startDigit));
-            }
+            this.compareString = getLeadingStringStrippedOfCopyNumber(file.getName().toLowerCase());
         }
 
         private String getLeadingStringStrippedOfCopyNumber(String name) {
-
-            String nameWithoutExtension = name.replace(".jpg", "").replace(".jpeg", "");
-            boolean oneDigitVersion = name.length() > 2 && name.charAt(name.length() - 2) == '-';
-            boolean twoDigitVersion = name.length() > 3 && name.charAt(name.length() - 3) == '-';
-            String strippedOfCopyNumber = nameWithoutExtension;
-            if (oneDigitVersion || twoDigitVersion) {
-                strippedOfCopyNumber = name.substring(0, name.lastIndexOf("-") - 1);
-
+            stripNameOfExtension(name);
+            int locationOfVersionNumber = name.length() - 1;
+            while (locationOfVersionNumber >= 1 && Character.isDigit(name.charAt(locationOfVersionNumber - 1))) {
+                locationOfVersionNumber--;
             }
-            return strippedOfCopyNumber.replace("-", "");
+
+            final int lengthOfVersionNumber = name.length() - locationOfVersionNumber;
+            final boolean isVersionReasonableNumber = lengthOfVersionNumber < 4
+                    && lengthOfVersionNumber > 1;
+            if (isVersionReasonableNumber) {
+                number = Long.getLong(name.substring(locationOfVersionNumber));
+            }
+
+            return name.replace("-", "");
         }
 
-        @Override
-        public int compareTo(FileWithComparString other) {
-            int compareTo;
-            if (compareString.equals(other.compareString)) {
-                compareTo = file.lastModified() > other.file.lastModified() ? 1 : file.lastModified() == other.file.lastModified() ? 0 : -1;
-            } else if (number != null && other.number != null) {
-                compareTo = number.compareTo(other.number);
-            } else {
-                compareTo = compareString.compareTo(other.compareString);
+        private String stripNameOfExtension(String name) {
+            for (String extension : EXTENSIONS) {
+                name = name.replace(extension, "");
             }
-            return compareTo; 
+            return name.replace(".", "");
+        }
+
+
+        @Override
+        public int compareTo(FileWithCompareString other) {
+            try {
+                int compareTo;
+                if (compareString.equals(other.compareString)) {
+                    compareTo = number != null && other.number != null ? number.compareTo(other.number) :
+                            0;
+                } else {
+                    compareTo = compareString.compareTo(other.compareString);
+                }
+                return compareTo;
+            } catch (Throwable e) {
+                e.printStackTrace();
+                return 0;
+            }
+
         }
     }
 }

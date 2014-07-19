@@ -1,7 +1,6 @@
 package com.mangione.imagedupfinder;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +11,11 @@ import java.util.List;
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
 public class ImageDupFinder {
-    private static List<File> imageFiles = new ArrayList<File>();
+    private static List<File> imageFiles = new ArrayList<>();
 
     public static void main(String[] args) {
 
-        recurseAndCollectFiles(new File("/Users/carminemangione/Pictures/internet/allpics/"));
+        recurseAndCollectFiles(new File("/Users/carmine/Pictures/internet/allpics/"));
         System.out.println("processing " + imageFiles.size());
 
 
@@ -26,6 +25,8 @@ public class ImageDupFinder {
             try {
                 imageStats[i] = new ImageStats(imageFiles.get(i));
             } catch (Throwable e) {
+                //noinspection ResultOfMethodCallIgnored
+                imageFiles.get(i).delete();
             }
         }
 
@@ -48,11 +49,13 @@ public class ImageDupFinder {
     }
 
     private static void recurseAndCollectFiles(File currentFile) {
-        for (File file : currentFile.listFiles()) {
-            if (file.isDirectory()) {
-                recurseAndCollectFiles(file);
-            } else {
-                imageFiles.add(file);
+        if (currentFile != null) {
+            for (File file : currentFile.listFiles()) {
+                if (file.isDirectory()) {
+                    recurseAndCollectFiles(file);
+                } else {
+                    imageFiles.add(file);
+                }
             }
         }
     }

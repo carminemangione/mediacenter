@@ -1,20 +1,9 @@
-package com.mangione.mediacenter.view.panels;
+package com.mangione.mediacenter.view.components;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GradientPanel extends JPanel {
-    public GradientPanel(LayoutManager layoutManager, boolean b) {
-        super(layoutManager, b);
-    }
-
-    public GradientPanel(LayoutManager layoutManager) {
-        super(layoutManager);
-    }
-
-    public GradientPanel(boolean b) {
-        super(b);
-    }
 
     public GradientPanel() {
         super();

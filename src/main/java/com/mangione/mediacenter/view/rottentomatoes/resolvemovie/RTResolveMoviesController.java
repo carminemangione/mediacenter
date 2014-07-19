@@ -1,9 +1,8 @@
 package com.mangione.mediacenter.view.rottentomatoes.resolvemovie;
 
-import com.mangione.mediacenter.model.rottentomatoes.RTMovie;
-import com.mangione.mediacenter.model.rottentomatoes.RTSearchResult;
-import com.mangione.mediacenter.model.rottentomatoes.RottenTomatoesSearch;
-import com.mangione.mediacenter.view.panels.ImagePanel;
+import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTMovie;
+import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTSearchResult;
+import com.mangione.mediacenter.model.rottentomatoes.namesearch.RottenTomatoesSearch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,27 +18,20 @@ public class RTResolveMoviesController {
     private JPanel resolveMoviesPanel;
 
     public static void main(String[] args) throws Exception {
-        final ImageIcon icon = new ImageIcon(RTResolveMoviesController.class.getClassLoader().getResource("folder.jpg"));
 
-        ImagePanel imagePanel = new ImagePanel(icon, 1000, 1000);
         JFrame frame = new JFrame();
-        frame.add(imagePanel);
+        final RTResolveMoviesController rtResolveMoviesController = new RTResolveMoviesController("under one roof");
+        frame.setContentPane(rtResolveMoviesController.resolveMoviesPanel);
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        new RTResolveMoviesController(frame.getLayeredPane(), 50, 50, "under one roof");
     }
 
-    public RTResolveMoviesController(JComponent parent, int locX, int locY, String movieName) throws Exception {
+    public RTResolveMoviesController(String movieName) throws Exception {
         final RTSearchResult searchResult = new RottenTomatoesSearch(movieName).getSearchResult();
         final RTMovie[] movies = searchResult.getMovies();
-        resolveMoviesPanel = new RTResolveMoviesPanel(parent, locX, locY, movies);
+        resolveMoviesPanel = new RTResolveMoviesPanel(movies);
     }
-
-    public Component getPanel() {
-        return resolveMoviesPanel;
-    }
-
 
 
 }

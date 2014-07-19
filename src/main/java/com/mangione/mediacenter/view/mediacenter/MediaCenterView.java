@@ -14,20 +14,18 @@ public class MediaCenterView extends JFrame {
     public MediaCenterView(JComponent mediaImageGrid, GraphicsDevice graphicsDevice) throws HeadlessException {
         this.graphicsDevice = graphicsDevice;
         setLayout(new BorderLayout());
-        add(mediaImageGrid, BorderLayout.CENTER);
-
         setBackground(Color.black);
-        if(!isDebugMode()){
-            setUndecorated(true);
-        }
-        pack();
-
-        setFullScreen();
+        setFullScreen(mediaImageGrid);
     }
 
-    private void setFullScreen() {
+    private void setFullScreen(Container mediaImageGrid) {
         setState(Frame.NORMAL);
         if (!isDebugMode()) {
+            setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            setUndecorated(true);
+            setResizable(false);
+            setContentPane(mediaImageGrid);
+            validate();
             graphicsDevice.setFullScreenWindow(this);
         } else {
             setSize(500, 500);
@@ -39,7 +37,6 @@ public class MediaCenterView extends JFrame {
         return "true".equalsIgnoreCase(System.getProperty("debug"));
     }
 
-
     public void windowToBack(boolean toBack) {
         if (toBack) {
             graphicsDevice.setFullScreenWindow(null);
@@ -47,15 +44,8 @@ public class MediaCenterView extends JFrame {
             setVisible(false);
             setState(Frame.ICONIFIED);
         } else {
-            setFullScreen();
+            setFullScreen(null);
         }
     }
-
-    public void hideWindow() {
-        dispose();
-        setVisible(false);
-        setState(Frame.ICONIFIED);
-    }
-
 
 }

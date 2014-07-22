@@ -4,11 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GradientPanel extends JPanel {
-
-    public GradientPanel() {
-        super();
-    }
-
     protected void addGradient(Graphics2D graphics2d, int currentBottomOfGradient, int heightToMask,
             boolean down, Color gradientColor) {
         Color oldColor = graphics2d.getColor();

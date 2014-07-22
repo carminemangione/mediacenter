@@ -6,33 +6,19 @@ import com.google.common.collect.ImmutableList;
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTMovie;
 
 import javax.swing.*;
-import java.awt.*;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 
-/**
- * User: carminemangione
- * Date: Dec 28, 2009
- * Time: 9:33:03 PM
- * Copyright Cognigtive Health Sciences, Inc. All rights reserved
- */
 public class RTResolveMoviesPanel extends JPanel {
 
     public RTResolveMoviesPanel(RTMovie[] movies) throws Exception {
 
         JComponent moviesPanel = createMoviesPanel(movies);
 
-//        JScrollPane scrollPane = new JScrollPane(moviesPanel);
-//        scrollPane.setPreferredSize(new Dimension(moviesPanel.getPreferredSize().width, 300));
+        JScrollPane scrollPane = new JScrollPane(moviesPanel);
+        scrollPane.setViewportView(moviesPanel);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(moviesPanel);
-        setVisible(true);
-        validate();
-    }
-
-    @Override
-    public void paint(Graphics graphics) {
-        super.paint(graphics);
+        add(scrollPane);
     }
 
     private JList<DisplayableRTMovie> createMoviesPanel(RTMovie[] movies) throws MalformedURLException {
@@ -50,6 +36,7 @@ public class RTResolveMoviesPanel extends JPanel {
         DisplayableRTMovie[] array = displayableRTMovies.toArray(new DisplayableRTMovie[displayableRTMovies.size()]);
         final JList<DisplayableRTMovie> rtMovieJList = new JList<>(array);
         rtMovieJList.setCellRenderer(new RTResolveMovieListCellRender());
+        rtMovieJList.setVisibleRowCount(3);
         return rtMovieJList;
     }
 

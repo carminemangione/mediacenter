@@ -8,11 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-/**
- * User: carminemangione
- * Date: Aug 8, 2009
- * Time: 4:18:44 PM
- */
+
 public class MovieBrowser extends GradientPanel {
     private final static int NUMBER_OF_COLUMNS = 5;
     private final static double ASPECT_RATIO_OF_ICON = 0.70;

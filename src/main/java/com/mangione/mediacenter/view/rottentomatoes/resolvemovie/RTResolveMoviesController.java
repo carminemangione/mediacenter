@@ -5,7 +5,6 @@ import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTSearchResult;
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RottenTomatoesSearch;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * User: carminemangione

@@ -3,12 +3,7 @@ package com.mangione.mediacenter.model.videofile;
 import javax.swing.*;
 import java.io.File;
 
-/**
- * User: carminemangione
- * Date: Oct 7, 2009
- * Time: 10:32:53 PM
- * Copyright Cognigtive Health Sciences, Inc. All rights reserved
- */
+
 public class VideoFile implements Comparable<VideoFile> {
     private static final ImageIcon IMAGE_NOT_FOUND_ICON = new ImageIcon(VideoFile.class.getClassLoader().getResource("blankimage.jpeg"));
 

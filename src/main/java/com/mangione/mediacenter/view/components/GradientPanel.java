@@ -9,8 +9,9 @@ public class GradientPanel extends JPanel {
         super();
     }
 
-    protected void addGradient(Graphics2D graphics2d, int currentBottomOfGradient, int heightToMask, boolean down,
-            Color gradientColor) {
+    protected void addGradient(Graphics2D graphics2d, int currentBottomOfGradient, int heightToMask,
+            boolean down, Color gradientColor) {
+        Color oldColor = graphics2d.getColor();
         graphics2d.setColor(gradientColor);
         double startingAlphaComposite = 1;
         for (int i = 0; i < heightToMask; i++) {
@@ -18,9 +19,9 @@ public class GradientPanel extends JPanel {
             AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)
                     alphaComposite);
             graphics2d.setComposite(ac);
-            graphics2d.setColor(Color.black);
             graphics2d.fillRect(0, currentBottomOfGradient, getPreferredSize().width, 1);
             currentBottomOfGradient += (down ? 1 : -1);
         }
+        graphics2d.setColor(oldColor);
     }
 }

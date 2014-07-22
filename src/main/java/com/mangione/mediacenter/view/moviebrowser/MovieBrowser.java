@@ -11,38 +11,35 @@ import java.awt.event.KeyEvent;
 
 public class MovieBrowser extends GradientPanel {
     private final static int NUMBER_OF_COLUMNS = 5;
-    private final static double ASPECT_RATIO_OF_ICON = 0.70;
-    private final static double PERCENT_SCEEN_HEIGHT_OF_FILE_NAME = 0.20;
-    private final Dimension imageSize;
-    private final Dimension screenSize;
-    private final int leftRightBorderSize;
-    private final int heightOfTitle;
+    private final static double ASPECT_RATIO_OF_POSTER = 0.70;
+    private final static int HORIZONTAL_BORDER = 10;
+    private final static int VERTICAL_BORDER = 10;
+    private final int strokeHighlightWidth = 6;
+
     private int currentColumn = 0;
     private int currentRow = 0;
     private int numberOfLines;
     private VideoFiles videoFiles;
-    private int fractionOfImageBetweenImages = 5;
     private int currentTopOfImage;
     private int currentSelectedRow = currentRow;
-    private Font movieTitleFont;
-    private boolean dimm = false;
-    private boolean animating = false;
 
-    public MovieBrowser(Dimension screenSize, VideoFiles movieDirs) throws Exception {
-        this.screenSize = screenSize;
-        setOpaque(false);
-        heightOfTitle = (int) (screenSize.height * PERCENT_SCEEN_HEIGHT_OF_FILE_NAME);
-        double heightOfImage = (screenSize.height - heightOfTitle) * fractionOfImageBetweenImages / (1 + (2 * fractionOfImageBetweenImages));
-        imageSize = new Dimension((int) (heightOfImage * ASPECT_RATIO_OF_ICON), (int) heightOfImage);
-        leftRightBorderSize = (screenSize.width - NUMBER_OF_COLUMNS * imageSize.width) / 5;
+    private boolean dim = false;
+    private boolean animating = false;
+    private int columnWidth;
+    private int posterWidth;
+    private int posterHeight;
+    private double rowHeight;
+    private Font movieTitleFont;
+
+    public MovieBrowser(VideoFiles movieDirs) throws Exception {
         numberOfLines = movieDirs.getNumberOfVideoFiles() / NUMBER_OF_COLUMNS + 1;
         videoFiles = movieDirs;
         movieTitleFont = new Font(Font.SANS_SERIF, Font.BOLD, 50);
-        setPreferredSize(screenSize);
+        setOpaque(false);
     }
 
     public void setDim(boolean dim) {
-        this.dimm = dim;
+        this.dim = dim;
         invalidate();
         repaint();
     }
@@ -91,126 +88,118 @@ public class MovieBrowser extends GradientPanel {
     }
 
     @Override
-    public synchronized void paint(Graphics graphics) {
+    public synchronized void paintComponent(Graphics graphics) {
         Graphics2D graphics2d = (Graphics2D) graphics;
+        Dimension screenSize = getSize();
+
+        columnWidth = (int) (screenSize.getWidth() / NUMBER_OF_COLUMNS);
+
+        posterWidth = columnWidth - HORIZONTAL_BORDER * 2;
+        posterHeight = (int) ((double) posterWidth / ASPECT_RATIO_OF_POSTER);
+        rowHeight = posterHeight + 2 * VERTICAL_BORDER;
+
+        int numberOfRowsThatFitOnTheScreen = (int) Math.ceil(screenSize.getHeight() / (posterHeight + 2 * VERTICAL_BORDER));
 
         Color oldColor = graphics2d.getColor();
-        Stroke oldStroke = graphics2d.getStroke();
         if (videoFiles.getNumberOfVideoFiles() > 0) {
             final int indexOfSelected = getIndexOfSelected();
 
-            graphics2d.setStroke(new BasicStroke(4f));
-            graphics2d.setColor(Color.white);
-            graphics2d.drawLine(0, heightOfTitle - 4, screenSize.width, heightOfTitle - 4);
-
-            String movieName = videoFiles.getVideoFile(indexOfSelected).getVideoName();
-            graphics2d.setFont(movieTitleFont);
-            graphics2d.setColor(Color.LIGHT_GRAY);
-            graphics2d.drawString(movieName, 30, heightOfTitle / 2);
-
-            graphics2d.setClip(0, heightOfTitle, screenSize.width, screenSize.height);
-            int topOfCurrentImageRow = currentTopOfImage;
-
-            paintThreeRowsOfImagesLeavingBlankRowAtTop(graphics2d, indexOfSelected, topOfCurrentImageRow);
+            paintRowsOfPosters(graphics2d, indexOfSelected, numberOfRowsThatFitOnTheScreen);
             Composite oldAlphaComposite = graphics2d.getComposite();
 
-            if (dimm) {
+            if (dim) {
                 graphics2d.setColor(Color.black);
                 AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
                 graphics2d.setComposite(ac);
                 graphics2d.fillRect(0, 0, screenSize.width, screenSize.height);
             }
 
-            int currentBottomOfGradient = heightOfTitle;
-            int heightToMask = imageSize.height / 6;
-            addGradient(graphics2d, currentBottomOfGradient, heightToMask, true, Color.black);
+            int heightToMask = posterHeight / 2;
+            addGradient(graphics2d, 0, heightToMask, true, Color.black);
 
-            currentBottomOfGradient = screenSize.height;
-            addGradient(graphics2d, currentBottomOfGradient, heightToMask, false, Color.black);
+            addGradient(graphics2d, screenSize.height, heightToMask, false, Color.black);
 
             graphics2d.setComposite(oldAlphaComposite);
 
         } else {
+            final Font oldStroke = graphics2d.getFont();
             graphics2d.setFont(movieTitleFont);
             graphics2d.setColor(Color.LIGHT_GRAY);
             graphics2d.drawString("No movies found... Add a directory", 50, screenSize.height / 2 - 20);
+            graphics2d.setFont(oldStroke);
 
         }
         graphics2d.setColor(oldColor);
-        graphics2d.setStroke(oldStroke);
-        super.paint(graphics);
     }
 
-    private void paintThreeRowsOfImagesLeavingBlankRowAtTop(Graphics2D graphics2d, int indexOfSelected, int topOfCurrentImageRow) {
+
+    private void paintRowsOfPosters(Graphics2D graphics2d, int indexOfSelected, int numberOfRows) {
         int startingRow;
+        int topOfCurrentImageRow = currentTopOfImage;
         if (currentRow > 0) {
             startingRow = currentRow - 1;
         } else {
             startingRow = 0;
-            topOfCurrentImageRow += calculateHeightOfOneRow();
+            topOfCurrentImageRow += rowHeight;
         }
-        for (int i = startingRow; i < startingRow + 3; i++) {
+        for (int i = startingRow; i < numberOfRows + 3; i++) {
             paintOneRowOfImages(graphics2d, indexOfSelected, i, topOfCurrentImageRow);
-            topOfCurrentImageRow += calculateHeightOfOneRow();
+            topOfCurrentImageRow += rowHeight;
         }
     }
 
-    private int calculateHeightOfOneRow() {
-        return imageSize.height * (1 + fractionOfImageBetweenImages) / fractionOfImageBetweenImages;
-    }
 
     private int getIndexOfSelected() {
         return Math.min(currentSelectedRow * NUMBER_OF_COLUMNS + currentColumn, videoFiles.getNumberOfVideoFiles() - 1);
     }
 
     private void animateRowChange(final int newRow) {
-        animating = true;
-        final boolean animateDown = newRow < currentRow;
-        currentSelectedRow = newRow;
-        int centerOfSelectedRow = (screenSize.height - heightOfTitle) / 2 + heightOfTitle;
-        final int topOfFirstRowBeforeScroll = centerOfSelectedRow - imageSize.height *
-                (3 * fractionOfImageBetweenImages + 2) / 2 / fractionOfImageBetweenImages;
-        SwingUtilities.invokeLater(() -> {
-            currentTopOfImage = topOfFirstRowBeforeScroll;
-            int moveEachStep = 1;
-            int numberOfSteps = calculateHeightOfOneRow();
-            for (int i = 1; i < numberOfSteps; i++) {
-                currentTopOfImage += (animateDown ? moveEachStep : -moveEachStep);
-                repaint();
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    // nowarn
+        new Thread() {
+            public void run() {
+                animating = true;
+                final boolean animateDown = newRow < currentRow;
+                currentSelectedRow = newRow;
+
+                currentTopOfImage = 0;
+                int moveEachStep = 10;
+                int numberOfSteps = (int) rowHeight / moveEachStep;
+                for (int i = 1; i < numberOfSteps; i++) {
+                    currentTopOfImage += (animateDown ? moveEachStep : -moveEachStep);
+                    repaint();
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        // nowarn
+                    }
                 }
+                currentTopOfImage = 0;
+                currentRow = newRow;
+                repaint();
+                animating = false;
             }
-            currentTopOfImage = topOfFirstRowBeforeScroll;
-            currentRow = newRow;
-            repaint();
-            animating = false;
-        });
+        }.start();
+
     }
 
 
     private void paintOneRowOfImages(Graphics2D graphics2d, int indexOfSelected, int row, int topOfImage) {
         int currentIndex = row * NUMBER_OF_COLUMNS;
         for (int column = 0; column < NUMBER_OF_COLUMNS && currentIndex < videoFiles.getNumberOfVideoFiles(); column++) {
-            int leftOfImage = getLeftOfImage(column);
+            int leftOfImage = columnWidth * column;
 
             ImageIcon currentImage = videoFiles.getVideoFile(currentIndex).getImageIcon();
-            graphics2d.drawImage(currentImage.getImage(), leftOfImage, topOfImage, imageSize.width,
-                    imageSize.height, null);
+            graphics2d.drawImage(currentImage.getImage(), leftOfImage, topOfImage, posterWidth,
+                    posterHeight, null);
             if (currentIndex == indexOfSelected) {
                 graphics2d.setColor(Color.green);
-                graphics2d.setStroke(new BasicStroke(6));
-                graphics2d.drawRoundRect(leftOfImage - 6, topOfImage - 6, imageSize.width + 6, imageSize.height + 6, 4, 4);
+                graphics2d.setStroke(new BasicStroke(strokeHighlightWidth));
+                graphics2d.drawRoundRect(leftOfImage - strokeHighlightWidth, topOfImage - strokeHighlightWidth,
+                        posterWidth + strokeHighlightWidth, posterHeight + strokeHighlightWidth, 4, 4);
             }
             currentIndex++;
         }
     }
 
-    private int getLeftOfImage(int column) {
-        return column * (imageSize.width + leftRightBorderSize) + leftRightBorderSize / 2;
-    }
 
     private int stopScrollAtTopOrBottom(int newRow) {
         if (newRow < 0) {

@@ -6,8 +6,6 @@ import com.mangione.mediacenter.view.mediacenter.MediaCenterView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * User: carminemangione
@@ -16,26 +14,19 @@ import java.awt.event.ActionListener;
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
 public class ManageVideoDirectoriesController implements ManageVideoDirectoriesControllerInterface {
-    private final MediaCenterView parent;
     private MediaCenterControllerInterface mediaCenterControllerInterface;
 
     public ManageVideoDirectoriesController(final MediaCenterView parent, Point location,
         MediaCenterControllerInterface mediaCenterControllerInterface) {
-        this.parent = parent;
 
         this.mediaCenterControllerInterface = mediaCenterControllerInterface;
-        
+
             final JPopupMenu popupMenu = new JPopupMenu();
             JMenuItem menuItem = new JMenuItem("Manage video directories...");
-            menuItem.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    launchManageDirectoriesWindow(parent);
-                }
-            });
+            menuItem.addActionListener(actionEvent -> launchManageDirectoriesWindow(parent));
             popupMenu.add(menuItem);
             popupMenu.show(parent, location.x, location.y);
-//            parent.windowToBack(true);
+
     }
 
     private void launchManageDirectoriesWindow(JFrame parent) {
@@ -45,6 +36,5 @@ public class ManageVideoDirectoriesController implements ManageVideoDirectoriesC
     @Override
     public void finishedUpdatingDirectories(String[] directories) {
         ManageVideoDirectoriesController.this.mediaCenterControllerInterface.videoSelectionFinished();
-        parent.windowToBack(false);
     }
 }

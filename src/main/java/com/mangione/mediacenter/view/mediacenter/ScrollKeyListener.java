@@ -36,9 +36,7 @@ public class ScrollKeyListener implements KeyListener {
             if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
                 new KillMplayerX();
                 VideoFile videoFile = movieBrowserController.getCurrentVideoFile();
-                mediaCenterView.windowToBack(true);
                 new LaunchMplayerXAndWaitForTerminate(videoFile);
-                mediaCenterView.windowToBack(false);
             } else if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 mediaCenterView.dispatchEvent(new WindowEvent(mediaCenterView, WindowEvent.WINDOW_CLOSING));
             } else {

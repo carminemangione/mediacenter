@@ -1,7 +1,6 @@
 package com.mangione.mediacenter.view.mediacenter;
 
 import com.mangione.mediacenter.model.VideoDirectories;
-import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
 import com.mangione.mediacenter.view.managevideodirectories.ManageVideoDirectoriesController;
 import com.mangione.mediacenter.view.moviebrowser.MovieBrowserController;
@@ -24,23 +23,15 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
     public MediaCenterController(VideoFiles videoFiles) throws Exception {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MediaCenter");
-        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
-        Dimension maximumWindowSize = new Dimension(graphicsDevice.getDisplayMode().getWidth(), graphicsDevice.getDisplayMode().getHeight());
 
-        movieBrowserController = new MovieBrowserController(this, maximumWindowSize, videoFiles);
+        movieBrowserController = new MovieBrowserController(videoFiles);
         panelWithBorder = movieBrowserController.getMovieBrowser();
 
-        mediaCenterView = new MediaCenterView(panelWithBorder, graphicsDevice);
+        mediaCenterView = new MediaCenterView(panelWithBorder);
         mediaCenterView.addKeyListener(new ScrollKeyListener(movieBrowserController, mediaCenterView));
 
         mediaCenterView.addMouseListener(new PopupMenuMouseListener());
 
-    }
-
-    @Override
-    public void playerFinishedPlaying() {
-        mediaCenterView.windowToBack(false);
     }
 
     @Override
@@ -49,18 +40,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
         panelWithBorder.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         movieBrowserController.setVideoFiles(loadVideoFiles());
         movieBrowserController.setDim(false);
-        mediaCenterView.windowToBack(true);
         panelWithBorder.setCursor(oldCursor);
-    }
-
-    @Override
-    public void showMovieDetails(VideoFile selectedVideoFile, int xPos, int yPos) {
-
-    }
-
-    @Override
-    public void killMovieDetails() {
-
     }
 
     private static VideoFiles loadVideoFiles() {

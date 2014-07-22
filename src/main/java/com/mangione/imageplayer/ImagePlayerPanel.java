@@ -2,8 +2,6 @@ package com.mangione.imageplayer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 /**
  * User: carminemangione
@@ -25,11 +23,7 @@ public class ImagePlayerPanel extends JFrame {
         setLocation(location.x, location.y);
         setVisible(true);
         setAlwaysOnTop(true);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent event) {
-                System.exit(0);
-            }
-        });
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
     }
 }

@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 
-public class MovieBrowser extends GradientPanel {
+public class MovieBrowserPanel extends GradientPanel {
     private final static int NUMBER_OF_COLUMNS = 5;
     private final static double ASPECT_RATIO_OF_POSTER = 0.70;
     private final static double HORIZONTAL_BORDER = 0.02;
@@ -32,7 +32,7 @@ public class MovieBrowser extends GradientPanel {
     private int verticalBorder;
     private int currentTopOfImage;
 
-    public MovieBrowser(VideoFiles movieDirs) throws Exception {
+    public MovieBrowserPanel(VideoFiles movieDirs) throws Exception {
         numberOfLines = movieDirs.getNumberOfVideoFiles() / NUMBER_OF_COLUMNS + 1;
         videoFiles = movieDirs;
         movieTitleFont = new Font(Font.SANS_SERIF, Font.BOLD, 50);
@@ -85,7 +85,7 @@ public class MovieBrowser extends GradientPanel {
     public void setVideoFiles(VideoFiles videoFiles) {
         this.videoFiles = videoFiles;
         numberOfLines = videoFiles.getNumberOfVideoFiles() / NUMBER_OF_COLUMNS + 1;
-        repaint();
+        SwingUtilities.invokeLater(this::repaint);
     }
 
     @Override
@@ -265,5 +265,7 @@ public class MovieBrowser extends GradientPanel {
         }
         return newRow;
     }
+
+
 
 }

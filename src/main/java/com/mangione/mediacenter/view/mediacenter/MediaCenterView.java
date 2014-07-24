@@ -13,7 +13,6 @@ public class MediaCenterView extends JFrame {
     public MediaCenterView(JComponent mediaImageGrid) throws HeadlessException {
 
         setContentPane(mediaImageGrid);
-        setLayout(new BorderLayout());
         setBackground(Color.black);
         setPreferredSize(new Dimension(600, 500));
         validate();

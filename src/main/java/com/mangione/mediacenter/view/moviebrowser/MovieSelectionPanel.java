@@ -1,0 +1,59 @@
+package com.mangione.mediacenter.view.moviebrowser;
+
+import com.mangione.mediacenter.model.videofile.VideoFile;
+import com.mangione.mediacenter.model.videofile.VideoFiles;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+
+public class MovieSelectionPanel extends JPanel {
+    private static final Font FONT = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+    private final JLabel movieTitle;
+    private final MovieBrowserPanel movieBrowserPanel;
+
+    public MovieSelectionPanel(VideoFiles moviesFiles) throws Exception {
+        setOpaque(false);
+        setLayout(new BorderLayout());
+        movieTitle = new JLabel("No selection");
+        movieTitle.setFont(FONT);
+        movieTitle.setForeground(Color.CYAN);
+        movieTitle.setBackground(Color.BLACK);
+        movieTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        movieTitle.setVerticalAlignment(SwingConstants.CENTER);
+
+        movieBrowserPanel = new MovieBrowserPanel(moviesFiles);
+        add(movieTitle, BorderLayout.NORTH);
+        add(movieBrowserPanel, BorderLayout.CENTER);
+    }
+
+    public void movieTitleChanged(String newMovieTitle) {
+        SwingUtilities.invokeLater(() -> {
+            movieTitle.setText(newMovieTitle);
+            repaint();
+        });
+    }
+
+    public void setVideoFiles(VideoFiles videoFiles) {
+        movieBrowserPanel.setVideoFiles(videoFiles);
+    }
+
+    public void setDim(boolean b) {
+        movieBrowserPanel.setDim(b);
+    }
+
+    public void zoomToLetter(char keyPressed) {
+        movieBrowserPanel.zoomToLetter(keyPressed);
+        movieTitleChanged(movieBrowserPanel.getCurrentVideoFile().getVideoName());
+    }
+
+    public VideoFile getCurrentVideoFile() {
+        return movieBrowserPanel.getCurrentVideoFile();
+    }
+
+    public void arrowPressed(KeyEvent keyEvent, boolean lastEventWasKeyPressed) throws Exception {
+        movieBrowserPanel.arrowPressed(keyEvent, lastEventWasKeyPressed);
+        movieTitleChanged(movieBrowserPanel.getCurrentVideoFile().getVideoName());
+    }
+
+}

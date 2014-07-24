@@ -3,7 +3,7 @@ package com.mangione.mediacenter.view.mediacenter;
 import com.mangione.mediacenter.model.VideoDirectories;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
 import com.mangione.mediacenter.view.managevideodirectories.ManageVideoDirectoriesController;
-import com.mangione.mediacenter.view.moviebrowser.MovieBrowserController;
+import com.mangione.mediacenter.view.moviebrowser.MovieSelectionController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MediaCenterController implements MediaCenterControllerInterface {
-    private final MovieBrowserController movieBrowserController;
+    private final MovieSelectionController movieSelectionController;
     private final JPanel panelWithBorder;
 
     private MediaCenterView mediaCenterView;
@@ -24,11 +24,11 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     public MediaCenterController(VideoFiles videoFiles) throws Exception {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MediaCenter");
 
-        movieBrowserController = new MovieBrowserController(videoFiles);
-        panelWithBorder = movieBrowserController.getMovieBrowser();
+        movieSelectionController = new MovieSelectionController(videoFiles);
+        panelWithBorder = movieSelectionController.getMovieSelectionPanel();
 
         mediaCenterView = new MediaCenterView(panelWithBorder);
-        mediaCenterView.addKeyListener(new ScrollKeyListener(movieBrowserController, mediaCenterView));
+        mediaCenterView.addKeyListener(new ScrollKeyListener(movieSelectionController, mediaCenterView));
 
         mediaCenterView.addMouseListener(new PopupMenuMouseListener());
 
@@ -38,8 +38,8 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     public void videoSelectionFinished() {
         Cursor oldCursor = panelWithBorder.getCursor();
         panelWithBorder.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        movieBrowserController.setVideoFiles(loadVideoFiles());
-        movieBrowserController.setDim(false);
+        movieSelectionController.setVideoFiles(loadVideoFiles());
+        movieSelectionController.setDim(false);
         panelWithBorder.setCursor(oldCursor);
     }
 
@@ -66,7 +66,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
         private void showPopupIfTrigger(final MouseEvent mouseEvent) {
             if (mouseEvent.isPopupTrigger()) {
-                movieBrowserController.setDim(true);
+                movieSelectionController.setDim(true);
                 new ManageVideoDirectoriesController(mediaCenterView, mouseEvent.getPoint(), MediaCenterController.this);
 
             }

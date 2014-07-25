@@ -6,19 +6,22 @@ import com.google.common.collect.ImmutableList;
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTMovie;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 
 public class RTResolveMoviesPanel extends JPanel {
 
     public RTResolveMoviesPanel(RTMovie[] movies) throws Exception {
+        setOpaque(false);
+        setLayout(new BorderLayout());
 
         JComponent moviesPanel = createMoviesPanel(movies);
 
         JScrollPane scrollPane = new JScrollPane(moviesPanel);
         scrollPane.setViewportView(moviesPanel);
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(scrollPane);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private JList<DisplayableRTMovie> createMoviesPanel(RTMovie[] movies) throws MalformedURLException {
@@ -29,6 +32,8 @@ public class RTResolveMoviesPanel extends JPanel {
                     try {
                         return new DisplayableRTMovie(rtMovie);
                     } catch (MalformedURLException e) {
+                        return null;
+                    } catch (IOException e) {
                         return null;
                     }
                 }).toList();

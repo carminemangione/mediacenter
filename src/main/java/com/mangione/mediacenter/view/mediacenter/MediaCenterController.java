@@ -1,20 +1,17 @@
 package com.mangione.mediacenter.view.mediacenter;
 
 import com.mangione.mediacenter.model.VideoDirectories;
+import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
-import com.mangione.mediacenter.view.managevideodirectories.ManageVideoDirectoriesController;
 import com.mangione.mediacenter.view.moviebrowser.MovieSelectionController;
+import com.mangione.mediacenter.view.rottentomatoes.resolvemovie.RTResolveMoviesController;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 
 public class MediaCenterController implements MediaCenterControllerInterface {
     private final MovieSelectionController movieSelectionController;
-    private final JPanel panelWithBorder;
-
-    private MediaCenterView mediaCenterView;
+    private final MediaCenterView mediaCenterView;
 
     public static void main(String[] args) throws Exception {
         VideoFiles videoFiles = loadVideoFiles();
@@ -24,23 +21,30 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     public MediaCenterController(VideoFiles videoFiles) throws Exception {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MediaCenter");
 
-        movieSelectionController = new MovieSelectionController(videoFiles);
-        panelWithBorder = movieSelectionController.getMovieSelectionPanel();
+        movieSelectionController = new MovieSelectionController(videoFiles, this);
+        RTResolveMoviesController rtResolveMoviesController = new RTResolveMoviesController("Under one roof");
 
-        mediaCenterView = new MediaCenterView(panelWithBorder);
-        mediaCenterView.addKeyListener(new ScrollKeyListener(movieSelectionController, mediaCenterView));
 
-        mediaCenterView.addMouseListener(new PopupMenuMouseListener());
+        final JPanel movieSelectionPanel = movieSelectionController.getMovieSelectionPanel();
+        mediaCenterView = new MediaCenterView(movieSelectionPanel, rtResolveMoviesController.getResolveMoviesPanel());
+
+
+    }
+
+    @Override
+    public void videoSelectionChanged(VideoFile videoFile) {
 
     }
 
     @Override
     public void videoSelectionFinished() {
-        Cursor oldCursor = panelWithBorder.getCursor();
-        panelWithBorder.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         movieSelectionController.setVideoFiles(loadVideoFiles());
         movieSelectionController.setDim(false);
-        panelWithBorder.setCursor(oldCursor);
+    }
+
+    @Override
+    public void exitRequested() {
+        mediaCenterView.dispatchEvent(new WindowEvent(mediaCenterView, WindowEvent.WINDOW_CLOSING));
     }
 
     private static VideoFiles loadVideoFiles() {
@@ -52,25 +56,5 @@ public class MediaCenterController implements MediaCenterControllerInterface {
         return VideoDirectories.getInstance().getVideoDirectories();
     }
 
-    private class PopupMenuMouseListener extends MouseAdapter {
-
-        @Override
-        public void mousePressed(MouseEvent mouseEvent) {
-            showPopupIfTrigger(mouseEvent);
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent mouseEvent) {
-            showPopupIfTrigger(mouseEvent);
-        }
-
-        private void showPopupIfTrigger(final MouseEvent mouseEvent) {
-            if (mouseEvent.isPopupTrigger()) {
-                movieSelectionController.setDim(true);
-                new ManageVideoDirectoriesController(mediaCenterView, mouseEvent.getPoint(), MediaCenterController.this);
-
-            }
-        }
-    }
 
 }

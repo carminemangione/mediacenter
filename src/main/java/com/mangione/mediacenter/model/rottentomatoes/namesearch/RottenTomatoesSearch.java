@@ -10,14 +10,6 @@ public class RottenTomatoesSearch {
     private RTSearchResult searchResult;
 
 
-    public static void main(String[] args) {
-        final RTSearchResult moviesResult = new RottenTomatoesSearch("under one roof").getSearchResult();
-        System.out.println(moviesResult.toString());
-        moviesResult.getMovies();
-
-
-    }
-
     public RottenTomatoesSearch(String movieName) {
         WebResource resource = Client.create()
                 .resource("http://api.rottentomatoes.com/api/public/v1.0/movies.json")

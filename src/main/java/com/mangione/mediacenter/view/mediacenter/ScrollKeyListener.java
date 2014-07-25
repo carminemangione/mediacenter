@@ -7,20 +7,17 @@ import com.mangione.mediacenter.view.moviebrowser.MovieSelectionController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
 
 public class ScrollKeyListener implements KeyListener {
 
     private final MovieSelectionController movieSelectionController;
-    private final MediaCenterView mediaCenterView;
 
     private volatile boolean handlingScroll;
     private boolean lastEventWasKeyPressed = false;
     private long lastAutoKeyTimeMillis = 0;
 
-    public ScrollKeyListener(MovieSelectionController movieSelectionController, MediaCenterView mediaCenterView) {
+    public ScrollKeyListener(MovieSelectionController movieSelectionController) {
         this.movieSelectionController = movieSelectionController;
-        this.mediaCenterView = mediaCenterView;
     }
 
     @Override
@@ -39,7 +36,7 @@ public class ScrollKeyListener implements KeyListener {
                 VideoFile videoFile = movieSelectionController.getCurrentVideoFile();
                 new LaunchMplayerXAndWaitForTerminate(videoFile);
             } else if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                mediaCenterView.dispatchEvent(new WindowEvent(mediaCenterView, WindowEvent.WINDOW_CLOSING));
+                movieSelectionController.escPressed();
             } else {
                 scrollOneLineOrHandleContinual(keyEvent);
             }

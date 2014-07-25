@@ -1,6 +1,6 @@
 package com.mangione.mediacenter.model.rottentomatoes.database;
 
-import com.mangione.database.*;
+import com.mangione.common.database.*;
 
 import java.sql.*;
 

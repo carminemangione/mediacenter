@@ -1,99 +1,142 @@
-{"total":2,"movies":[
+{"total": 3, "movies": [
     {
-        "id":"17414",
-        "title":"Under One Roof",
-        "year":2002,
-        "mpaa_rating":"Unrated",
-        "runtime":74,
-        "release_dates":{
-            "theater":"2002-01-01",
-            "dvd":"2003-04-08"
+        "id": "10184",
+        "title": "Being There",
+        "year": 1979,
+        "mpaa_rating": "PG",
+        "runtime": 130,
+        "critics_consensus": "",
+        "release_dates": {
+            "theater": "1979-12-19",
+            "dvd": "2001-04-03"
         },
-        "ratings":{
-            "critics_score":-1,
-            "audience_rating":"Spilled",
-            "audience_score":27
+        "ratings": {
+            "critics_rating": "Certified Fresh",
+            "critics_score": 96,
+            "audience_rating": "Upright",
+            "audience_score": 92
         },
-        "synopsis":"",
-        "posters":{
-            "thumbnail":"http://content9.flixster.com/movie/10/91/67/10916739_mob.jpg",
-            "profile":"http://content9.flixster.com/movie/10/91/67/10916739_pro.jpg",
-            "detailed":"http://content9.flixster.com/movie/10/91/67/10916739_det.jpg",
-            "original":"http://content9.flixster.com/movie/10/91/67/10916739_ori.jpg"
+        "synopsis": "",
+        "posters": {
+            "thumbnail": "http://content6.flixster.com/movie/25/44/254496_tmb.jpg",
+            "profile": "http://content6.flixster.com/movie/25/44/254496_tmb.jpg",
+            "detailed": "http://content6.flixster.com/movie/25/44/254496_tmb.jpg",
+            "original": "http://content6.flixster.com/movie/25/44/254496_tmb.jpg"
         },
-        "abridged_cast":[
+        "abridged_cast": [
             {
-                "name":"Jay Wong"
+                "name": "Peter Sellers",
+                "id": "162656841",
+                "characters": ["Chance the Gardener"]
             },
             {
-                "name":"Audrey Finer"
+                "name": "Shirley MacLaine",
+                "id": "162652664",
+                "characters": ["Eve Rand"]
             },
             {
-                "name":"Erik Ing"
+                "name": "Melvyn Douglas",
+                "id": "162692122",
+                "characters": ["Benjamin Rand"]
             },
             {
-                "name":"James Marks"
+                "name": "Jack Warden",
+                "id": "162697069",
+                "characters": ["President Bobby"]
             },
             {
-                "name":"James Quedado"
+                "name": "Richard Basehart",
+                "id": "326393422",
+                "characters": ["Vladimir Skrapinov"]
             }
         ],
-        "alternate_ids":{
-            "imdb":"0337738"
+        "alternate_ids": {
+            "imdb": "0078841"
         },
-        "links":{
-            "self":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414.json",
-            "alternate":"http://www.rottentomatoes.com/m/under_one_roof/",
-            "cast":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414/cast.json",
-            "clips":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414/clips.json",
-            "reviews":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414/reviews.json",
-            "similar":"http://api.rottentomatoes.com/api/public/v1.0/movies/17414/similar.json"
+        "links": {
+            "self": "http://api.rottentomatoes.com/api/public/v1.0/movies/10184.json",
+            "alternate": "http://www.rottentomatoes.com/m/being_there/",
+            "cast": "http://api.rottentomatoes.com/api/public/v1.0/movies/10184/cast.json",
+            "reviews": "http://api.rottentomatoes.com/api/public/v1.0/movies/10184/reviews.json",
+            "similar": "http://api.rottentomatoes.com/api/public/v1.0/movies/10184/similar.json"
         }
     },
     {
-        "id":"576297406",
-        "title":"The Brady Bunch: Coming Together Under One Roof",
-        "year":2005,
-        "mpaa_rating":"Unrated",
-        "runtime":18,
-        "release_dates":{
-            "theater":"2005-03-01"
+        "id": "771270469",
+        "title": "Just Like Being There",
+        "year": 2012,
+        "mpaa_rating": "Unrated",
+        "runtime": 90,
+        "release_dates": {
+            "dvd": "2013-04-22"
         },
-        "ratings":{
-            "critics_score":-1,
-            "audience_rating":"Spilled",
-            "audience_score":58
+        "ratings": {
+            "critics_score": -1,
+            "audience_rating": "Upright",
+            "audience_score": 70
         },
-        "synopsis":"",
-        "posters":{
-            "thumbnail":"http://images.rottentomatoescdn.com/images/redesign/poster_default.gif",
-            "profile":"http://images.rottentomatoescdn.com/images/redesign/poster_default.gif",
-            "detailed":"http://images.rottentomatoescdn.com/images/redesign/poster_default.gif",
-            "original":"http://images.rottentomatoescdn.com/images/redesign/poster_default.gif"
+        "synopsis": "A documentary about cutting-edge poster artists like Daniel Danger and Jay Ryan who have breathed new life into the very specific artform. ~ Perry Seibert, Rovi",
+        "posters": {
+            "thumbnail": "http://d1rjibvava1hwe.cloudfront.net/static/images/redesign/poster_default_thumb.gif",
+            "profile": "http://d1rjibvava1hwe.cloudfront.net/static/images/redesign/poster_default_thumb.gif",
+            "detailed": "http://d1rjibvava1hwe.cloudfront.net/static/images/redesign/poster_default_thumb.gif",
+            "original": "http://d1rjibvava1hwe.cloudfront.net/static/images/redesign/poster_default_thumb.gif"
         },
-        "abridged_cast":[
+        "abridged_cast": [
             {
-                "name":"Christopher Knight"
+                "name": "Jay Ryan",
+                "id": "770836729"
             },
             {
-                "name":"Maureen McCormick"
+                "name": "Daniel the Duke of Danger",
+                "id": "771065591"
             },
             {
-                "name":"Sherwood Schwartz"
+                "name": "Kevin Tong",
+                "id": "771435435"
             }
         ],
-        "alternate_ids":{
-            "imdb":"0459221"
+        "alternate_ids": {
+            "imdb": "2039360"
         },
-        "links":{
-            "self":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406.json",
-            "alternate":"http://www.rottentomatoes.com/m/the-brady-bunch-coming-together-under-one-roof/",
-            "cast":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406/cast.json",
-            "clips":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406/clips.json",
-            "reviews":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406/reviews.json",
-            "similar":"http://api.rottentomatoes.com/api/public/v1.0/movies/576297406/similar.json"
+        "links": {
+            "self": "http://api.rottentomatoes.com/api/public/v1.0/movies/771270469.json",
+            "alternate": "http://www.rottentomatoes.com/m/just_like_being_there/",
+            "cast": "http://api.rottentomatoes.com/api/public/v1.0/movies/771270469/cast.json",
+            "reviews": "http://api.rottentomatoes.com/api/public/v1.0/movies/771270469/reviews.json",
+            "similar": "http://api.rottentomatoes.com/api/public/v1.0/movies/771270469/similar.json"
+        }
+    },
+    {
+        "id": "771259730",
+        "title": "On 'Being There' with Richard Leacock",
+        "year": 2011,
+        "mpaa_rating": "Unrated",
+        "runtime": 90,
+        "release_dates": {},
+        "ratings": {
+            "critics_score": -1,
+            "audience_score": 0
+        },
+        "synopsis": "",
+        "posters": {
+            "thumbnail": "http://d1rjibvava1hwe.cloudfront.net/static/images/redesign/poster_default_thumb.gif",
+            "profile": "http://d1rjibvava1hwe.cloudfront.net/static/images/redesign/poster_default_thumb.gif",
+            "detailed": "http://d1rjibvava1hwe.cloudfront.net/static/images/redesign/poster_default_thumb.gif",
+            "original": "http://d1rjibvava1hwe.cloudfront.net/static/images/redesign/poster_default_thumb.gif"
+        },
+        "abridged_cast": [],
+        "alternate_ids": {
+            "imdb": "1547925"
+        },
+        "links": {
+            "self": "http://api.rottentomatoes.com/api/public/v1.0/movies/771259730.json",
+            "alternate": "http://www.rottentomatoes.com/m/on_being_there_with_richard_leacock_2011/",
+            "cast": "http://api.rottentomatoes.com/api/public/v1.0/movies/771259730/cast.json",
+            "reviews": "http://api.rottentomatoes.com/api/public/v1.0/movies/771259730/reviews.json",
+            "similar": "http://api.rottentomatoes.com/api/public/v1.0/movies/771259730/similar.json"
         }
     }
-],"links":{
-    "self":"http://api.rottentomatoes.com/api/public/v1.0/movies.json?q=under+one+roof&page_limit=30&page=1"
-},"link_template":"http://api.rottentomatoes.com/api/public/v1.0/movies.json?q={search-term}&page_limit={results-per-page}&page={page-number}"}
+], "links": {
+    "self": "http://api.rottentomatoes.com/api/public/v1.0/movies.json?q=being+there&page_limit=30&page=1"
+}, "link_template": "http://api.rottentomatoes.com/api/public/v1.0/movies.json?q={search-term}&page_limit={results-per-page}&page={page-number}"}

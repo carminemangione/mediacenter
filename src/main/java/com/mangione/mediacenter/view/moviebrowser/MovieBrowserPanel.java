@@ -2,6 +2,7 @@ package com.mangione.mediacenter.view.moviebrowser;
 
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
+import com.mangione.mediacenter.view.SharedConstants;
 import com.mangione.mediacenter.view.components.GradientPanel;
 
 import javax.swing.*;
@@ -118,8 +119,8 @@ public class MovieBrowserPanel extends GradientPanel {
             }
 
             int heightToMask = posterHeight / 2;
-            addGradient(graphics2d, 0, heightToMask, screenSize.width, true, Color.black);
-            addGradient(graphics2d, screenSize.height, heightToMask, screenSize.width, false, Color.black);
+            addGradient(graphics2d, 0, heightToMask, screenSize.width, true, SharedConstants.DEFAULT_BACKGROUND_COLOR);
+            addGradient(graphics2d, screenSize.height, heightToMask, screenSize.width, false, SharedConstants.DEFAULT_BACKGROUND_COLOR);
 
             graphics2d.setComposite(oldAlphaComposite);
 

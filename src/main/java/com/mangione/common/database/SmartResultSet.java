@@ -1,4 +1,4 @@
-package com.mangione.database;
+package com.mangione.common.database;
 
 import java.sql.Array;
 import java.sql.Date;

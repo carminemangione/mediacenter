@@ -1,17 +1,12 @@
 package com.mangione.mediacenter.model.videofile;
 
 import java.io.File;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
-/**
- * User: carminemangione
- * Date: Oct 7, 2009
- * Time: 10:31:15 PM
- * Copyright Cognigtive Health Sciences, Inc. All rights reserved
- */
+
 public class VideoFiles {
     private final VideoFile[] videoFiles;
     private static final int NUMBER_OF_IMAGES_TO_PRELOAD = 1;

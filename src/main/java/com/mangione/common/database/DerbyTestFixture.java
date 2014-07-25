@@ -1,4 +1,4 @@
-package com.mangione.database;
+package com.mangione.common.database;
 
 import org.junit.After;
 import org.junit.Before;

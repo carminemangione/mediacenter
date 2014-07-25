@@ -4,14 +4,16 @@ import com.mangione.mediacenter.model.AspectRatioBox;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class AspectRatioPreservedImagePanel extends JPanel {
-    private final ImageIcon image;
+    private final BufferedImage image;
+    private final Dimension imageSize;
 
-    public AspectRatioPreservedImagePanel(ImageIcon imageIcon) {
+    public AspectRatioPreservedImagePanel(BufferedImage imageIcon) {
         this.image = imageIcon;
+        imageSize = new Dimension(image.getWidth(), image.getHeight());
     }
-
 
     @Override
     public void paint(Graphics graphics) {
@@ -20,14 +22,14 @@ public class AspectRatioPreservedImagePanel extends JPanel {
         Dimension panelSize = getSize();
 
 
-        double imageWidth = image.getIconWidth();
-        double imageHeight = image.getIconHeight();
+        double imageWidth = imageSize.getWidth();
+        double imageHeight = imageSize.getHeight();
         final AspectRatioBox adjustedImageDimension = new AspectRatioBox(imageWidth, imageHeight)
                 .fitHeightThenWidth(panelSize.getWidth(), panelSize.getHeight());
 
         int imageStartX = (int) ((panelSize.getWidth() - adjustedImageDimension.getWidth())) / 2;
         int imageStartY = (int) ((panelSize.getHeight() - adjustedImageDimension.getHeight())) / 2;
-        g2d.drawImage(image.getImage(),
+        g2d.drawImage(image,
                 imageStartX, imageStartY,
                 (int) adjustedImageDimension.getWidth(), (int) adjustedImageDimension.getHeight(), null);
 

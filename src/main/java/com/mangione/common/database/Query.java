@@ -1,4 +1,4 @@
-package com.mangione.database;
+package com.mangione.common.database;
 
 
 import com.google.common.base.Charsets;

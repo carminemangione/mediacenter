@@ -3,15 +3,10 @@ package com.mangione.mediacenter.view.rottentomatoes.resolvemovie;
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTMovie;
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTSearchResult;
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RottenTomatoesSearch;
+import com.mangione.mediacenter.view.SharedConstants;
 
 import javax.swing.*;
 
-/**
- * User: carminemangione
- * Date: Dec 28, 2009
- * Time: 9:34:16 PM
- * Copyright Cognigtive Health Sciences, Inc. All rights reserved
- */
 public class RTResolveMoviesController {
 
     private JPanel resolveMoviesPanel;
@@ -21,6 +16,7 @@ public class RTResolveMoviesController {
         JFrame frame = new JFrame();
         final RTResolveMoviesController rtResolveMoviesController = new RTResolveMoviesController("under one roof");
         frame.setContentPane(rtResolveMoviesController.resolveMoviesPanel);
+        frame.setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -32,6 +28,8 @@ public class RTResolveMoviesController {
         resolveMoviesPanel = new RTResolveMoviesPanel(movies);
     }
 
-
+    public JPanel getResolveMoviesPanel() {
+        return resolveMoviesPanel;
+    }
 }
 

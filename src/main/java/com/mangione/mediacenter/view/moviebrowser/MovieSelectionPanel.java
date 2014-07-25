@@ -2,6 +2,7 @@ package com.mangione.mediacenter.view.moviebrowser;
 
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
+import com.mangione.mediacenter.view.SharedConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +19,7 @@ public class MovieSelectionPanel extends JPanel {
         movieTitle = new JLabel("No selection");
         movieTitle.setFont(FONT);
         movieTitle.setForeground(Color.CYAN);
-        movieTitle.setBackground(Color.BLACK);
+        movieTitle.setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
         movieTitle.setHorizontalAlignment(SwingConstants.CENTER);
         movieTitle.setVerticalAlignment(SwingConstants.CENTER);
 

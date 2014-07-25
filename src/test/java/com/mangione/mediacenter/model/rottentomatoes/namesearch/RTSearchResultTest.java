@@ -26,4 +26,15 @@ public class RTSearchResultTest {
         assertEquals("http://api.rottentomatoes.com/api/public/v1.0/movies/17414.json", links.getSelf());
 
     }
+
+
+
+    @Test
+    public void reconstituteZedSearchFromJSON() throws Exception {
+        final String json = IOUtils.toString(
+                RTSearchResultTest.class.getClassLoader().getResourceAsStream("search_zed.json"));
+        final RTSearchResult rtSearchResult = RTSearchResult.fromJson(json);
+        assertEquals(9, rtSearchResult.getTotal());
+
+    }
 }

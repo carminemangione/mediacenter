@@ -9,6 +9,10 @@ public class RottenTomatoesSearch {
     private static final String API_KEY = "2ufc48xdsqutqtwrrzpg8rcd";
     private RTSearchResult searchResult;
 
+    public static void main(String[] args) {
+        new RottenTomatoesSearch("zed");
+    }
+
 
     public RottenTomatoesSearch(String movieName) {
         WebResource resource = Client.create()

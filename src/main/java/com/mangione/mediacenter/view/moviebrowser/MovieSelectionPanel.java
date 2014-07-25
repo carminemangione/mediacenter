@@ -16,16 +16,23 @@ public class MovieSelectionPanel extends JPanel {
     public MovieSelectionPanel(VideoFiles moviesFiles) throws Exception {
         setOpaque(false);
         setLayout(new BorderLayout());
-        movieTitle = new JLabel("No selection");
+
+        movieBrowserPanel = new MovieBrowserPanel(moviesFiles);
+        movieTitle = createAndInitializeCurrentMovie(movieBrowserPanel.getCurrentVideoFile().getVideoName());
+
+        add(movieTitle, BorderLayout.NORTH);
+        add(movieBrowserPanel, BorderLayout.CENTER);
+    }
+
+    private JLabel createAndInitializeCurrentMovie(String currentMovie) {
+        JLabel movieTitle;
+        movieTitle = new JLabel(currentMovie);
         movieTitle.setFont(FONT);
         movieTitle.setForeground(Color.CYAN);
         movieTitle.setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
         movieTitle.setHorizontalAlignment(SwingConstants.CENTER);
         movieTitle.setVerticalAlignment(SwingConstants.CENTER);
-
-        movieBrowserPanel = new MovieBrowserPanel(moviesFiles);
-        add(movieTitle, BorderLayout.NORTH);
-        add(movieBrowserPanel, BorderLayout.CENTER);
+        return movieTitle;
     }
 
     public void movieTitleChanged(String newMovieTitle) {

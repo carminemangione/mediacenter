@@ -1,5 +1,7 @@
 package com.mangione.mediacenter.view.moviebrowser;
 
+import com.mangione.mediacenter.model.mplayerx.KillMplayerX;
+import com.mangione.mediacenter.model.mplayerx.LaunchMplayerXAndWaitForTerminate;
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
 import com.mangione.mediacenter.view.mediacenter.MediaCenterControllerInterface;
@@ -41,10 +43,6 @@ public class MovieSelectionController {
     }
 
 
-    public VideoFile getCurrentVideoFile() {
-        return movieSelectionPanel.getCurrentVideoFile();
-    }
-
     public void arrowPressed(KeyEvent keyEvent, boolean lastEventWasKeyPressed) throws Exception {
         movieSelectionPanel.arrowPressed(keyEvent, lastEventWasKeyPressed);
         mediaCenterController.videoSelectionChanged(movieSelectionPanel.getCurrentVideoFile());
@@ -52,5 +50,16 @@ public class MovieSelectionController {
 
     public void escPressed() {
         mediaCenterController.exitRequested();
+    }
+
+    public void spacePressed() {
+        new KillMplayerX();
+        VideoFile videoFile = movieSelectionPanel.getCurrentVideoFile();
+        new LaunchMplayerXAndWaitForTerminate(videoFile);
+
+    }
+
+    public VideoFile getCurrentlySelectedVideo() {
+        return movieSelectionPanel.getCurrentVideoFile();
     }
 }

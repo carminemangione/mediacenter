@@ -3,11 +3,11 @@ package com.mangione.mediacenter.model.rottentomatoes.namesearch;
 public class RTMovie {
     private final String id;
     private final String title;
-    private final Long year;
+    private final String year;
     private final RTPosters posters;
     private final RTMovieLinks links;
 
-    public RTMovie(String id, String title, Long year, RTPosters posters, RTMovieLinks links) {
+    public RTMovie(String id, String title, String year, RTPosters posters, RTMovieLinks links) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -23,7 +23,7 @@ public class RTMovie {
         return title;
     }
 
-    public Long getYear() {
+    public String getYear() {
         return year;
     }
 

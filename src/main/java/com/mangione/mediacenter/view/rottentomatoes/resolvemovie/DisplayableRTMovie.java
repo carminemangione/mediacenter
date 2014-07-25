@@ -15,7 +15,7 @@ public class DisplayableRTMovie {
         return rtMovie.getTitle();
     }
 
-    public Long getYear() {
+    public String getYear() {
         return rtMovie.getYear();
     }
 

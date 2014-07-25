@@ -7,12 +7,12 @@ import java.awt.*;
 
 
 public class MediaCenterView extends JFrame {
+    private Component currentEastComponent;
 
-    public MediaCenterView(JComponent mediaImageGrid, JPanel resolveMoviesPanel) throws HeadlessException {
+    public MediaCenterView(JComponent mediaImageGrid) throws HeadlessException {
         setLayout(new BorderLayout(20, 0));
 
         add(mediaImageGrid, BorderLayout.CENTER);
-        add(resolveMoviesPanel, BorderLayout.EAST);
         getContentPane().setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
         setPreferredSize(new Dimension(600, 500));
         mediaImageGrid.setFocusable(true);
@@ -20,8 +20,23 @@ public class MediaCenterView extends JFrame {
 
         validate();
         pack();
-        setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    public void setEastComponent(final Component eastComponent) {
+        SwingUtilities.invokeLater(() -> {
+            if (currentEastComponent != null) {
+                remove(currentEastComponent);
+            }
+
+            add(eastComponent, BorderLayout.EAST);
+            currentEastComponent = eastComponent;
+            eastComponent.invalidate();
+            validate();
+            repaint();
+        });
+
+
     }
 
 }

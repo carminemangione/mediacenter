@@ -65,12 +65,17 @@ public class VideoFile implements Comparable<VideoFile> {
     }
 
     private String makeVideoNameDecent(String videoName) {
+        videoName = stripMovieTypes(videoName);
         StringBuffer mixedCaseWithPeriods = getVideoNameWithSpaces(videoName);
         String mixedCase = mixedCaseWithPeriods.toString();
         if (mixedCase.startsWith("The ")) {
             mixedCase = mixedCase.substring(4) + ", The";
         }
         return mixedCase;
+    }
+
+    private String stripMovieTypes(String videoName) {
+        return videoName.toLowerCase().replace("mp4", "").replace("mkv", "");
     }
 
     private StringBuffer getVideoNameWithSpaces(String videoName) {

@@ -3,6 +3,7 @@ package com.mangione.mediacenter.view.mediacenter;
 import com.mangione.mediacenter.model.VideoDirectories;
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
+import com.mangione.mediacenter.view.SharedConstants;
 import com.mangione.mediacenter.view.moviebrowser.MovieSelectionController;
 import com.mangione.mediacenter.view.rottentomatoes.resolvemovie.RTResolveMoviesController;
 
@@ -22,17 +23,24 @@ public class MediaCenterController implements MediaCenterControllerInterface {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MediaCenter");
 
         movieSelectionController = new MovieSelectionController(videoFiles, this);
-        RTResolveMoviesController rtResolveMoviesController = new RTResolveMoviesController("Under one roof");
 
 
         final JPanel movieSelectionPanel = movieSelectionController.getMovieSelectionPanel();
-        mediaCenterView = new MediaCenterView(movieSelectionPanel, rtResolveMoviesController.getResolveMoviesPanel());
-
-
+        mediaCenterView = new MediaCenterView(movieSelectionPanel);
+        final JPanel blankPanel = new JPanel();
+        blankPanel.setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
+        videoSelectionChanged(movieSelectionController.getCurrentlySelectedVideo());
+        mediaCenterView.setVisible(true);
     }
 
     @Override
-    public void videoSelectionChanged(VideoFile videoFile) {
+    public void videoSelectionChanged(VideoFile videoFile)  {
+        try {
+            RTResolveMoviesController rtResolveMoviesController = new RTResolveMoviesController(movieSelectionController.getCurrentlySelectedVideo().getVideoName());
+            mediaCenterView.setEastComponent(rtResolveMoviesController.getResolveMoviesPanel());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

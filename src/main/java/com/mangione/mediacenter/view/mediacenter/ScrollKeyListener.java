@@ -1,8 +1,5 @@
 package com.mangione.mediacenter.view.mediacenter;
 
-import com.mangione.mediacenter.model.mplayerx.KillMplayerX;
-import com.mangione.mediacenter.model.mplayerx.LaunchMplayerXAndWaitForTerminate;
-import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.view.moviebrowser.MovieSelectionController;
 
 import java.awt.event.KeyEvent;
@@ -32,9 +29,7 @@ public class ScrollKeyListener implements KeyListener {
             movieSelectionController.zoomToLetter(keyPressed);
         } else {
             if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
-                new KillMplayerX();
-                VideoFile videoFile = movieSelectionController.getCurrentVideoFile();
-                new LaunchMplayerXAndWaitForTerminate(videoFile);
+                movieSelectionController.spacePressed();
             } else if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 movieSelectionController.escPressed();
             } else {

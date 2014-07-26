@@ -1,12 +1,12 @@
-package com.mangione.mediacenter.model.rottentomatoes.namesearch;
+package com.mangione.mediacenter.model.rottentomatoes;
 
-public class RTPosters {
+public class MoviePosters {
 
     private final String thumbnail;
     private final String profile;
     private final String original;
 
-    public RTPosters(String thumbnail, String profile, String original) {
+    public MoviePosters(String thumbnail, String profile, String original) {
         this.thumbnail = thumbnail;
         this.profile = profile;
         this.original = original;

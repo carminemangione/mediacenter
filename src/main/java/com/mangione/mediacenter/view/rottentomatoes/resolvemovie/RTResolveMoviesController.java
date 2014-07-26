@@ -1,7 +1,7 @@
 package com.mangione.mediacenter.view.rottentomatoes.resolvemovie;
 
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTMovie;
-import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTSearchResult;
+import com.mangione.mediacenter.model.rottentomatoes.namesearch.SearchResult;
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RottenTomatoesSearch;
 import com.mangione.mediacenter.view.SharedConstants;
 
@@ -23,7 +23,7 @@ public class RTResolveMoviesController {
     }
 
     public RTResolveMoviesController(String movieName) throws Exception {
-        final RTSearchResult searchResult = new RottenTomatoesSearch(movieName).getSearchResult();
+        final SearchResult searchResult = new RottenTomatoesSearch(movieName).getSearchResult();
         final RTMovie[] movies = searchResult.getMovies();
         resolveMoviesPanel = new RTResolveMoviesPanel(movies);
     }

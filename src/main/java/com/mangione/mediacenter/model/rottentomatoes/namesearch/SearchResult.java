@@ -3,18 +3,18 @@ package com.mangione.mediacenter.model.rottentomatoes.namesearch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class RTSearchResult {
+public class SearchResult {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private final int total;
     private final RTMovie[] movies;
 
-    public static RTSearchResult fromJson(String json){
-        return GSON.fromJson(json, RTSearchResult.class);
+    public static SearchResult fromJson(String json){
+        return GSON.fromJson(json, SearchResult.class);
     }
 
-    public RTSearchResult(int total, RTMovie[] movies) {
+    public SearchResult(int total, RTMovie[] movies) {
         this.total = total;
         this.movies = movies;
     }

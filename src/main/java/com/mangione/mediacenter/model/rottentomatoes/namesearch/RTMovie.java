@@ -1,13 +1,16 @@
 package com.mangione.mediacenter.model.rottentomatoes.namesearch;
 
+import com.mangione.mediacenter.model.MovieLinks;
+import com.mangione.mediacenter.model.rottentomatoes.MoviePosters;
+
 public class RTMovie {
     private final String id;
     private final String title;
     private final String year;
-    private final RTPosters posters;
-    private final RTMovieLinks links;
+    private final MoviePosters posters;
+    private final MovieLinks links;
 
-    public RTMovie(String id, String title, String year, RTPosters posters, RTMovieLinks links) {
+    public RTMovie(String id, String title, String year, MoviePosters posters, MovieLinks links) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -27,7 +30,7 @@ public class RTMovie {
         return year;
     }
 
-    public RTPosters getPosters() {
+    public MoviePosters getPosters() {
         return posters;
     }
 
@@ -36,7 +39,7 @@ public class RTMovie {
         return title + " (" + year + ")";
     }
 
-    public RTMovieLinks getLinks() {
+    public MovieLinks getLinks() {
         return links;
     }
 }

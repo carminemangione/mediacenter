@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
-public class DisplayableRTMovie {
+public class DisplayableMovie {
     private final BufferedImage posterImage;
     private final RTMovie rtMovie;
 
@@ -19,7 +19,7 @@ public class DisplayableRTMovie {
         return rtMovie.getYear();
     }
 
-    public DisplayableRTMovie(RTMovie rtMovie) throws IOException {
+    public DisplayableMovie(RTMovie rtMovie) throws IOException {
         posterImage = ImageIO.read(new URL(rtMovie.getPosters().getOriginal()));
         this.rtMovie = rtMovie;
     }

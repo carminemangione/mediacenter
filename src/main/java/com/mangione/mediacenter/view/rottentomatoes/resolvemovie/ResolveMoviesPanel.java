@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 
-public class RTResolveMoviesPanel extends JPanel {
+public class ResolveMoviesPanel extends JPanel {
 
-    public RTResolveMoviesPanel(RTMovie[] movies) throws Exception {
+    public ResolveMoviesPanel(RTMovie[] movies) throws Exception {
         setOpaque(false);
         setLayout(new BorderLayout());
 
@@ -24,23 +24,25 @@ public class RTResolveMoviesPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    private JList<DisplayableRTMovie> createMoviesPanel(RTMovie[] movies) throws MalformedURLException {
+    private JList<DisplayableMovie> createMoviesPanel(RTMovie[] movies) throws MalformedURLException {
 
-        final ImmutableList<DisplayableRTMovie> displayableRTMovies = FluentIterable
+        final ImmutableList<DisplayableMovie> displayableRTMovies = FluentIterable
                 .from(Arrays.asList(movies))
                 .transform(rtMovie -> {
                     try {
-                        return new DisplayableRTMovie(rtMovie);
+                        return new DisplayableMovie(rtMovie);
                     } catch (MalformedURLException e) {
+                        e.printStackTrace();
                         return null;
                     } catch (IOException e) {
+                        e.printStackTrace();
                         return null;
                     }
                 }).toList();
 
-        DisplayableRTMovie[] array = displayableRTMovies.toArray(new DisplayableRTMovie[displayableRTMovies.size()]);
-        final JList<DisplayableRTMovie> rtMovieJList = new JList<>(array);
-        rtMovieJList.setCellRenderer(new RTResolveMovieListCellRender());
+        DisplayableMovie[] array = displayableRTMovies.toArray(new DisplayableMovie[displayableRTMovies.size()]);
+        final JList<DisplayableMovie> rtMovieJList = new JList<>(array);
+        rtMovieJList.setCellRenderer(new ResolveMovieListCellRender());
         rtMovieJList.setVisibleRowCount(3);
         return rtMovieJList;
     }

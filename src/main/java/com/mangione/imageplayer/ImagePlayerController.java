@@ -61,6 +61,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void recurseAndCollectFiles(File currentFile) {
         if (currentFile != null && currentFile.listFiles() != null) {
             for (File file : currentFile.listFiles()) {

@@ -128,7 +128,6 @@ public class ImagePanel extends JPanel {
         super.paint(g);
         g2d.setColor(Color.darkGray);
         g2d.fillRect(0, 0, panelSize.width, panelSize.height);
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, currentAlpha));
         g2d.drawImage(currentImage, imageStartX, imageStartY, (int) adjustedImageWidth, (int) adjustedImageHeight, null);
 
     }

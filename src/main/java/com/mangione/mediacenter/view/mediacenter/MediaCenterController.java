@@ -5,7 +5,7 @@ import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
 import com.mangione.mediacenter.view.SharedConstants;
 import com.mangione.mediacenter.view.moviebrowser.MovieSelectionController;
-import com.mangione.mediacenter.view.rottentomatoes.resolvemovie.RTResolveMoviesController;
+import com.mangione.mediacenter.view.rottentomatoes.resolvemovie.ResolveMoviesController;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;
@@ -36,8 +36,8 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     @Override
     public void videoSelectionChanged(VideoFile videoFile)  {
         try {
-            RTResolveMoviesController rtResolveMoviesController = new RTResolveMoviesController(movieSelectionController.getCurrentlySelectedVideo().getVideoName());
-            mediaCenterView.setEastComponent(rtResolveMoviesController.getResolveMoviesPanel());
+            ResolveMoviesController resolveMoviesController = new ResolveMoviesController(movieSelectionController.getCurrentlySelectedVideo().getVideoName());
+            mediaCenterView.setEastComponent(resolveMoviesController.getPanel());
         } catch (Exception e) {
             e.printStackTrace();
         }

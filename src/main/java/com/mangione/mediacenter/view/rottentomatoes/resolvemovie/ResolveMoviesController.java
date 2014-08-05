@@ -9,12 +9,18 @@ import javax.swing.*;
 
 public class ResolveMoviesController implements RottenTomatoesControllerInterface {
 
+    private final MovieResolvedListener rtMainController;
     private JPanel resolveMoviesPanel;
 
-    public ResolveMoviesController(String movieName) throws Exception {
+    public ResolveMoviesController(String movieName, MovieResolvedListener rtMainController) throws Exception {
+        this.rtMainController = rtMainController;
         final SearchResult searchResult = new RottenTomatoesSearch(movieName).getSearchResult();
-        final RTMovie[] movies = searchResult.getMovies();
-        resolveMoviesPanel = new ResolveMoviesPanel(movies);
+        RTMovie[] movies = searchResult.getMovies();
+        resolveMoviesPanel = new ResolveMoviesPanel(movies, this);
+    }
+
+    public void resolveMovieSelected(RTMovie selectedMovie) {
+        rtMainController.resolvedMovieSelected(selectedMovie);
     }
 
     @Override

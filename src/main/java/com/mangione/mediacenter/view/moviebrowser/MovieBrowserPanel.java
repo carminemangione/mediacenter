@@ -8,6 +8,7 @@ import com.mangione.mediacenter.view.components.GradientPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 
 public class MovieBrowserPanel extends GradientPanel {
@@ -190,8 +191,8 @@ public class MovieBrowserPanel extends GradientPanel {
         for (int column = 0; column < NUMBER_OF_COLUMNS && currentIndex < videoFiles.getNumberOfVideoFiles(); column++) {
             int leftOfImage = columnWidth * column + horizontalBorder;
 
-            ImageIcon currentImage = videoFiles.getVideoFile(currentIndex).getImageIcon();
-            graphics2d.drawImage(currentImage.getImage(), leftOfImage, topOfImage, posterWidth,
+            BufferedImage currentImage = videoFiles.getVideoFile(currentIndex).loadImage();
+            graphics2d.drawImage(currentImage, leftOfImage, topOfImage, posterWidth,
                     posterHeight, null);
             if (currentIndex == indexOfSelected) {
                 graphics2d.setColor(Color.green);

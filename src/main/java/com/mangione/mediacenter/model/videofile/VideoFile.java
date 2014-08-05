@@ -1,17 +1,28 @@
 package com.mangione.mediacenter.model.videofile;
 
-import javax.swing.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 
 public class VideoFile implements Comparable<VideoFile> {
-    private static final ImageIcon IMAGE_NOT_FOUND_ICON = new ImageIcon(VideoFile.class.getClassLoader().getResource("blankimage.jpeg"));
+    private static final BufferedImage IMAGE_NOT_FOUND_ICON;
+
+    static {
+        try {
+            IMAGE_NOT_FOUND_ICON = ImageIO.read(VideoFile.class.getClassLoader().getResource("blankimage.jpeg"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private final String fullVideoPath;
     private final String videoName;
 
     private File imageFile;
-    private ImageIcon imageIcon;
+    private BufferedImage image;
     private final File currentDirectory;
 
 
@@ -28,21 +39,29 @@ public class VideoFile implements Comparable<VideoFile> {
         this.videoName = makeVideoNameDecent(dvdMovieDirectory.getName());
     }
 
-    public ImageIcon getImageIcon() {
-        if (imageIcon == null) {
+    public BufferedImage loadImage() {
+        if (image == null) {
             if (imageFile == null) {
-                imageIcon = IMAGE_NOT_FOUND_ICON;
+                image = IMAGE_NOT_FOUND_ICON;
             } else {
-                imageIcon = new ImageIcon(imageFile.getPath());
+                try {
+                    image = ImageIO.read(new File(imageFile.getPath()));
+                } catch (IOException e) {
+                    image = IMAGE_NOT_FOUND_ICON;
+                }
             }
 
         }
-        return imageIcon;
+        return image;
 
     }
 
     public String getVideoName() {
         return videoName;
+    }
+
+    public String getIdentifyingString() {
+        return getCurrentDirectory() + (videoName == null ? "" : videoName);
     }
 
     public void setImageFile(File imageFile) {
@@ -61,7 +80,7 @@ public class VideoFile implements Comparable<VideoFile> {
 
     @Override
     public int compareTo(VideoFile videoFile) {
-        return videoName.compareTo(videoFile.videoName);
+        return videoFile != null ? videoName.compareTo(videoFile.videoName) : -1;
     }
 
     private String makeVideoNameDecent(String videoName) {
@@ -75,7 +94,7 @@ public class VideoFile implements Comparable<VideoFile> {
     }
 
     private String stripMovieTypes(String videoName) {
-        return videoName.toLowerCase().replace("mp4", "").replace("mkv", "");
+        return videoName.toLowerCase().replace("mp4", "").replace("mkv", "").replace("m4v", "");
     }
 
     private StringBuffer getVideoNameWithSpaces(String videoName) {

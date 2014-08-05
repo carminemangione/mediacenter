@@ -8,7 +8,17 @@ import java.io.IOException;
 import java.net.URL;
 
 public class DisplayableMovie {
-    private final BufferedImage posterImage;
+
+    private static final BufferedImage IMAGE_NOT_FOUND_ICON;
+
+    static {
+        try {
+            IMAGE_NOT_FOUND_ICON = ImageIO.read(DisplayableMovie.class.getClassLoader().getResource("blankimage.jpeg"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private BufferedImage posterImage;
     private final RTMovie rtMovie;
 
     public String getTitle() {
@@ -19,12 +29,17 @@ public class DisplayableMovie {
         return rtMovie.getYear();
     }
 
-    public DisplayableMovie(RTMovie rtMovie) throws IOException {
-        posterImage = ImageIO.read(new URL(rtMovie.getPosters().getOriginal()));
+    public DisplayableMovie(RTMovie rtMovie)  {
+        try {
+            posterImage = ImageIO.read(new URL(rtMovie.getPosters().getOriginal()));
+        } catch (Exception e) {
+            posterImage = IMAGE_NOT_FOUND_ICON;
+        }
         this.rtMovie = rtMovie;
     }
 
     public BufferedImage getPosterImage() {
         return posterImage;
     }
-}
+
+ }

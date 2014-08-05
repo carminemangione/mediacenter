@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MovieDetailsPanel extends JPanel {
-    private static final Font SYNOPSIS_FONT = new Font("ITC Garamond", Font.ITALIC, 14);
-    private static final Font STATS_FONT = new Font("ITC Garamond", Font.PLAIN, 16);
+    private static final Font SYNOPSIS_FONT = new Font("ITC Garamond", Font.ITALIC, 12);
+    private static final Font STATS_FONT = new Font("ITC Garamond", Font.PLAIN, 14);
 
     private static final BufferedImage FRESH_IMAGE;
     private static final BufferedImage SPLASH_IMAGE;
@@ -27,17 +27,23 @@ public class MovieDetailsPanel extends JPanel {
         } catch (IOException e) {
             throw new RuntimeException("Could not load rotten tomato images",e);
         }
-
     }
 
 
     public MovieDetailsPanel(MovieDetails movieDetails, String synopsis) throws Exception {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
         setOpaque(false);
+        add(createPosterAndRatingsPanel(movieDetails), BorderLayout.NORTH);
+        add(createStatsAndSynopsisPanel(movieDetails, synopsis), BorderLayout.CENTER);
+    }
 
-        add(createPosterAndRatingsPanel(movieDetails));
-        add(createMovieStatsPanel(movieDetails));
-        add(createSynopsisPanel(synopsis));
+    private JPanel createStatsAndSynopsisPanel(MovieDetails movieDetails, String synopsis) {
+
+        JPanel statsAndSynopsis = new JPanel(new BorderLayout());
+        statsAndSynopsis.setOpaque(false);
+        statsAndSynopsis.add(createMovieStatsPanel(movieDetails), BorderLayout.NORTH);
+        statsAndSynopsis.add(createSynopsisPanel(synopsis), BorderLayout.CENTER);
+        return  statsAndSynopsis;
     }
 
     private JPanel createPosterAndRatingsPanel(MovieDetails movieDetails) throws IOException {
@@ -52,10 +58,13 @@ public class MovieDetailsPanel extends JPanel {
 
     private Component createMovieStatsPanel(MovieDetails movieDetails) {
         JPanel statsPanel = new JPanel();
-        statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.Y_AXIS));
         statsPanel.setOpaque(false);
-        statsPanel.add(getDetailsLabel(movieDetails.getYear()));
-        statsPanel.add(getGenresPanel(movieDetails));
+        final JLabel genresPanel = getGenresPanel(movieDetails);
+        genresPanel.setHorizontalAlignment(SwingConstants.LEFT);
+        statsPanel.add(genresPanel);
+        final JLabel dateLabel = getDetailsLabel(movieDetails.getYear());
+        dateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        statsPanel.add(dateLabel);
         return statsPanel;
     }
 
@@ -91,8 +100,7 @@ public class MovieDetailsPanel extends JPanel {
                 JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane.setOpaque(false);
         jScrollPane.getViewport().setOpaque(false);
-        jScrollPane.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(30, 15, 15, 15), BorderFactory.createEtchedBorder(Color.LIGHT_GRAY, Color.BLACK)));
+        jScrollPane.setBorder(BorderFactory.createEmptyBorder(10, 20, 5, 20));
         return jScrollPane;
     }
 

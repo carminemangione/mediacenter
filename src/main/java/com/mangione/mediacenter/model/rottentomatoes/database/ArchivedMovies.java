@@ -8,9 +8,9 @@ public class ArchivedMovies {
 
     private final DerbyConnectionFactory derbyConnectionFactory;
 
-    public ArchivedMovies(String applicationDataDirectory, String dbname) throws Exception {
+    public ArchivedMovies(String applicationDataDirectory, String dbName) throws Exception {
 
-        derbyConnectionFactory = new DerbyConnectionFactory(applicationDataDirectory, dbname);
+        derbyConnectionFactory = new DerbyConnectionFactory(applicationDataDirectory, dbName);
         boolean tableExists;
         tableExists = doesTableExist();
 
@@ -27,30 +27,6 @@ public class ArchivedMovies {
             tableExists = rs.next();
         }
         return tableExists;
-    }
-
-    private void createDBTable()  {
-        try {
-            new Transaction(derbyConnectionFactory) {
-                @Override
-                protected void doTransaction(Connection connection) throws SQLException {
-                    new UpdateQuery(connection) {
-
-                        @Override
-                        protected String getUpdateQuery() {
-                            return "CREATE TABLE mediacenter.movie_links (movieName VARCHAR(128), movieURL VARCHAR(256), PRIMARY KEY (movieName))";
-                        }
-
-                        @Override
-                        protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
-
-                        }
-                    };
-                }
-            };
-        } catch (SQLException ignored) {
-
-        }
     }
 
     public String getMovieURL(String movieName) throws SQLException {
@@ -76,6 +52,30 @@ public class ArchivedMovies {
         };
 
         return movieURL[0];
+    }
+
+    private void createDBTable()  {
+        try {
+            new Transaction(derbyConnectionFactory) {
+                @Override
+                protected void doTransaction(Connection connection) throws SQLException {
+                    new UpdateQuery(connection) {
+
+                        @Override
+                        protected String getUpdateQuery() {
+                            return "CREATE TABLE mediacenter.movie_links (movieName VARCHAR(128), movieURL VARCHAR(256), PRIMARY KEY (movieName))";
+                        }
+
+                        @Override
+                        protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
+
+                        }
+                    };
+                }
+            };
+        } catch (SQLException ignored) {
+
+        }
     }
 
     public void addMovieURL(String movieName, String movieURL) throws SQLException {

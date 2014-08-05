@@ -26,7 +26,7 @@ public class VideoFiles {
 
     public synchronized VideoFile getVideoFile(int index) {
         for (int i = Math.max(index, 0); i < Math.min(videoFiles.length, index + NUMBER_OF_IMAGES_TO_PRELOAD); i++) {
-            videoFiles[i].getImageIcon();
+            videoFiles[i].loadImage();
         }
         return videoFiles[index];
     }

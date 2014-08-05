@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ResolveMovieListCellRender implements ListCellRenderer<DisplayableMovie>{
-    private static final Font SELECTION_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 12);
+    private static final Font SELECTION_FONT = new Font("ITC Garamond", Font.PLAIN, 14);
 
     @Override
     public Component getListCellRendererComponent(JList<? extends DisplayableMovie> list,

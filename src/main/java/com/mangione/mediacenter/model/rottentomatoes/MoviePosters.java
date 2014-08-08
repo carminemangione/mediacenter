@@ -1,6 +1,8 @@
 package com.mangione.mediacenter.model.rottentomatoes;
 
-public class MoviePosters {
+import java.io.Serializable;
+
+public class MoviePosters implements Serializable {
 
     private final String thumbnail;
     private final String profile;

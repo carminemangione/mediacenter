@@ -1,8 +1,10 @@
 package com.mangione.mediacenter.view.rottentomatoes.moviedetails;
 
+import com.mangione.mediacenter.model.rottentomatoes.moviedetails.DetailsAndSynopsis;
 import com.mangione.mediacenter.model.rottentomatoes.moviedetails.MovieDetails;
 import com.mangione.mediacenter.model.rottentomatoes.moviedetails.Ratings;
 import com.mangione.mediacenter.view.ImagePanel;
+import com.mangione.mediacenter.view.SharedConstants;
 import com.mangione.mediacenter.view.components.AspectRatioPreservedImagePanel;
 
 import javax.imageio.ImageIO;
@@ -13,8 +15,8 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MovieDetailsPanel extends JPanel {
-    private static final Font SYNOPSIS_FONT = new Font("ITC Garamond", Font.ITALIC, 12);
-    private static final Font STATS_FONT = new Font("ITC Garamond", Font.PLAIN, 14);
+    private static final Font SYNOPSIS_FONT = SharedConstants.BASE_FONT.deriveFont(Font.ITALIC, 12);
+    private static final Font STATS_FONT = SharedConstants.BASE_FONT.deriveFont(Font.PLAIN, 14);
 
     private static final BufferedImage FRESH_IMAGE;
     private static final BufferedImage SPLASH_IMAGE;
@@ -29,20 +31,21 @@ public class MovieDetailsPanel extends JPanel {
         }
     }
 
+    public MovieDetailsPanel(DetailsAndSynopsis detailsAndSynopsis) throws Exception {
 
-    public MovieDetailsPanel(MovieDetails movieDetails, String synopsis) throws Exception {
         setLayout(new BorderLayout());
         setOpaque(false);
-        add(createPosterAndRatingsPanel(movieDetails), BorderLayout.NORTH);
-        add(createStatsAndSynopsisPanel(movieDetails, synopsis), BorderLayout.CENTER);
+        add(createPosterAndRatingsPanel(detailsAndSynopsis.getMovieDetails()), BorderLayout.NORTH);
+        add(createStatsAndSynopsisPanel(detailsAndSynopsis), BorderLayout.CENTER);
+
     }
 
-    private JPanel createStatsAndSynopsisPanel(MovieDetails movieDetails, String synopsis) {
+    private JPanel createStatsAndSynopsisPanel(DetailsAndSynopsis detailsAndSynopsis) {
 
         JPanel statsAndSynopsis = new JPanel(new BorderLayout());
         statsAndSynopsis.setOpaque(false);
-        statsAndSynopsis.add(createMovieStatsPanel(movieDetails), BorderLayout.NORTH);
-        statsAndSynopsis.add(createSynopsisPanel(synopsis), BorderLayout.CENTER);
+        statsAndSynopsis.add(createMovieStatsPanel(detailsAndSynopsis.getMovieDetails()), BorderLayout.NORTH);
+        statsAndSynopsis.add(createSynopsisPanel(detailsAndSynopsis.getSynopsis().getSynopsis()), BorderLayout.CENTER);
         return  statsAndSynopsis;
     }
 
@@ -92,7 +95,7 @@ public class MovieDetailsPanel extends JPanel {
     private JComponent createSynopsisPanel(String synopsis) {
         final JTextArea synopsisPanel = new JTextArea(synopsis);
         synopsisPanel.setFont(SYNOPSIS_FONT);
-        synopsisPanel.setForeground(Color.LIGHT_GRAY);
+        synopsisPanel.setForeground(SharedConstants.LIGHT_TEXT_COLOR);
         synopsisPanel.setOpaque(false);
         synopsisPanel.setLineWrap(true);
         synopsisPanel.setWrapStyleWord(true);
@@ -104,10 +107,15 @@ public class MovieDetailsPanel extends JPanel {
         return jScrollPane;
     }
 
-    private AspectRatioPreservedImagePanel getPosterPanel(String original) throws IOException {
-        AspectRatioPreservedImagePanel moviePoster = new AspectRatioPreservedImagePanel(ImageIO.read(new URL(original)));
-        moviePoster.setPreferredSize(new Dimension(80, 120));
-        moviePoster.setOpaque(false);
+    private AspectRatioPreservedImagePanel getPosterPanel(String original) {
+        AspectRatioPreservedImagePanel moviePoster = null;
+        try {
+            moviePoster = new AspectRatioPreservedImagePanel(ImageIO.read(new URL(original)));
+            moviePoster.setPreferredSize(new Dimension(80, 120));
+            moviePoster.setOpaque(false);
+        } catch (IOException e) {
+            System.out.println("Could not load image: " + original);
+        }
         return moviePoster;
     }
 

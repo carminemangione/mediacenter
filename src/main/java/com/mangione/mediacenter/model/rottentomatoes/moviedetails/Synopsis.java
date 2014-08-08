@@ -3,12 +3,14 @@ package com.mangione.mediacenter.model.rottentomatoes.moviedetails;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
-public class Synopsis {
+import java.io.Serializable;
+
+public class Synopsis implements Serializable {
     private static final String BEGINNING_OF_SYNOPSIS = "<p id=\"movieSynopsis\" class=\"movie_synopsis\" itemprop=\"description\">";
     private static final String MORE_INFO = "<span id=\"movieSynopsisRemaining\" style=\"display:none;\">";
     private String synopsis = "No synopsis found.";
 
-    public static Synopsis fromWeblink(String link) {
+    public static Synopsis fromWebLink(String link) {
         final WebResource resource = Client.create().resource(link);
         String webpageText = resource.get(String.class);
         return new Synopsis(webpageText);

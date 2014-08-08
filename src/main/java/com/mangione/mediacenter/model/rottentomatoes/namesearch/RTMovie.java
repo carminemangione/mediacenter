@@ -3,7 +3,9 @@ package com.mangione.mediacenter.model.rottentomatoes.namesearch;
 import com.mangione.mediacenter.model.MovieLinks;
 import com.mangione.mediacenter.model.rottentomatoes.MoviePosters;
 
-public class RTMovie {
+import java.io.Serializable;
+
+public class RTMovie implements Serializable {
     private final String id;
     private final String title;
     private final String year;

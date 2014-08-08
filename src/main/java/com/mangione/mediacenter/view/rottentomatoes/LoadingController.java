@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class LoadingController implements RottenTomatoesControllerInterface {
 
-    private static final Font LOADING_FONT = new Font("ITC Garamond", Font.ITALIC, 40);
+    private static final Font LOADING_FONT = new Font("ITC Garamond", Font.ITALIC, 20);
     private final JPanel jPanel;
 
     public LoadingController() {
@@ -14,6 +14,7 @@ public class LoadingController implements RottenTomatoesControllerInterface {
         JLabel loadingLabel = new JLabel("Loading...");
         loadingLabel.setFont(LOADING_FONT);
         loadingLabel.setForeground(Color.LIGHT_GRAY);
+        loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         jPanel.add(loadingLabel, BorderLayout.CENTER);
     }

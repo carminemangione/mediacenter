@@ -1,6 +1,8 @@
 package com.mangione.mediacenter.model;
 
-public class MovieLinks {
+import java.io.Serializable;
+
+public class MovieLinks implements Serializable{
     private final String self;
     private final String alternate;
 

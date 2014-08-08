@@ -37,7 +37,7 @@ public class MovieBrowserPanel extends GradientPanel {
     public MovieBrowserPanel(VideoFiles movieDirs) throws Exception {
         numberOfLines = movieDirs.getNumberOfVideoFiles() / NUMBER_OF_COLUMNS + 1;
         videoFiles = movieDirs;
-        movieTitleFont = new Font(Font.SANS_SERIF, Font.BOLD, 50);
+        movieTitleFont = SharedConstants.BASE_FONT.deriveFont(Font.BOLD, 50);
         setOpaque(false);
     }
 
@@ -158,30 +158,30 @@ public class MovieBrowserPanel extends GradientPanel {
     }
 
     private void animateRowChange(final int newRow) {
-        new Thread() {
-            public void run() {
-                animating = true;
-                final boolean animateDown = newRow < currentRow;
-                currentSelectedRow = newRow;
+        currentSelectedRow = newRow;
+            new Thread() {
+                public void run() {
+                    animating = true;
+                    final boolean animateDown = newRow < currentRow;
 
-                currentTopOfImage = 0;
-                int moveEachStep = 1;
-                int numberOfSteps = (int) rowHeight / moveEachStep;
-                for (int i = 1; i < numberOfSteps; i++) {
-                    currentTopOfImage += (animateDown ? moveEachStep : -moveEachStep);
-                    repaint();
-                    try {
-                        Thread.sleep(2);
-                    } catch (InterruptedException e) {
-                        // nowarn
+                    currentTopOfImage = 0;
+                    int moveEachStep = 1;
+                    int numberOfSteps = (int) rowHeight / moveEachStep;
+                    for (int i = 1; i < numberOfSteps; i++) {
+                        currentTopOfImage += (animateDown ? moveEachStep : -moveEachStep);
+                        repaint();
+                        try {
+                            Thread.sleep(2);
+                        } catch (InterruptedException e) {
+                            // nowarn
+                        }
                     }
+                    currentTopOfImage = 0;
+                    currentRow = newRow;
+                    repaint();
+                    animating = false;
                 }
-                currentTopOfImage = 0;
-                currentRow = newRow;
-                repaint();
-                animating = false;
-            }
-        }.start();
+            }.start();
 
     }
 
@@ -267,7 +267,6 @@ public class MovieBrowserPanel extends GradientPanel {
         }
         return newRow;
     }
-
 
 
 }

@@ -1,6 +1,7 @@
 package com.mangione.mediacenter.view.rottentomatoes;
 
 import com.mangione.mediacenter.model.rottentomatoes.database.ArchivedMovies;
+import com.mangione.mediacenter.model.rottentomatoes.moviedetails.DetailsAndSynopsis;
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTMovie;
 import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.view.SharedConstants;
@@ -15,13 +16,11 @@ import java.sql.SQLException;
 
 public class RTMainController implements MovieResolvedListener {
     private static final Dimension PREFERRED_SIZE = new Dimension(300, 316);
-    private static final String APPLICATION_DATA_DIRECTORY = "~/Library/Application\\ Support/MediaCenter";
     private static final LoadingController LOADING_CONTROLLER = new LoadingController();
-
-    private final ArchivedMovies ARCHIVED_MOVIES;
 
 
     private RottenTomatoesControllerInterface currentController;
+    private String currentMovieInSearch;
     private JPanel currentPanel = null;
     private volatile Thread movieLoadingThread;
 
@@ -40,16 +39,20 @@ public class RTMainController implements MovieResolvedListener {
     }
 
     public RTMainController() throws Exception {
-        ARCHIVED_MOVIES = new ArchivedMovies(APPLICATION_DATA_DIRECTORY, "MediaCenter");
         currentPanel = new JPanel(new BorderLayout());
-        currentPanel.setOpaque(false);
+        currentPanel.setOpaque(true);
         currentPanel.setPreferredSize(PREFERRED_SIZE);
+        currentPanel.setBorder(BorderFactory.createEmptyBorder(20,20, 20, 20));
+        currentPanel.setBackground(new Color(84, 127, 165));
+
+
     }
 
 
     public synchronized void loadMovie(final VideoFile videoFile) throws SQLException {
-        final String movieURL = ARCHIVED_MOVIES.getMovieURL(videoFile.getIdentifyingString());
-        if (movieURL == null) {
+        currentMovieInSearch = videoFile.getIdentifyingString();
+        final DetailsAndSynopsis detailsAndSynopsis = ArchivedMovies.getInstance().getMovie(currentMovieInSearch);
+        if (detailsAndSynopsis == null) {
             if (movieLoadingThread != null) {
                 movieLoadingThread.interrupt();
             }
@@ -69,12 +72,24 @@ public class RTMainController implements MovieResolvedListener {
                 }
             };
             movieLoadingThread.start();
+        } else {
+            try {
+                currentController = new MovieDetailsController(detailsAndSynopsis);
+                flipPanel();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
     @Override
     public void resolvedMovieSelected(RTMovie rtMovie) {
+        final String movieLink = rtMovie.getLinks().getSelf();
+        loadMovieAtLink(movieLink);
+    }
+
+    private void loadMovieAtLink(final String movieLink) {
         try {
             if (movieLoadingThread != null) {
                 movieLoadingThread.interrupt();
@@ -84,7 +99,7 @@ public class RTMainController implements MovieResolvedListener {
             movieLoadingThread = new Thread() {
                 public void run() {
                     try {
-                        currentController = new MovieDetailsController(rtMovie.getLinks().getSelf());
+                        currentController = new MovieDetailsController(currentMovieInSearch, movieLink);
                         flipPanel();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -99,7 +114,6 @@ public class RTMainController implements MovieResolvedListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void flipPanel() {

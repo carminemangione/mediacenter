@@ -1,14 +1,30 @@
 package com.mangione.mediacenter.model.rottentomatoes.database;
 
 import com.mangione.common.database.*;
+import com.mangione.mediacenter.model.rottentomatoes.moviedetails.DetailsAndSynopsis;
 
+import java.io.*;
 import java.sql.*;
 
 public class ArchivedMovies {
+    private static final String APPLICATION_DATA_DIRECTORY = System.getProperty("user.home") + "/Library/Application\\ Support/MediaCenter";
+    private static final ArchivedMovies INSTANCE;
+    static {
+        try {
+            INSTANCE = new ArchivedMovies(APPLICATION_DATA_DIRECTORY, "MediaCenter");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ArchivedMovies getInstance() {
+        return INSTANCE;
+    }
+
 
     private final DerbyConnectionFactory derbyConnectionFactory;
 
-    public ArchivedMovies(String applicationDataDirectory, String dbName) throws Exception {
+    ArchivedMovies(String applicationDataDirectory, String dbName) throws Exception {
 
         derbyConnectionFactory = new DerbyConnectionFactory(applicationDataDirectory, dbName);
         boolean tableExists;
@@ -29,29 +45,37 @@ public class ArchivedMovies {
         return tableExists;
     }
 
-    public String getMovieURL(String movieName) throws SQLException {
-        final String[] movieURL = {null};
+    public DetailsAndSynopsis getMovie(String moviePath) throws SQLException {
+        final DetailsAndSynopsis[] movie = {null};
         new Query(derbyConnectionFactory) {
 
             @Override
             protected String getQueryString() throws SQLException {
-                return "SELECT movieURL FROM mediacenter.movie_links WHERE movieName = ?";
+                return "SELECT rtmovie FROM mediacenter.rtmovies WHERE moviePath = ?";
             }
 
             @Override
             protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
-                ps.setString(1, movieName);
+                ps.setString(1, moviePath);
             }
 
             @Override
             protected void processResults(ResultSet rs) throws SQLException {
                 if (rs.next()) {
-                    movieURL[0] = rs.getString("movieURL");
+                    final byte[] rtbytes = rs.getBytes("rtmovie");
+
+                    ByteArrayInputStream bais = new ByteArrayInputStream(rtbytes);
+                    try {
+                        ObjectInputStream ois = new ObjectInputStream(bais);
+                        movie[0] = (DetailsAndSynopsis) ois.readObject();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
 
-        return movieURL[0];
+        return movie[0];
     }
 
     private void createDBTable()  {
@@ -63,7 +87,11 @@ public class ArchivedMovies {
 
                         @Override
                         protected String getUpdateQuery() {
-                            return "CREATE TABLE mediacenter.movie_links (movieName VARCHAR(128), movieURL VARCHAR(256), PRIMARY KEY (movieName))";
+                            return "CREATE TABLE mediacenter.rtmovies " +
+                                    "(moviePath VARCHAR(256), " +
+                                    "   movieURL VARCHAR(256), " +
+                                    " rtmovie BLOB(16M), " +
+                                    " PRIMARY KEY (moviePath))";
                         }
 
                         @Override
@@ -78,20 +106,31 @@ public class ArchivedMovies {
         }
     }
 
-    public void addMovieURL(String movieName, String movieURL) throws SQLException {
+    public void addMovieURL(String moviePath, String movieURL, DetailsAndSynopsis detailsAndSynopsis) throws SQLException {
         new Transaction(derbyConnectionFactory) {
             @Override
             protected void doTransaction(Connection connection) throws SQLException {
                 new InsertQuery(connection) {
                     @Override
                     protected String getInsertQuery() {
-                        return "INSERT INTO mediacenter.movie_links (movieName, movieURL) VALUES (?, ?)";
+                        return "INSERT INTO mediacenter.rtmovies (moviePath, movieURL, rtmovie) VALUES (?, ?, ?)";
                     }
 
                     @Override
                     protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
-                        ps.setString(1, movieName);
+                        ps.setString(1, moviePath);
                         ps.setString(2, movieURL);
+
+                        try {
+                            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+                            ObjectOutputStream oos = new ObjectOutputStream(out);
+                            oos.writeObject(detailsAndSynopsis);
+                            ByteArrayInputStream bais = new ByteArrayInputStream(out.toByteArray());
+                            ps.setBinaryStream(3, bais);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
                     }
                 };
             }

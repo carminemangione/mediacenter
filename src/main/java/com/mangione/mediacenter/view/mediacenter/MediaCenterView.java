@@ -14,7 +14,7 @@ public class MediaCenterView extends JFrame {
 
         add(mediaImageGrid, BorderLayout.CENTER);
         getContentPane().setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
-        setPreferredSize(new Dimension(600, 500));
+        setPreferredSize(new Dimension(900, 500));
         mediaImageGrid.setFocusable(true);
         mediaImageGrid.requestFocus();
 

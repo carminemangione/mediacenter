@@ -1,6 +1,8 @@
 package com.mangione.mediacenter.model.rottentomatoes.moviedetails;
 
-public class Ratings {
+import java.io.Serializable;
+
+public class Ratings implements Serializable {
 
     private final String critics_score;
     private final String audience_rating;

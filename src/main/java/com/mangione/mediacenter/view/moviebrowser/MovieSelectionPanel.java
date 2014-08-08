@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class MovieSelectionPanel extends JPanel {
-    private static final Font FONT = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+    private static final Font FONT = SharedConstants.BASE_FONT.deriveFont(Font.BOLD, 20);
     private final JLabel movieTitle;
     private final MovieBrowserPanel movieBrowserPanel;
 
@@ -28,7 +28,7 @@ public class MovieSelectionPanel extends JPanel {
         JLabel movieTitle;
         movieTitle = new JLabel(currentMovie);
         movieTitle.setFont(FONT);
-        movieTitle.setForeground(Color.CYAN);
+        movieTitle.setForeground(SharedConstants.LIGHT_TEXT_COLOR);
         movieTitle.setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
         movieTitle.setHorizontalAlignment(SwingConstants.CENTER);
         movieTitle.setVerticalAlignment(SwingConstants.CENTER);

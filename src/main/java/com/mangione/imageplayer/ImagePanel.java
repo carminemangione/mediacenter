@@ -1,46 +1,41 @@
 package com.mangione.imageplayer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 
 public class ImagePanel extends JPanel {
     private Dimension imageSize;
-    private float currentAlpha;
     private Image currentImage;
     private String currentImageFile;
-    private boolean animating = false;
-    private int numberOfSteps;
-    private boolean fadeOut;
-    private static final int NUMBER_OF_STEPS = 50;
 
 
     public ImagePanel() {
     }
 
     public synchronized void setImage(final String imageFileName) {
-        currentAlpha = 1.0f;
         currentImageFile = imageFileName;
         if (currentImage != null) {
             currentImage = null;
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                invalidate();
-                repaint();
-            }
+        SwingUtilities.invokeLater(() -> {
+            invalidate();
+            repaint();
         });
-        new Thread() {
-            @Override
-            public void run() {
-                if (currentImageFile == null) {
-                    currentImageFile = imageFileName;
-                }
-                numberOfSteps = 0;
-                fadeOut = true;
-                animating = true;
-                currentAlpha = 1.0f;
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                if (currentImageFile == null) {
+//                    currentImageFile = imageFileName;
+//                }
+//                numberOfSteps = 0;
+//                fadeOut = true;
+//                animating = true;
+//                currentAlpha = 1.0f;
 //                while (animating) {
 //                    try {
 //                        if (!fadeOut) {
@@ -83,8 +78,8 @@ public class ImagePanel extends JPanel {
 //                    }
 //                }
 
-            }
-        }.start();
+//            }
+//        }.start();
 
 
     }
@@ -93,8 +88,11 @@ public class ImagePanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         Dimension panelSize = getSize();
         if (currentImage == null) {
-            ImageIcon image = new ImageIcon(currentImageFile);
-            currentImage = image.getImage();
+            try {
+                currentImage = ImageIO.read(new File(currentImageFile));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         double panelWidth = panelSize.getWidth();
         double panelHeight = panelSize.getHeight();

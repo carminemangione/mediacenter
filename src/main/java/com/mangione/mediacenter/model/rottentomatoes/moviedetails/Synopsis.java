@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class Synopsis implements Serializable {
     private static final String BEGINNING_OF_SYNOPSIS = "<p id=\"movieSynopsis\" class=\"movie_synopsis\" itemprop=\"description\">";
-    private static final String MORE_INFO = "<span id=\"movieSynopsisRemaining\" style=\"display:none;\">";
+    private static final String MORE_INFO = "<span id=\"movieSynopsisRemaining\"";
     private String synopsis = "No synopsis found.";
 
     public static Synopsis fromWebLink(String link) {
@@ -39,6 +39,7 @@ public class Synopsis implements Serializable {
             synopsis = synopsis.replaceAll("\t", " ");
             synopsis = synopsis.replaceAll(" +", " ");
             synopsis = synopsis.trim();
+            synopsis = synopsis.replaceAll(("<h2>Movie Info</h2>"), "");
         }
     }
 

@@ -10,6 +10,11 @@ public class MediaCenterView extends JFrame {
     private Component currentEastComponent;
 
     public MediaCenterView(JComponent mediaImageGrid) throws HeadlessException {
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+
+        JMenuBar menuBar = createMenuBar();
+        setJMenuBar(menuBar);
+
         setLayout(new BorderLayout(20, 0));
 
         add(mediaImageGrid, BorderLayout.CENTER);
@@ -37,6 +42,16 @@ public class MediaCenterView extends JFrame {
         });
 
 
+    }
+
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        final JMenu fileMenu = new JMenu("File");
+        final JMenuItem videoDirectories = new JMenuItem("Manage Video Directories...");
+        fileMenu.add(videoDirectories);
+
+        menuBar.add(fileMenu);
+        return menuBar;
     }
 
 }

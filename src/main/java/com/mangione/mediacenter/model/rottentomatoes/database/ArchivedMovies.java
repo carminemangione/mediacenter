@@ -1,5 +1,6 @@
 package com.mangione.mediacenter.model.rottentomatoes.database;
 
+import com.mangione.common.applicationdata.ApplicationDataLocation;
 import com.mangione.common.database.*;
 import com.mangione.mediacenter.model.rottentomatoes.moviedetails.DetailsAndSynopsis;
 
@@ -7,11 +8,10 @@ import java.io.*;
 import java.sql.*;
 
 public class ArchivedMovies {
-    private static final String APPLICATION_DATA_DIRECTORY = System.getProperty("user.home") + "/Library/Application\\ Support/MediaCenter";
     private static final ArchivedMovies INSTANCE;
     static {
         try {
-            INSTANCE = new ArchivedMovies(APPLICATION_DATA_DIRECTORY, "MediaCenter");
+            INSTANCE = new ArchivedMovies(new ApplicationDataLocation("MediaCenter").getApplicationDataLocation(), "MediaCenter");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

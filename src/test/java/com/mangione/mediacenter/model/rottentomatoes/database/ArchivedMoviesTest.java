@@ -1,5 +1,7 @@
 package com.mangione.mediacenter.model.rottentomatoes.database;
 
+import com.mangione.common.applicationdata.ApplicationDataLocation;
+import com.mangione.common.database.DerbyConnectionFactory;
 import com.mangione.mediacenter.model.MovieLinks;
 import com.mangione.mediacenter.model.rottentomatoes.MoviePosters;
 import com.mangione.mediacenter.model.rottentomatoes.moviedetails.DetailsAndSynopsis;
@@ -42,7 +44,7 @@ public class ArchivedMoviesTest {
         File applicationDirectory = new File(tempApplicationDataDirectory);
         assertFalse(applicationDirectory.exists());
 
-        new ArchivedMovies(tempApplicationDataDirectory, "ArcivedMoviesTest");
+        new ArchivedMovies( new DerbyConnectionFactory(new ApplicationDataLocation("MediaCenter").getApplicationDataLocation(), "MediaCenterTest"));
 
         assertTrue(applicationDirectory.exists());
     }
@@ -51,7 +53,7 @@ public class ArchivedMoviesTest {
     public void storeAndRetrieveMovieUrl() throws Exception {
         String moviePath = "UNDER_ONE_ROOF";
 
-        final ArchivedMovies archivedMovies = new ArchivedMovies(tempApplicationDataDirectory, "ArchivedMoviesTest");
+        final ArchivedMovies archivedMovies = new ArchivedMovies(new DerbyConnectionFactory(new ApplicationDataLocation("MediaCenterTest").getApplicationDataLocation(), "MediaCenterTest"));
         MovieDetails details = new MovieDetails(10, "Hello", "1999", new String[]{}, new MoviePosters("thumb", "prof", "orig"),
                 new MovieLinks("self", "alternate"), new Ratings("", null, null));
         DetailsAndSynopsis detailsAndSynopsis = new DetailsAndSynopsis(details, new Synopsis("Hi there"));
@@ -59,7 +61,7 @@ public class ArchivedMoviesTest {
         assertNull(archivedMovies.getMovie(moviePath));
         archivedMovies.addMovieURL(moviePath, "url", detailsAndSynopsis);
 
-        final ArchivedMovies newArchivedMovies = new ArchivedMovies(tempApplicationDataDirectory, "ArchivedMoviesTest");
+        final ArchivedMovies newArchivedMovies = new ArchivedMovies(new DerbyConnectionFactory(new ApplicationDataLocation("MediaCenterTest").getApplicationDataLocation(), "MediaCenterTest"));
         assertEquals(10, newArchivedMovies.getMovie(moviePath).getMovieDetails().getId());
 
     }

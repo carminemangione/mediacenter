@@ -1,7 +1,7 @@
 package com.mangione.mediacenter.model.rottentomatoes.database;
 
-import com.mangione.common.applicationdata.ApplicationDataLocation;
 import com.mangione.common.database.*;
+import com.mangione.mediacenter.model.database.MediaCenterDataSource;
 import com.mangione.mediacenter.model.rottentomatoes.moviedetails.DetailsAndSynopsis;
 
 import java.io.*;
@@ -11,7 +11,7 @@ public class ArchivedMovies {
     private static final ArchivedMovies INSTANCE;
     static {
         try {
-            INSTANCE = new ArchivedMovies(new ApplicationDataLocation("MediaCenter").getApplicationDataLocation(), "MediaCenter");
+            INSTANCE = new ArchivedMovies();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -22,17 +22,22 @@ public class ArchivedMovies {
     }
 
 
-    private final DerbyConnectionFactory derbyConnectionFactory;
+    private final AbstractDataSource derbyConnectionFactory;
 
-    ArchivedMovies(String applicationDataDirectory, String dbName) throws Exception {
 
-        derbyConnectionFactory = new DerbyConnectionFactory(applicationDataDirectory, dbName);
+    public ArchivedMovies(AbstractDataSource dataSource) throws Exception {
+        derbyConnectionFactory = dataSource;
+
         boolean tableExists;
         tableExists = doesTableExist();
 
         if (!tableExists) {
             createDBTable();
         }
+    }
+
+    public ArchivedMovies() throws Exception {
+        this(MediaCenterDataSource.get());
     }
 
     private boolean doesTableExist() throws SQLException {

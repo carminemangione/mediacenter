@@ -29,16 +29,18 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
 
         final JPanel movieSelectionPanel = movieSelectionController.getMovieSelectionPanel();
-        mediaCenterView = new MediaCenterView(movieSelectionPanel);
+        mediaCenterView = new MediaCenterView(this, movieSelectionPanel);
         mediaCenterView.setEastComponent(rtMainController.getCurrentPanel());
         final JPanel blankPanel = new JPanel();
         blankPanel.setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
-        videoSelectionChanged(movieSelectionController.getCurrentlySelectedVideo());
+        if (videoFiles.getNumberOfVideoFiles() > 0) {
+            videoSelectionChanged(movieSelectionController.getCurrentlySelectedVideo());
+        }
         mediaCenterView.setVisible(true);
     }
 
     @Override
-    public void videoSelectionChanged(VideoFile videoFile)  {
+    public void videoSelectionChanged(VideoFile videoFile) {
         try {
             rtMainController.loadMovie(videoFile);
 

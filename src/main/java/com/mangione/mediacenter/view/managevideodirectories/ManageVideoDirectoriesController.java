@@ -2,10 +2,8 @@ package com.mangione.mediacenter.view.managevideodirectories;
 
 import com.mangione.mediacenter.model.VideoDirectories;
 import com.mangione.mediacenter.view.mediacenter.MediaCenterControllerInterface;
-import com.mangione.mediacenter.view.mediacenter.MediaCenterView;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * User: carminemangione
@@ -16,20 +14,13 @@ import java.awt.*;
 public class ManageVideoDirectoriesController implements ManageVideoDirectoriesControllerInterface {
     private MediaCenterControllerInterface mediaCenterControllerInterface;
 
-    public ManageVideoDirectoriesController(final MediaCenterView parent, Point location,
+    public ManageVideoDirectoriesController(
         MediaCenterControllerInterface mediaCenterControllerInterface) {
 
         this.mediaCenterControllerInterface = mediaCenterControllerInterface;
-
-            final JPopupMenu popupMenu = new JPopupMenu();
-            JMenuItem menuItem = new JMenuItem("Manage video directories...");
-            menuItem.addActionListener(actionEvent -> launchManageDirectoriesWindow(parent));
-            popupMenu.add(menuItem);
-            popupMenu.show(parent, location.x, location.y);
-
     }
 
-    private void launchManageDirectoriesWindow(JFrame parent) {
+    public void launchManageDirectoriesWindow(JFrame parent) {
         new ManageVideoDirectoriesView(VideoDirectories.getInstance().getVideoDirectories(), parent, this);
     }
 

@@ -48,7 +48,7 @@ public class MovieBrowserPanel extends GradientPanel {
     }
 
     public void zoomToLetter(char charPressed) {
-        int newIndex = videoFiles.getIndexFirstVideoStart(charPressed);
+        int newIndex = videoFiles.getIndexFirstVideoWithStartingCharacter(charPressed);
         currentRow = newIndex / NUMBER_OF_COLUMNS;
         currentSelectedRow = currentRow;
         currentColumn = newIndex % NUMBER_OF_COLUMNS;
@@ -80,7 +80,7 @@ public class MovieBrowserPanel extends GradientPanel {
         }
     }
 
-    public VideoFile getCurrentVideoFile() {
+    public VideoFile getCurrentVideoFile() throws IllegalArgumentException  {
         return videoFiles.getVideoFile(getIndexOfSelected());
     }
 

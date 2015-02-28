@@ -22,14 +22,14 @@ public class ArchivedMovies {
     }
 
 
-    private final AbstractDataSource derbyConnectionFactory;
+    private final DerbyConnectionFactory derbyConnectionFactory;
 
 
-    public ArchivedMovies(AbstractDataSource dataSource) throws Exception {
+    public ArchivedMovies(DerbyConnectionFactory dataSource) throws Exception {
         derbyConnectionFactory = dataSource;
 
         boolean tableExists;
-        tableExists = doesTableExist();
+        tableExists = derbyConnectionFactory.doesTableExist("mediacenter", "rtmovies");
 
         if (!tableExists) {
             createDBTable();
@@ -38,16 +38,6 @@ public class ArchivedMovies {
 
     public ArchivedMovies() throws Exception {
         this(MediaCenterDataSource.get());
-    }
-
-    private boolean doesTableExist() throws SQLException {
-        boolean tableExists;
-        try (Connection connection = derbyConnectionFactory.getConnection()) {
-            final DatabaseMetaData metaData = connection.getMetaData();
-            final ResultSet rs = metaData.getSuperTables(null, "MEDIACENTER", "*");
-            tableExists = rs.next();
-        }
-        return tableExists;
     }
 
     public DetailsAndSynopsis getMovie(String moviePath) throws SQLException {

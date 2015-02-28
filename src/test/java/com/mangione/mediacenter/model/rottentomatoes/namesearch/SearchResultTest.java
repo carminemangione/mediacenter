@@ -23,7 +23,6 @@ public class SearchResultTest {
         assertEquals("2002", underOneRoof.getYear());
         final MoviePosters posters = underOneRoof.getPosters();
         assertEquals("http://content9.flixster.com/movie/10/91/67/10916739_pro.jpg", posters.getProfile());
-        assertEquals("http://content9.flixster.com/movie/10/91/67/10916739_mob.jpg", posters.getThumbnail());
         final MovieLinks links = underOneRoof.getLinks();
         assertEquals("http://api.rottentomatoes.com/api/public/v1.0/movies/17414.json", links.getSelf());
 

@@ -1,15 +1,18 @@
 package com.mangione.mediacenter.view.mediacenter;
 
 import com.mangione.mediacenter.view.SharedConstants;
+import com.mangione.mediacenter.view.managevideodirectories.ManageVideoDirectoriesController;
 
 import javax.swing.*;
 import java.awt.*;
 
 
 public class MediaCenterView extends JFrame {
+    private final MediaCenterController mediaCenterController;
     private Component currentEastComponent;
 
-    public MediaCenterView(JComponent mediaImageGrid) throws HeadlessException {
+    public MediaCenterView(MediaCenterController mediaCenterController, JComponent mediaImageGrid) throws HeadlessException {
+        this.mediaCenterController = mediaCenterController;
         System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         JMenuBar menuBar = createMenuBar();
@@ -48,6 +51,8 @@ public class MediaCenterView extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         final JMenu fileMenu = new JMenu("File");
         final JMenuItem videoDirectories = new JMenuItem("Manage Video Directories...");
+        videoDirectories.addActionListener(actionEvent -> new ManageVideoDirectoriesController(mediaCenterController).launchManageDirectoriesWindow(this));
+
         fileMenu.add(videoDirectories);
 
         menuBar.add(fileMenu);

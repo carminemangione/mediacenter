@@ -1,50 +1,145 @@
 package com.mangione.mediacenter.model;
 
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
+import com.mangione.common.database.*;
+import com.mangione.mediacenter.model.database.MediaCenterDataSource;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.prefs.Preferences;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideoDirectories {
-    private static final Preferences preferences = Preferences.userNodeForPackage(VideoDirectories.class);
-    private static final VideoDirectories instance = new VideoDirectories();
-    private static final String VIDEO_DIRECTORIES = "videoDirectories";
+    private static final VideoDirectories instance;
+    static {
+        try {
+            instance = new VideoDirectories();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-    private VideoDirectories() {
+    }
+    private static final String TABLE_NAME = "moviedirectories";
+    private static final String SCHEMA_NAME = "mediacenter";
+    private static final String QUALIFIED_TABLE_NAME = SCHEMA_NAME + "." + TABLE_NAME;
+    private final DerbyConnectionFactory derbyConnectionFactory;
+
+    private VideoDirectories() throws Exception {
+
+
+        boolean tableExists;
+        derbyConnectionFactory = MediaCenterDataSource.get();
+        tableExists = derbyConnectionFactory.doesTableExist(SCHEMA_NAME, TABLE_NAME);
+
+        if (!tableExists) {
+            createDBTable();
+        }
+
         String deleteDirectories = System.getProperty("deleteDirectories", "false");
         if ("true".equals(deleteDirectories)) {
-            preferences.put(VIDEO_DIRECTORIES, "");
+            clearDirectoriesTable();
         }
+    }
+
+    private void clearDirectoriesTable() throws SQLException {
+        new UpdateQuery(derbyConnectionFactory) {
+
+            @Override
+            protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
+
+            }
+
+            @Override
+            protected String getUpdateQuery() {
+                return "DELETE * FROM " + QUALIFIED_TABLE_NAME;
+            }
+        };
+    }
+
+    private void createDBTable() {
+        try (Connection connection = derbyConnectionFactory.getConnection()) {
+            new UpdateQuery(connection) {
+
+                @Override
+                protected String getUpdateQuery() {
+                    return "CREATE TABLE " + QUALIFIED_TABLE_NAME +
+                            " (directory VARCHAR(256), " +
+                            " PRIMARY KEY (directory))";
+                }
+                @Override
+                protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
+
+                }
+            };
+                        
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+
     }
 
     public static VideoDirectories getInstance() {
         return instance;
     }
 
-    public String[] getVideoDirectories() {
-        CSVReader csvReader = new CSVReader(new StringReader(preferences.get(VIDEO_DIRECTORIES, "")));
-        String[] directories = new String[0];
+    public String[] getVideoDirectories()  {
+        final List<String> videoDirectories = new ArrayList<>();
         try {
-            directories = csvReader.readNext();
-        } catch (IOException e) {
-            //ignored
+            new Query(derbyConnectionFactory) {
+
+                @Override
+                protected String getQueryString() throws SQLException {
+                    return "SELECT directory FROM " + QUALIFIED_TABLE_NAME;
+                }
+
+                @Override
+                protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
+
+                }
+
+                @Override
+                protected void processResults(ResultSet rs) throws SQLException {
+                    while (rs.next()) {
+                        videoDirectories.add(rs.getString("directory"));
+                    }
+                }
+            };
+        } catch (SQLException e) {
+            throw new RuntimeException();
         }
-        return directories;
+        return videoDirectories.toArray(new String[videoDirectories.size()]);
     }
 
-    public void setDirectories(String[] directories) {
-        final StringWriter stringWriter = new StringWriter();
-        CSVWriter writer = new CSVWriter(stringWriter);
-        writer.writeNext(directories);
+    public void setDirectories(String[] directories)  {
+
         try {
-            writer.close();
-        } catch (IOException e) {
-            //ignored
+            new Transaction(derbyConnectionFactory) {
+
+                @Override
+                protected void doTransaction(Connection connection) throws SQLException {
+                    for (String directory : directories) {
+                        try {
+                            new InsertQuery(derbyConnectionFactory.getConnection()) {
+                                @Override
+                                protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
+                                    ps.setString(1, directory);
+                                }
+
+                                @Override
+                                protected String getInsertQuery() {
+                                    return "INSERT INTO " + QUALIFIED_TABLE_NAME + " VALUES (?)";
+                                }
+                            };
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                }
+            };
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        final String csvDirectories = stringWriter.toString();
-        preferences.put(VIDEO_DIRECTORIES, csvDirectories);
     }
 }

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class MediaCenterDataSource extends AbstractDataSource {
 
-    private static AbstractDataSource INSTANCE;
+    private static DerbyConnectionFactory INSTANCE;
 
     static {
         try {
@@ -20,12 +20,12 @@ public class MediaCenterDataSource extends AbstractDataSource {
         }
     }
 
-    public MediaCenterDataSource (AbstractDataSource dataSource) {
+    public MediaCenterDataSource (DerbyConnectionFactory dataSource) {
         INSTANCE = dataSource;
     }
 
 
-    public static AbstractDataSource get() {
+    public static DerbyConnectionFactory get() {
         return INSTANCE;
     }
 

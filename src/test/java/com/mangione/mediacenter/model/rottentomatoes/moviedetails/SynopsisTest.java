@@ -16,7 +16,7 @@ public class SynopsisTest {
         assertTrue(synopsis.getSynopsis().endsWith("~ Michael Hastings, Rovi"));
         final String lineChangeConvertedToSpace = "hunky border";
         assertTrue(synopsis.getSynopsis().contains(lineChangeConvertedToSpace));
-        final String moreAddedCorrectly = "a clandestine";
+        final String moreAddedCorrectly = "clandestine";
         assertTrue(synopsis.getSynopsis().contains(moreAddedCorrectly));
     }
 
@@ -30,4 +30,17 @@ public class SynopsisTest {
         final String lineChangeConvertedToSpace = "hunky border";
         assertTrue(synopsis.getSynopsis().contains(lineChangeConvertedToSpace));
     }
+
+
+    @Test
+    public void ethanMaoIsDifferent() throws Exception {
+
+        final String webpage = IOUtils.toString(SynopsisTest.class.getClassLoader().getResourceAsStream("ethanmao.html"));
+        Synopsis synopsis = new Synopsis(webpage);
+        assertTrue(synopsis.getSynopsis().startsWith("The product of a dysfunctional family takes unusual"));
+        assertTrue(synopsis.getSynopsis().endsWith(" filmmaker Quentin Lee."));
+        final String lineChangeConvertedToSpace = "house. Ethan";
+        assertTrue(synopsis.getSynopsis().contains(lineChangeConvertedToSpace));
+    }
+
 }

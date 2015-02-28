@@ -18,7 +18,11 @@ public class MovieSelectionPanel extends JPanel {
         setLayout(new BorderLayout());
 
         movieBrowserPanel = new MovieBrowserPanel(moviesFiles);
-        movieTitle = createAndInitializeCurrentMovie(movieBrowserPanel.getCurrentVideoFile().getVideoName());
+        if (moviesFiles.getNumberOfVideoFiles() > 0) {
+            movieTitle = createAndInitializeCurrentMovie(movieBrowserPanel.getCurrentVideoFile().getVideoName());
+        } else {
+            movieTitle = new JLabel("No movies available");
+        }
 
         add(movieTitle, BorderLayout.NORTH);
         add(movieBrowserPanel, BorderLayout.CENTER);

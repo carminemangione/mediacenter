@@ -24,14 +24,17 @@ public class VideoFiles {
 
     }
 
-    public synchronized VideoFile getVideoFile(int index) {
+    public synchronized VideoFile getVideoFile(int index) throws IllegalArgumentException {
         for (int i = Math.max(index, 0); i < Math.min(videoFiles.length, index + NUMBER_OF_IMAGES_TO_PRELOAD); i++) {
             videoFiles[i].loadImage();
+        }
+        if (index < 0) {
+            throw new IllegalArgumentException("Can't get video file at a negative index.");
         }
         return videoFiles[index];
     }
 
-    public synchronized int getIndexFirstVideoStart(char starting) {
+    public synchronized int getIndexFirstVideoWithStartingCharacter(char starting) {
         boolean found = false;
         int i;
         for (i = 0; i < videoFiles.length && !found; i++) {

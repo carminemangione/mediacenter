@@ -34,9 +34,9 @@ public class MovieBrowserPanel extends GradientPanel {
     private int verticalBorder;
     private int currentTopOfImage;
 
-    public MovieBrowserPanel(VideoFiles movieDirs) throws Exception {
-        numberOfLines = movieDirs.getNumberOfVideoFiles() / NUMBER_OF_COLUMNS + 1;
-        videoFiles = movieDirs;
+    public MovieBrowserPanel(VideoFiles videoFiles) throws Exception {
+        numberOfLines = videoFiles.getNumberOfVideoFiles() / NUMBER_OF_COLUMNS + 1;
+        this.videoFiles = videoFiles;
         movieTitleFont = SharedConstants.BASE_FONT.deriveFont(Font.BOLD, 50);
         setOpaque(false);
     }

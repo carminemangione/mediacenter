@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MovieDetailsPanel extends JPanel {
-    private static final Font SYNOPSIS_FONT = SharedConstants.BASE_FONT.deriveFont(Font.ITALIC, 12);
-    private static final Font STATS_FONT = SharedConstants.BASE_FONT.deriveFont(Font.PLAIN, 14);
 
     private static final BufferedImage FRESH_IMAGE;
     private static final BufferedImage SPLASH_IMAGE;
@@ -84,7 +82,7 @@ public class MovieDetailsPanel extends JPanel {
 
     private JLabel getDetailsLabel(String label) {
         JLabel jlabel = new JLabel(label);
-        jlabel.setFont(STATS_FONT);
+        jlabel.setFont(SharedConstants.STATS_FONT);
         jlabel.setOpaque(false);
         jlabel.setForeground(Color.YELLOW);
         jlabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -94,7 +92,7 @@ public class MovieDetailsPanel extends JPanel {
 
     private JComponent createSynopsisPanel(String synopsis) {
         final JTextArea synopsisPanel = new JTextArea(synopsis);
-        synopsisPanel.setFont(SYNOPSIS_FONT);
+        synopsisPanel.setFont(SharedConstants.SYNOPSIS_FONT);
         synopsisPanel.setForeground(SharedConstants.LIGHT_TEXT_COLOR);
         synopsisPanel.setOpaque(false);
         synopsisPanel.setLineWrap(true);
@@ -140,7 +138,7 @@ public class MovieDetailsPanel extends JPanel {
         }
 
         ratingsLabel.setForeground(Color.YELLOW);
-        ratingsLabel.setFont(STATS_FONT);
+        ratingsLabel.setFont(SharedConstants.STATS_FONT);
         ratingsLabel.setOpaque(false);
         return ratingsLabel;
     }

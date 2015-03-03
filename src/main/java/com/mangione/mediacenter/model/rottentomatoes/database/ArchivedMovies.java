@@ -40,6 +40,20 @@ public class ArchivedMovies {
         this(MediaCenterDataSource.get());
     }
 
+    public void deleteMovie(String moviePath) throws SQLException {
+        new UpdateQuery(derbyConnectionFactory) {
+            @Override
+            protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
+                ps.setString(1, moviePath);
+            }
+
+            @Override
+            protected String getUpdateQuery() {
+                return "DELETE FROM mediacenter.rtmovies WHERE moviePath = ?";
+            }
+        };
+    }
+
     public DetailsAndSynopsis getMovie(String moviePath) throws SQLException {
         final DetailsAndSynopsis[] movie = {null};
         new Query(derbyConnectionFactory) {

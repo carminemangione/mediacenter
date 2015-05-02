@@ -15,7 +15,10 @@ public class ImageDupFinder {
 
     public static void main(String[] args) {
 
-        recurseAndCollectFiles(new File("/Users/carmine/Pictures/internet/allpics/"));
+        File currentFile = new File("/Users/carmine/Pictures/internet/allpics");
+        recurseAndCollectFiles(currentFile);
+        currentFile = new File("/Users/carmine/Pictures/Gallery Grabber");
+        recurseAndCollectFiles(currentFile);
         System.out.println("processing " + imageFiles.size());
 
 

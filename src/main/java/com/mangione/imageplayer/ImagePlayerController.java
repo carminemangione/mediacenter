@@ -15,12 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * User: carminemangione
- * Date: Feb 23, 2009
- * Time: 2:29:33 AM
- * Copyright Cognigtive Health Sciences, Inc. All rights reserved
- */
+
 public class ImagePlayerController implements ButtonPanelControllerInterface, ImagePlayerControllerInterface {
     private final Random RANDOM = new Random();
     private int currentIndex;
@@ -46,7 +41,8 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
         imageFileNameLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
         File currentFile = new File("/Users/carmine/Pictures/internet/allpics");
         recurseAndCollectFiles(currentFile);
-
+        currentFile = new File("/Users/carmine/Pictures/Gallery Grabber");
+        recurseAndCollectFiles(currentFile);
         Collections.sort(imageFiles);
 
         imagePanelController = new ImagePanelController(imageFiles.get(RANDOM.nextInt(imageFiles.size())).file.getPath());

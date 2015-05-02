@@ -11,7 +11,8 @@ public class RottenTomatoesSearch {
     public RottenTomatoesSearch(String movieName) {
         WebResource resource = new RottenTomatoesResource("http://api.rottentomatoes.com/api/public/v1.0/movies.json").
                 getResource().queryParam("q", movieName);
-        searchResult = SearchResult.fromJson(resource.get(String.class));
+        final String json = resource.get(String.class);
+        searchResult = SearchResult.fromJson(json);
     }
 
     public SearchResult getSearchResult() {

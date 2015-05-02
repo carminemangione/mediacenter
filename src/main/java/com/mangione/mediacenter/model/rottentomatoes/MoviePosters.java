@@ -4,31 +4,21 @@ import java.io.Serializable;
 
 public class MoviePosters implements Serializable {
 
-    private final String thumbnail;
     private final String profile;
     private final String original;
 
-    public MoviePosters(String thumbnail, String profile, String original) {
-        this.thumbnail = thumbnail;
+    public MoviePosters(String profile, String original) {
         this.profile = profile;
         this.original = original;
     }
 
 
     public String getProfile() {
-        return replaceTmbToWorkAroundRTBug(this.profile, "pro");
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
+        return profile;
     }
 
     public String getOriginal() {
-        return replaceTmbToWorkAroundRTBug(original, "ori");
+        return original;
     }
 
-    private String replaceTmbToWorkAroundRTBug(String thumbnailUrl, String replacement) {
-        return thumbnailUrl == null ? null : thumbnailUrl.replace("tmb", replacement);
-
-    }
 }

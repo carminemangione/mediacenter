@@ -5,6 +5,7 @@ import com.mangione.mediacenter.view.components.AspectRatioPreservedImagePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class ResolveMovieListCellRender implements ListCellRenderer<DisplayableMovie>{
     private static final Font SELECTION_FONT = new Font("ITC Garamond", Font.PLAIN, 14);
@@ -31,8 +32,10 @@ public class ResolveMovieListCellRender implements ListCellRenderer<DisplayableM
     }
 
     private AspectRatioPreservedImagePanel getPosterImage(DisplayableMovie movie) {
+        final BufferedImage posterImage = movie.getPosterImage() == null ? movie.getPosterImage() :
+                movie.getPosterImage();
         AspectRatioPreservedImagePanel moviePosterPanel =
-                new AspectRatioPreservedImagePanel(movie.getPosterImage());
+                new AspectRatioPreservedImagePanel(posterImage);
         moviePosterPanel.setOpaque(false);
         moviePosterPanel.setPreferredSize(new Dimension(50, 100));
         return moviePosterPanel;

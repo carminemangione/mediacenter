@@ -4,12 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * User: carminemangione
- * Date: Jul 26, 2009
- * Time: 2:35:52 PM
- * Copyright Cognigtive Health Sciences, Inc. All rights reserved
- */
 public class ImageDupFinder {
     private static List<File> imageFiles = new ArrayList<>();
 

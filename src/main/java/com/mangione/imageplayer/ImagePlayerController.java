@@ -70,6 +70,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
                     for (int i = 0; i < EXTENSIONS.length && !imageFile; i++) {
                         imageFile = name.toLowerCase().endsWith(EXTENSIONS[i]);
                     }
+                    //noinspection SpellCheckingInspection
                     if (imageFile && !file.getPath().contains("WICThumbs") && !name.contains("DFTTH")) {
                         imageFiles.add(new FileWithCompareString(file));
                     }

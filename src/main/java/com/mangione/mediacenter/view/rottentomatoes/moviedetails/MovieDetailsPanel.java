@@ -10,6 +10,8 @@ import com.mangione.mediacenter.view.components.AspectRatioPreservedImagePanel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +20,7 @@ public class MovieDetailsPanel extends JPanel {
 
     private static final BufferedImage FRESH_IMAGE;
     private static final BufferedImage SPLASH_IMAGE;
+    private static final int MARQUIS_WIDTH = 140;
 
     static {
 
@@ -25,7 +28,7 @@ public class MovieDetailsPanel extends JPanel {
             FRESH_IMAGE = ImageIO.read(MovieDetailsPanel.class.getClassLoader().getResourceAsStream("rottentomatoes/fresh.png"));
             SPLASH_IMAGE = ImageIO.read(MovieDetailsPanel.class.getClassLoader().getResourceAsStream("rottentomatoes/splash.png"));
         } catch (IOException e) {
-            throw new RuntimeException("Could not load rotten tomato images",e);
+            throw new RuntimeException("Could not load rotten tomato images", e);
         }
     }
 
@@ -44,7 +47,7 @@ public class MovieDetailsPanel extends JPanel {
         statsAndSynopsis.setOpaque(false);
         statsAndSynopsis.add(createMovieStatsPanel(detailsAndSynopsis.getMovieDetails()), BorderLayout.NORTH);
         statsAndSynopsis.add(createSynopsisPanel(detailsAndSynopsis.getSynopsis().getSynopsis()), BorderLayout.CENTER);
-        return  statsAndSynopsis;
+        return statsAndSynopsis;
     }
 
     private JPanel createPosterAndRatingsPanel(MovieDetails movieDetails) throws IOException {
@@ -60,8 +63,7 @@ public class MovieDetailsPanel extends JPanel {
     private Component createMovieStatsPanel(MovieDetails movieDetails) {
         JPanel statsPanel = new JPanel();
         statsPanel.setOpaque(false);
-        final JLabel genresPanel = getGenresPanel(movieDetails);
-        genresPanel.setHorizontalAlignment(SwingConstants.LEFT);
+        final JPanel genresPanel = getGenresPanel(movieDetails);
         statsPanel.add(genresPanel);
         final JLabel dateLabel = getDetailsLabel(movieDetails.getYear());
         dateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -69,7 +71,7 @@ public class MovieDetailsPanel extends JPanel {
         return statsPanel;
     }
 
-    private JLabel getGenresPanel(MovieDetails movieDetails) {
+    private JPanel getGenresPanel(MovieDetails movieDetails) {
         StringBuilder genres = new StringBuilder();
         for (int i = 0; i < movieDetails.getGenres().length; i++) {
             genres.append(movieDetails.getGenres()[i]);
@@ -77,7 +79,9 @@ public class MovieDetailsPanel extends JPanel {
                 genres.append(", ");
             }
         }
-        return getDetailsLabel(genres.toString());
+        final MarqueePanel marqueePanel = new MarqueePanel(genres.toString(), 30);
+        marqueePanel.start();
+        return marqueePanel;
     }
 
     private JLabel getDetailsLabel(String label) {
@@ -117,7 +121,7 @@ public class MovieDetailsPanel extends JPanel {
         return moviePoster;
     }
 
-    public Component getRatingsPanel(Ratings ratings) {
+    private Component getRatingsPanel(Ratings ratings) {
         BufferedImage ratingImage = null;
         JComponent ratingsLabel;
         int criticsScore = parseScore(ratings.getCriticsScore());
@@ -143,7 +147,7 @@ public class MovieDetailsPanel extends JPanel {
         return ratingsLabel;
     }
 
-    public int parseScore(String score)  {
+    private int parseScore(String score) {
         int parsedScore = 0;
         if (score != null) {
             try {
@@ -156,7 +160,53 @@ public class MovieDetailsPanel extends JPanel {
         return parsedScore;
     }
 
-    public BufferedImage getImageForScore(int score) {
+    private BufferedImage getImageForScore(int score) {
         return score > 50 ? MovieDetailsPanel.FRESH_IMAGE : MovieDetailsPanel.SPLASH_IMAGE;
     }
+
+    class MarqueePanel extends JPanel implements ActionListener {
+
+        private static final int RATE = 6;
+        private final Timer timer = new Timer(1000 / RATE, this);
+        private final JLabel label = new JLabel();
+        private final String s;
+        private final int n;
+        private int index;
+
+        public MarqueePanel(String stringToScroll, int numberOfDisplayedCharacters) {
+            if (stringToScroll == null || numberOfDisplayedCharacters < 1) {
+                throw new IllegalArgumentException("Null string or n < 1");
+            }
+            StringBuilder sb = new StringBuilder(numberOfDisplayedCharacters);
+            for (int i = 0; i < numberOfDisplayedCharacters; i++) {
+                sb.append(' ');
+            }
+            this.s = sb + stringToScroll + sb;
+            this.n = numberOfDisplayedCharacters;
+            label.setFont(SharedConstants.STATS_FONT);
+            label.setOpaque(false);
+            label.setForeground(Color.YELLOW);
+            label.setText(sb.toString());
+            this.add(label);
+            setOpaque(false);
+
+            label.setPreferredSize(new Dimension(MARQUIS_WIDTH, label.getPreferredSize().height));
+        }
+
+        public void start() {
+            timer.start();
+        }
+
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            index++;
+            if (index > s.length() - n) {
+                index = 0;
+            }
+            label.setText(s.substring(index, index + n));
+        }
+    }
 }
+
+

@@ -18,7 +18,6 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     public static void main(String[] args) throws Exception {
         VideoFiles videoFiles = loadVideoFiles();
         new MediaCenterController(videoFiles);
-
     }
 
     public MediaCenterController(VideoFiles videoFiles) throws Exception {
@@ -26,7 +25,6 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
         movieSelectionController = new MovieSelectionController(videoFiles, this);
         rtMainController = new RTMainController();
-
 
         final JPanel movieSelectionPanel = movieSelectionController.getMovieSelectionPanel();
         mediaCenterView = new MediaCenterView(this, movieSelectionPanel);
@@ -43,11 +41,9 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     public void videoSelectionChanged(VideoFile videoFile) {
         try {
             rtMainController.loadMovie(videoFile);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -69,6 +65,4 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     private static String[] getVideoFileDirectories() {
         return VideoDirectories.getInstance().getVideoDirectories();
     }
-
-
 }

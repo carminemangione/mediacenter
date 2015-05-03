@@ -15,14 +15,11 @@ public class MovieDetails implements Serializable {
     private final MoviePosters posters;
     private final MovieLinks links;
     private final Ratings ratings;
-
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
 
     public static MovieDetails fromJson(String json){
         return GSON.fromJson(json, MovieDetails.class);
     }
-
 
     public MovieDetails(long id, String title, String year, String[] genres, MoviePosters posters, MovieLinks links, Ratings ratings) {
         this.id = id;
@@ -56,5 +53,9 @@ public class MovieDetails implements Serializable {
 
     public long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

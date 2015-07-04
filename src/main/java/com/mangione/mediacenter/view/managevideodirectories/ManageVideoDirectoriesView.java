@@ -72,6 +72,7 @@ public class ManageVideoDirectoriesView extends JDialog {
     private void clearAndFillDirectoryList(final String[] videoDirectories) {
         SwingUtilities.invokeLater(() -> {
             currentDirectories.clear();
+            VideoDirectories.getInstance().clear();
             DefaultListModel<String> listModel = (DefaultListModel<String>) directoryList.getModel();
             listModel.removeAllElements();
             currentDirectories.addAll(Arrays.asList(videoDirectories));

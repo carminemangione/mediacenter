@@ -185,7 +185,6 @@ public class MovieBrowserPanel extends GradientPanel {
 
     }
 
-
     private void paintOneRowOfPosters(Graphics2D graphics2d, int indexOfSelected, int row, int topOfImage) {
         int currentIndex = row * NUMBER_OF_COLUMNS;
         for (int column = 0; column < NUMBER_OF_COLUMNS && currentIndex < videoFiles.getNumberOfVideoFiles(); column++) {
@@ -204,7 +203,6 @@ public class MovieBrowserPanel extends GradientPanel {
             currentIndex++;
         }
     }
-
 
     private int stopScrollAtTopOrBottom(int newRow) {
         if (newRow < 0) {

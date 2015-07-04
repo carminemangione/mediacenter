@@ -142,4 +142,25 @@ public class VideoDirectories {
             throw new RuntimeException(e);
         }
     }
+
+    public void clear() {
+
+        try (Connection connection = derbyConnectionFactory.getConnection()) {
+            new UpdateQuery(connection) {
+
+                @Override
+                protected String getUpdateQuery() {
+                    return "DELETE FROM  " + QUALIFIED_TABLE_NAME;
+                }
+                @Override
+                protected void bindQueryParameters(PreparedStatement ps) throws SQLException {
+
+                }
+            };
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

@@ -30,7 +30,9 @@ public class MovieSelectionController {
 
     public void setVideoFiles(VideoFiles videoFiles) {
         movieSelectionPanel.setVideoFiles(videoFiles);
-        mediaCenterController.videoSelectionChanged(movieSelectionPanel.getCurrentVideoFile());
+        if (videoFiles.getNumberOfVideoFiles() > 0) {
+            mediaCenterController.videoSelectionChanged(movieSelectionPanel.getCurrentVideoFile());
+        }
     }
 
     public void setDim(boolean b) {

@@ -1,9 +1,10 @@
 package com.mangione.mediacenter.model.videofile;
 
+import com.google.common.io.ByteStreams;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 
 public class VideoFile implements Comparable<VideoFile> {
@@ -45,7 +46,11 @@ public class VideoFile implements Comparable<VideoFile> {
                 image = IMAGE_NOT_FOUND_ICON;
             } else {
                 try {
-                    image = ImageIO.read(new File(imageFile.getPath()));
+                    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(imageFile.getPath()));
+                    final byte[] image = ByteStreams.toByteArray(bis);
+                    ByteArrayInputStream bas = new ByteArrayInputStream(image);
+
+                    this.image = ImageIO.read(bas);
                 } catch (IOException e) {
                     image = IMAGE_NOT_FOUND_ICON;
                 }

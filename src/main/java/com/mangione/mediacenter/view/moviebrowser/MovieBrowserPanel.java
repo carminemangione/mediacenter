@@ -146,8 +146,9 @@ public class MovieBrowserPanel extends GradientPanel {
             startingRow = 0;
             topOfCurrentImageRow += rowHeight;
         }
-        for (int i = startingRow; i < numberOfRows + 3; i++) {
-            paintOneRowOfPosters(graphics2d, indexOfSelected, i, topOfCurrentImageRow);
+        for (int i = 0; i < numberOfRows; i++) {
+            int currentRow = i + startingRow;
+            paintOneRowOfPosters(graphics2d, indexOfSelected, currentRow, topOfCurrentImageRow);
             topOfCurrentImageRow += rowHeight;
         }
     }

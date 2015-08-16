@@ -47,11 +47,14 @@ public class ImageDupFinder {
 
     private static void recurseAndCollectFiles(File currentFile) {
         if (currentFile != null) {
-            for (File file : currentFile.listFiles()) {
-                if (file.isDirectory()) {
-                    recurseAndCollectFiles(file);
-                } else {
-                    imageFiles.add(file);
+            final File[] files = currentFile.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        recurseAndCollectFiles(file);
+                    } else {
+                        imageFiles.add(file);
+                    }
                 }
             }
         }

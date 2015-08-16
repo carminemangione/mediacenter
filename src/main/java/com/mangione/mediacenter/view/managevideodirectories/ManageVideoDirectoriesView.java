@@ -25,7 +25,7 @@ public class ManageVideoDirectoriesView extends JDialog {
         setLayout(new BorderLayout());
         clearAndFillDirectoryList(videoDirectories);
         JScrollPane scrollPane = new JScrollPane(directoryList);
-        scrollPane.setPreferredSize(new Dimension(400, 300));
+        scrollPane.setPreferredSize(new Dimension(800, 600));
         add(scrollPane, BorderLayout.CENTER);
 
         ImageIcon icon = new ImageIcon(ManageVideoDirectoriesView.class.getClassLoader().getResource("48px-Crystal_Clear_action_edit_add.png"));

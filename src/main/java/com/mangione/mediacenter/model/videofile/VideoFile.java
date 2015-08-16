@@ -5,6 +5,7 @@ import com.google.common.io.ByteStreams;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 
 
 public class VideoFile implements Comparable<VideoFile> {
@@ -12,7 +13,13 @@ public class VideoFile implements Comparable<VideoFile> {
 
     static {
         try {
-            IMAGE_NOT_FOUND_ICON = ImageIO.read(VideoFile.class.getClassLoader().getResource("blankimage.jpeg"));
+            final URL resource = VideoFile.class.getClassLoader().getResource("blankimage.jpeg");
+            if (resource != null) {
+                IMAGE_NOT_FOUND_ICON = ImageIO.read(resource);
+            } else {
+                throw new RuntimeException("Could not load the blank image resource.");
+
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

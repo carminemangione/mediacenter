@@ -7,5 +7,9 @@ public interface MediaCenterControllerInterface {
 
     void videoSelectionFinished();
 
-    void exitRequested();
+    void escapePressed();
+
+    void popupMovieDetails();
+
+    void startPopupTimer();
 }

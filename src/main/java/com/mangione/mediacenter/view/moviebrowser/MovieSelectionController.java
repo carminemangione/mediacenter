@@ -14,13 +14,15 @@ public class MovieSelectionController {
 
     private final MovieSelectionPanel movieSelectionPanel;
     private final MediaCenterControllerInterface mediaCenterController;
+    private final ScrollKeyListener panelKeyListener;
+    private VideoFiles videoFiles;
 
-    public MovieSelectionController(VideoFiles movieDirs,
+    public MovieSelectionController(VideoFiles videoFiles,
             MediaCenterControllerInterface mediaCenterController) throws Exception {
         this.mediaCenterController = mediaCenterController;
-        this.movieSelectionPanel = new MovieSelectionPanel(movieDirs);
-        movieSelectionPanel.addKeyListener(new ScrollKeyListener(this));
-
+        this.movieSelectionPanel = new MovieSelectionPanel(videoFiles);
+        panelKeyListener = new ScrollKeyListener(this);
+        movieSelectionPanel.addKeyListener(panelKeyListener);
 
     }
 
@@ -29,19 +31,20 @@ public class MovieSelectionController {
     }
 
     public void setVideoFiles(VideoFiles videoFiles) {
-        movieSelectionPanel.setVideoFiles(videoFiles);
+        this.videoFiles = videoFiles;
+        movieSelectionPanel.setVideoFiles(this.videoFiles);
         if (videoFiles.getNumberOfVideoFiles() > 0) {
             mediaCenterController.videoSelectionChanged(movieSelectionPanel.getCurrentVideoFile());
+            mediaCenterController.startPopupTimer();
         }
     }
 
-    public void setDim(boolean b) {
-        movieSelectionPanel.setDim(b);
-    }
 
     public void zoomToLetter(char keyPressed) {
-        movieSelectionPanel.zoomToLetter(keyPressed);
-        mediaCenterController.videoSelectionChanged(movieSelectionPanel.getCurrentVideoFile());
+        if (videoFiles != null && videoFiles.getNumberOfVideoFiles() > 0) {
+            movieSelectionPanel.zoomToLetter(keyPressed);
+            mediaCenterController.videoSelectionChanged(movieSelectionPanel.getCurrentVideoFile());
+        }
     }
 
 
@@ -50,8 +53,13 @@ public class MovieSelectionController {
         mediaCenterController.videoSelectionChanged(movieSelectionPanel.getCurrentVideoFile());
     }
 
-    public void escPressed() {
-        mediaCenterController.exitRequested();
+    public void arrowPressedFromDismissedPopup(KeyEvent keyEvent ) throws Exception {
+        panelKeyListener.setSelectionChanged(keyEvent);
+    }
+
+
+    public void killPopupWindow() {
+        panelKeyListener.popupDismissed();
     }
 
     public void spacePressed() {
@@ -64,4 +72,17 @@ public class MovieSelectionController {
     public VideoFile getCurrentlySelectedVideo() {
         return movieSelectionPanel.getCurrentVideoFile();
     }
+
+    public void popupMovieDetails() {
+        mediaCenterController.popupMovieDetails();
+
+    }
+
+    public void startMovieDetailsPopupTimer() {
+        panelKeyListener.startPopupTimer();
+    }
+
+    public Rectangle getBoundingBoxOfCurrentSelection() {
+         return movieSelectionPanel.getBoundingBoxOfCurrentSelection();
+     }
 }

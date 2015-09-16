@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 public class Synopsis implements Serializable {
     private String synopsis = "No synopsis found.";
+    private final String posterImageLink;
 
     public static Synopsis fromWebLink(String link) {
         final WebResource resource = Client.create().resource(link);
@@ -27,9 +28,15 @@ public class Synopsis implements Serializable {
             synopsis += " " + secondPartOfSynopsis.childNodes().get(0).toString().trim();
         }
 
+        final Element posterImageElement = doc.getElementsByClass("posterImage").first();
+        posterImageLink = posterImageElement.attr("src");
     }
 
     public String getSynopsis() {
         return synopsis;
+    }
+
+    public String getPosterImageLink() {
+        return posterImageLink;
     }
 }

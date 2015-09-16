@@ -4,6 +4,7 @@ import com.mangione.mediacenter.model.rottentomatoes.database.ArchivedMovies;
 import com.mangione.mediacenter.model.rottentomatoes.moviedetails.DetailsAndSynopsis;
 import com.mangione.mediacenter.model.rottentomatoes.namesearch.RTMovie;
 import com.mangione.mediacenter.model.videofile.VideoFile;
+import com.mangione.mediacenter.view.SharedConstants;
 import com.mangione.mediacenter.view.rottentomatoes.moviedetails.MovieDetailsController;
 import com.mangione.mediacenter.view.rottentomatoes.resolvemovie.MovieResolvedListener;
 import com.mangione.mediacenter.view.rottentomatoes.resolvemovie.ResolveMoviesController;
@@ -14,7 +15,7 @@ import java.awt.*;
 import java.sql.SQLException;
 
 public class RTMainController implements MovieResolvedListener {
-    private static final Dimension PREFERRED_SIZE = new Dimension(300, 316);
+    private static final Dimension PREFERRED_SIZE = new Dimension(400, 516);
     private static final LoadingController LOADING_CONTROLLER = new LoadingController();
 
 
@@ -31,7 +32,7 @@ public class RTMainController implements MovieResolvedListener {
         mainPanel.setOpaque(true);
         mainPanel.setPreferredSize(PREFERRED_SIZE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainPanel.setBackground(new Color(84, 127, 165));
+        mainPanel.setBackground(SharedConstants.POPUP_BACKGROUND_COLOR);
         researchController = new ResearchController(this);
 
     }

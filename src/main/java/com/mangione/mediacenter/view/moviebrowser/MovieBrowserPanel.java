@@ -23,7 +23,6 @@ public class MovieBrowserPanel extends GradientPanel {
     private VideoFiles videoFiles;
     private int currentSelectedRow = currentRow;
 
-    private boolean dim = false;
     private boolean animating = false;
     private int columnWidth;
     private int posterWidth;
@@ -33,18 +32,13 @@ public class MovieBrowserPanel extends GradientPanel {
     private int horizontalBorder;
     private int verticalBorder;
     private int currentTopOfImage;
+    private Rectangle boundsOfCurrentSelected;
 
     public MovieBrowserPanel(VideoFiles videoFiles) throws Exception {
         numberOfLines = videoFiles.getNumberOfVideoFiles() / NUMBER_OF_COLUMNS + 1;
         this.videoFiles = videoFiles;
         movieTitleFont = SharedConstants.BASE_FONT.deriveFont(Font.BOLD, 50);
         setOpaque(false);
-    }
-
-    public void setDim(boolean dim) {
-        this.dim = dim;
-        invalidate();
-        repaint();
     }
 
     public void zoomToLetter(char charPressed) {
@@ -111,14 +105,6 @@ public class MovieBrowserPanel extends GradientPanel {
 
             paintRowsOfPosters(graphics2d, indexOfSelected, numberOfRowsThatFitOnTheScreen);
             Composite oldAlphaComposite = graphics2d.getComposite();
-
-            if (dim) {
-                graphics2d.setColor(Color.black);
-                AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
-                graphics2d.setComposite(ac);
-                graphics2d.fillRect(0, 0, screenSize.width, screenSize.height);
-            }
-
             int heightToMask = posterHeight / 2;
             addGradient(graphics2d, 0, heightToMask, screenSize.width, true, SharedConstants.DEFAULT_BACKGROUND_COLOR);
             addGradient(graphics2d, screenSize.height, heightToMask, screenSize.width, false, SharedConstants.DEFAULT_BACKGROUND_COLOR);
@@ -198,12 +184,15 @@ public class MovieBrowserPanel extends GradientPanel {
                 graphics2d.setColor(Color.green);
                 int strokeHighlightWidth = 2;
                 graphics2d.setStroke(new BasicStroke(strokeHighlightWidth));
+                boundsOfCurrentSelected = new Rectangle(leftOfImage - strokeHighlightWidth, topOfImage - strokeHighlightWidth,
+                        leftOfImage + posterWidth, topOfImage + posterHeight);
                 graphics2d.drawRoundRect(leftOfImage - strokeHighlightWidth, topOfImage - strokeHighlightWidth,
                         posterWidth + strokeHighlightWidth, posterHeight + strokeHighlightWidth, 4, 4);
             }
             currentIndex++;
         }
     }
+
 
     private int stopScrollAtTopOrBottom(int newRow) {
         if (newRow < 0) {
@@ -260,12 +249,13 @@ public class MovieBrowserPanel extends GradientPanel {
             case KeyEvent.VK_DOWN:
                 newRow++;
                 break;
-            case KeyEvent.VK_ESCAPE:
-                System.exit(0);
-                break;
         }
         return newRow;
     }
 
+
+    public Rectangle getBoundsOfCurrentSelection() {
+        return boundsOfCurrentSelected;
+    }
 
 }

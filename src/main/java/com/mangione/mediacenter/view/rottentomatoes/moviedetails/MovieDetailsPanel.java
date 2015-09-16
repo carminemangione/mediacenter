@@ -36,7 +36,7 @@ public class MovieDetailsPanel extends JPanel {
 
         setLayout(new BorderLayout());
         setOpaque(false);
-        add(createPosterAndRatingsPanel(detailsAndSynopsis.getMovieDetails()), BorderLayout.NORTH);
+        add(createPosterAndRatingsPanel(detailsAndSynopsis), BorderLayout.NORTH);
         add(createStatsAndSynopsisPanel(detailsAndSynopsis), BorderLayout.CENTER);
 
     }
@@ -50,11 +50,12 @@ public class MovieDetailsPanel extends JPanel {
         return statsAndSynopsis;
     }
 
-    private JPanel createPosterAndRatingsPanel(MovieDetails movieDetails) throws IOException {
+    private JPanel createPosterAndRatingsPanel(DetailsAndSynopsis detailsAndSynopsis) throws IOException {
+        MovieDetails movieDetails  = detailsAndSynopsis.getMovieDetails();
         final JPanel posterAndRatingPanel = new JPanel();
         posterAndRatingPanel.setOpaque(false);
         posterAndRatingPanel.setLayout(new BoxLayout(posterAndRatingPanel, BoxLayout.X_AXIS));
-        final AspectRatioPreservedImagePanel poster = getPosterPanel(movieDetails.getPosters().getOriginal());
+        final AspectRatioPreservedImagePanel poster = getPosterPanel(detailsAndSynopsis.getSynopsis().getPosterImageLink());
         posterAndRatingPanel.add(poster);
         posterAndRatingPanel.add(getRatingsPanel(movieDetails.getRatings()));
         return posterAndRatingPanel;
@@ -86,7 +87,7 @@ public class MovieDetailsPanel extends JPanel {
 
     private JLabel getDetailsLabel(String label) {
         JLabel jlabel = new JLabel(label);
-        jlabel.setFont(SharedConstants.STATS_FONT);
+        jlabel.setFont(SharedConstants.GENRE_FONT);
         jlabel.setOpaque(false);
         jlabel.setForeground(Color.YELLOW);
         jlabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -113,7 +114,7 @@ public class MovieDetailsPanel extends JPanel {
         AspectRatioPreservedImagePanel moviePoster = null;
         try {
             moviePoster = new AspectRatioPreservedImagePanel(ImageIO.read(new URL(original)));
-            moviePoster.setPreferredSize(new Dimension(80, 120));
+            moviePoster.setPreferredSize(SharedConstants.MOVIE_POSTER_SIZE);
             moviePoster.setOpaque(false);
         } catch (IOException e) {
             System.out.println("Could not load image: " + original);
@@ -122,29 +123,29 @@ public class MovieDetailsPanel extends JPanel {
     }
 
     private Component getRatingsPanel(Ratings ratings) {
-        BufferedImage ratingImage = null;
-        JComponent ratingsLabel;
+
         int criticsScore = parseScore(ratings.getCriticsScore());
-        boolean validCriticsScore = criticsScore >= 0;
-        if (validCriticsScore) {
-            ratingImage = getImageForScore(criticsScore);
-        } else {
-            int audienceScore = parseScore(ratings.getAudienceScore());
-            if (audienceScore > 0) {
-                ratingImage = getImageForScore(audienceScore);
-            }
-        }
+        int audienceScore = parseScore(ratings.getAudienceScore());
+        int displayScore = criticsScore >= 0 ? criticsScore : audienceScore >= 0 ? audienceScore : 0;
+        ImagePanel ratingsImagePanel = new ImagePanel(getImageForScore(displayScore));
 
-        if (ratingImage != null) {
-            ratingsLabel = new ImagePanel(ratingImage);
-        } else {
-            ratingsLabel = new JLabel("No rating");
-        }
+        JLabel ratingsScore = new JLabel(displayScore + "%");
+        ratingsScore.setForeground(Color.YELLOW);
+        ratingsScore.setFont(SharedConstants.STATS_FONT);
+        ratingsScore.setOpaque(false);
+        ratingsImagePanel.setOpaque(false);
+        ratingsScore.setOpaque(false);
 
-        ratingsLabel.setForeground(Color.YELLOW);
-        ratingsLabel.setFont(SharedConstants.STATS_FONT);
-        ratingsLabel.setOpaque(false);
-        return ratingsLabel;
+        JPanel ratingsPanel = new JPanel();
+        ratingsPanel.add(ratingsScore);
+        ratingsPanel.add(ratingsImagePanel);
+        ratingsPanel.setOpaque(false);
+        ratingsPanel.setAlignmentY(JLabel.CENTER_ALIGNMENT);
+        ratingsPanel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        JPanel stretchingPanel = new JPanel();
+        stretchingPanel.setOpaque(false);
+        stretchingPanel.add(ratingsPanel);
+        return stretchingPanel;
     }
 
     private int parseScore(String score) {
@@ -183,7 +184,7 @@ public class MovieDetailsPanel extends JPanel {
             }
             this.s = sb + stringToScroll + sb;
             this.n = numberOfDisplayedCharacters;
-            label.setFont(SharedConstants.STATS_FONT);
+            label.setFont(SharedConstants.GENRE_FONT);
             label.setOpaque(false);
             label.setForeground(Color.YELLOW);
             label.setText(sb.toString());

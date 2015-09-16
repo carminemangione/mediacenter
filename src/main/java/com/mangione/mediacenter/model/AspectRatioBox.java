@@ -30,14 +30,15 @@ public class AspectRatioBox {
 
         double aspectRatioOfImage = width / height;
 
-        final boolean imageFitsInPanel = width <= maxWidth && height < maxHeight;
+        final boolean imageFitsInPanel = width < maxWidth && height < maxHeight;
         if (imageFitsInPanel) {
-            adjustedImageWidth = width;
-            adjustedImageHeight = height;
+            adjustedImageWidth = maxWidth;
+            adjustedImageHeight = adjustedImageWidth / aspectRatioOfImage;
         } else {
             // Squeeze the image so that the width fits
             adjustedImageWidth = Math.min(maxWidth, width);
             adjustedImageHeight = maxWidth / aspectRatioOfImage;
+        }
 
             final boolean heightStillDoesNotFit = adjustedImageHeight >= maxHeight;
             if (heightStillDoesNotFit) {
@@ -46,7 +47,6 @@ public class AspectRatioBox {
                 adjustedImageWidth = maxHeight * aspectRatioOfImage;
             }
 
-        }
         return new AspectRatioBox((int) adjustedImageWidth, (int) adjustedImageHeight);
     }
 

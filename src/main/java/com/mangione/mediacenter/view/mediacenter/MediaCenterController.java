@@ -8,7 +8,7 @@ import com.mangione.mediacenter.view.moviebrowser.MovieSelectionController;
 import com.mangione.mediacenter.view.rottentomatoes.RTMainController;
 
 import javax.swing.*;
-import java.awt.event.WindowEvent;
+import java.awt.event.KeyEvent;
 
 public class MediaCenterController implements MediaCenterControllerInterface {
     private final MovieSelectionController movieSelectionController;
@@ -28,13 +28,13 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
         final JPanel movieSelectionPanel = movieSelectionController.getMovieSelectionPanel();
         mediaCenterView = new MediaCenterView(this, movieSelectionPanel);
-        mediaCenterView.setEastComponent(rtMainController.getMainPanel());
         final JPanel blankPanel = new JPanel();
         blankPanel.setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
         if (videoFiles.getNumberOfVideoFiles() > 0) {
             videoSelectionChanged(movieSelectionController.getCurrentlySelectedVideo());
         }
         mediaCenterView.setVisible(true);
+        movieSelectionController.startMovieDetailsPopupTimer();
     }
 
     @Override
@@ -49,12 +49,23 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     @Override
     public void videoSelectionFinished() {
         movieSelectionController.setVideoFiles(loadVideoFiles());
-        movieSelectionController.setDim(false);
     }
 
     @Override
-    public void exitRequested() {
-        mediaCenterView.dispatchEvent(new WindowEvent(mediaCenterView, WindowEvent.WINDOW_CLOSING));
+    public void escapePressed() {
+        mediaCenterView.removePopup();
+        movieSelectionController.killPopupWindow();
+    }
+
+    @Override
+    public void popupMovieDetails() {
+        mediaCenterView.popupMovieDetails(rtMainController.getMainPanel(),
+                movieSelectionController.getBoundingBoxOfCurrentSelection());
+    }
+
+    @Override
+    public void startPopupTimer() {
+        movieSelectionController.startMovieDetailsPopupTimer();
     }
 
     private static VideoFiles loadVideoFiles() {
@@ -64,5 +75,13 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
     private static String[] getVideoFileDirectories() {
         return VideoDirectories.getInstance().getVideoDirectories();
+    }
+
+    public void handlePassedOnArrowPressed(KeyEvent keyCode) {
+        try {
+            movieSelectionController.arrowPressedFromDismissedPopup(keyCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

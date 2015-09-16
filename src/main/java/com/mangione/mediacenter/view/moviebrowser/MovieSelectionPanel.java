@@ -50,10 +50,6 @@ public class MovieSelectionPanel extends JPanel {
         movieBrowserPanel.setVideoFiles(videoFiles);
     }
 
-    public void setDim(boolean b) {
-        movieBrowserPanel.setDim(b);
-    }
-
     public void zoomToLetter(char keyPressed) {
         movieBrowserPanel.zoomToLetter(keyPressed);
         movieTitleChanged(movieBrowserPanel.getCurrentVideoFile().getVideoName());
@@ -68,4 +64,7 @@ public class MovieSelectionPanel extends JPanel {
         movieTitleChanged(movieBrowserPanel.getCurrentVideoFile().getVideoName());
     }
 
+    public Rectangle getBoundingBoxOfCurrentSelection() {
+        return movieBrowserPanel.getBoundsOfCurrentSelection();
+    }
 }

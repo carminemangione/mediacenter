@@ -2,14 +2,17 @@ package com.mangione.mediacenter.view.mediacenter;
 
 import com.mangione.mediacenter.view.SharedConstants;
 import com.mangione.mediacenter.view.managevideodirectories.ManageVideoDirectoriesController;
+import com.mangione.mediacenter.view.moviebrowser.Rectangle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 
 public class MediaCenterView extends JFrame {
     private final MediaCenterController mediaCenterController;
-    private Component currentEastComponent;
+    private JDialog popup;
+    private KeyEventDispatcher keyEventDispatcher;
 
     public MediaCenterView(MediaCenterController mediaCenterController, JComponent mediaImageGrid) throws HeadlessException {
         this.mediaCenterController = mediaCenterController;
@@ -22,7 +25,7 @@ public class MediaCenterView extends JFrame {
 
         add(mediaImageGrid, BorderLayout.CENTER);
         getContentPane().setBackground(SharedConstants.DEFAULT_BACKGROUND_COLOR);
-        setPreferredSize(new Dimension(900, 500));
+        setPreferredSize(new Dimension(1500, 900));
         mediaImageGrid.setFocusable(true);
         mediaImageGrid.requestFocus();
 
@@ -31,20 +34,47 @@ public class MediaCenterView extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    public void setEastComponent(final Component eastComponent) {
-        SwingUtilities.invokeLater(() -> {
-            if (currentEastComponent != null) {
-                remove(currentEastComponent);
+    public void popupMovieDetails(final Component movieDetails, Rectangle boundingBoxOfCurrentSelection) {
+
+        popup = new JDialog(this, true);
+        popup.setLayout(new BorderLayout());
+        popup.add(movieDetails, BorderLayout.CENTER);
+        popup.setUndecorated(true);
+        popup.invalidate();
+        keyEventDispatcher = e -> {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ESCAPE:
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_RIGHT:
+                    removePopup();
+                    KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyEventDispatcher);
+                    keyEventDispatcher = null;
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                        return true;
+                    }
+                    mediaCenterController.handlePassedOnArrowPressed(e);
+                    return true;
+
+                default:
+                    return false;
             }
+        };
+        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                .addKeyEventDispatcher(keyEventDispatcher);
+        popup.pack();
+        final Point topLeft = boundingBoxOfCurrentSelection.getTopLeft();
+        Point locationForPopup = new Point(topLeft.x, topLeft.y - popup.getPreferredSize().height / 2);
+        popup.setLocation(locationForPopup);
+        popup.setVisible(true);
+    }
 
-            add(eastComponent, BorderLayout.EAST);
-            currentEastComponent = eastComponent;
-            eastComponent.invalidate();
-            validate();
-            repaint();
-        });
-
-
+    public void removePopup() {
+        if (popup != null) {
+            popup.dispose();
+            popup = null;
+        }
     }
 
     private JMenuBar createMenuBar() {
@@ -58,5 +88,4 @@ public class MediaCenterView extends JFrame {
         menuBar.add(fileMenu);
         return menuBar;
     }
-
 }

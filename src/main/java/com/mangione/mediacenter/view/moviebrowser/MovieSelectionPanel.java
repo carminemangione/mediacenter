@@ -64,7 +64,7 @@ public class MovieSelectionPanel extends JPanel {
         movieTitleChanged(movieBrowserPanel.getCurrentVideoFile().getVideoName());
     }
 
-    public Rectangle getBoundingBoxOfCurrentSelection() {
-        return movieBrowserPanel.getBoundsOfCurrentSelection();
+    public Point getLocationForMovieDetails() {
+        return movieBrowserPanel.getTopCenterForMovieDeatils();
     }
 }

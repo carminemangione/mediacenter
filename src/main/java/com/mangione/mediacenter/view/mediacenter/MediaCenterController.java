@@ -60,7 +60,8 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     @Override
     public void popupMovieDetails() {
         mediaCenterView.popupMovieDetails(rtMainController.getMainPanel(),
-                movieSelectionController.getBoundingBoxOfCurrentSelection());
+                movieSelectionController.getTopCenterForMovieDetails(),
+                movieSelectionController.getHeightOfCurrentView());
     }
 
     @Override

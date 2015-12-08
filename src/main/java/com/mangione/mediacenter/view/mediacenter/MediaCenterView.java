@@ -2,7 +2,6 @@ package com.mangione.mediacenter.view.mediacenter;
 
 import com.mangione.mediacenter.view.SharedConstants;
 import com.mangione.mediacenter.view.managevideodirectories.ManageVideoDirectoriesController;
-import com.mangione.mediacenter.view.moviebrowser.Rectangle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +33,7 @@ public class MediaCenterView extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    public void popupMovieDetails(final Component movieDetails, Rectangle boundingBoxOfCurrentSelection) {
+    public void popupMovieDetails(final Component movieDetails, Point topCenter, int viewHeight) {
 
         popup = new JDialog(this, true);
         popup.setLayout(new BorderLayout());
@@ -52,6 +51,7 @@ public class MediaCenterView extends JFrame {
                     KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyEventDispatcher);
                     keyEventDispatcher = null;
                     if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                        mediaCenterController.escapePressed();
                         return true;
                     }
                     mediaCenterController.handlePassedOnArrowPressed(e);
@@ -64,8 +64,9 @@ public class MediaCenterView extends JFrame {
         KeyboardFocusManager.getCurrentKeyboardFocusManager()
                 .addKeyEventDispatcher(keyEventDispatcher);
         popup.pack();
-        final Point topLeft = boundingBoxOfCurrentSelection.getTopLeft();
-        Point locationForPopup = new Point(topLeft.x, topLeft.y - popup.getPreferredSize().height / 2);
+
+        Point locationForPopup = new Point(topCenter.x - popup.getPreferredSize().width / 2,
+                topCenter.y);
         popup.setLocation(locationForPopup);
         popup.setVisible(true);
     }

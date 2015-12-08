@@ -33,11 +33,19 @@ public class ImageDupFinder {
             for (int j = i + 1; j < imageStats.length; j++) {
                 ImageStats other = imageStats[j];
                 if (imageStat != null && other != null && imageStat.match(98, other) && i != j) {
-                    if (other.getImageFile().delete()) {
+
+                    File fileToDelete = other.getImageFile();
+                    if (imageStat.getImageFile().getName().toLowerCase().contains("thumbail")
+                            || imageStat.getImageFile().getName().length() <
+                                                        other.getImageFile().getName().length()) {
+                        fileToDelete = imageStat.getImageFile();
+                    }
+
+                    if (fileToDelete.delete()) {
                         imageStats[j] = null;
-                        System.out.println("Successfully deleted file: " + other.getImageFile().getName());
+                        System.out.println("Successfully deleted file: " + fileToDelete.getName());
                     } else {
-                        System.out.println("Error deleting file: " + other.getImageFile().getName());
+                        System.out.println("Error deleting file: " + fileToDelete.getName());
                     }
                 }
 

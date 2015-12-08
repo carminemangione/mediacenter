@@ -32,7 +32,7 @@ public class MovieBrowserPanel extends GradientPanel {
     private int horizontalBorder;
     private int verticalBorder;
     private int currentTopOfImage;
-    private Rectangle boundsOfCurrentSelected;
+    private Point topCenterForPopup;
 
     public MovieBrowserPanel(VideoFiles videoFiles) throws Exception {
         numberOfLines = videoFiles.getNumberOfVideoFiles() / NUMBER_OF_COLUMNS + 1;
@@ -88,8 +88,11 @@ public class MovieBrowserPanel extends GradientPanel {
     public synchronized void paintComponent(Graphics graphics) {
         Graphics2D graphics2d = (Graphics2D) graphics;
         Dimension screenSize = getSize();
+
+
         horizontalBorder = (int) (screenSize.getWidth() * HORIZONTAL_BORDER);
         verticalBorder = (int) (screenSize.getHeight() * VERTICAL_BORDER);
+        topCenterForPopup = new Point(screenSize.width / 2, verticalBorder + (int)rowHeight);
 
         columnWidth = (int) (screenSize.getWidth() / NUMBER_OF_COLUMNS);
 
@@ -184,8 +187,6 @@ public class MovieBrowserPanel extends GradientPanel {
                 graphics2d.setColor(Color.green);
                 int strokeHighlightWidth = 2;
                 graphics2d.setStroke(new BasicStroke(strokeHighlightWidth));
-                boundsOfCurrentSelected = new Rectangle(leftOfImage - strokeHighlightWidth, topOfImage - strokeHighlightWidth,
-                        leftOfImage + posterWidth, topOfImage + posterHeight);
                 graphics2d.drawRoundRect(leftOfImage - strokeHighlightWidth, topOfImage - strokeHighlightWidth,
                         posterWidth + strokeHighlightWidth, posterHeight + strokeHighlightWidth, 4, 4);
             }
@@ -254,8 +255,8 @@ public class MovieBrowserPanel extends GradientPanel {
     }
 
 
-    public Rectangle getBoundsOfCurrentSelection() {
-        return boundsOfCurrentSelected;
+    public Point getTopCenterForMovieDeatils() {
+        return topCenterForPopup;
     }
 
 }

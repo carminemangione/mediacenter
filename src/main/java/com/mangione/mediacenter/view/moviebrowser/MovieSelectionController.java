@@ -8,6 +8,7 @@ import com.mangione.mediacenter.view.mediacenter.MediaCenterControllerInterface;
 import com.mangione.mediacenter.view.mediacenter.ScrollKeyListener;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class MovieSelectionController {
@@ -82,7 +83,11 @@ public class MovieSelectionController {
         panelKeyListener.startPopupTimer();
     }
 
-    public Rectangle getBoundingBoxOfCurrentSelection() {
-         return movieSelectionPanel.getBoundingBoxOfCurrentSelection();
+    public Point getTopCenterForMovieDetails() {
+         return movieSelectionPanel.getLocationForMovieDetails();
      }
+
+    public int getHeightOfCurrentView() {
+        return movieSelectionPanel.getHeight();
+    }
 }

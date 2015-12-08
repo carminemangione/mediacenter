@@ -43,7 +43,7 @@ public class RTMainController implements MovieResolvedListener {
         currentMovieInSearch = this.videoFile.getIdentifyingString();
         final DetailsAndSynopsis detailsAndSynopsis = ArchivedMovies.getInstance().getMovie(currentMovieInSearch);
         if (detailsAndSynopsis == null) {
-            final String videoName = videoFile.getVideoName();
+            final String videoName = videoFile.getSearchVideoName();
             searchRottenTomatoesAndFlipToResolvePanel(videoName);
         } else {
             try {
@@ -54,6 +54,21 @@ public class RTMainController implements MovieResolvedListener {
             }
         }
 
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    public void reSearch(String returnText) {
+        try {
+            ArchivedMovies.getInstance().deleteMovie(videoFile.getIdentifyingString());
+            currentController = LOADING_CONTROLLER;
+            flipPanel();
+            searchRottenTomatoesAndFlipToResolvePanel(returnText == null ? videoFile.getVideoName() : returnText);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -125,21 +140,5 @@ public class RTMainController implements MovieResolvedListener {
             mainPanel.validate();
             mainPanel.repaint();
         });
-    }
-
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
-
-
-    public void reSearch(String returnText) {
-        try {
-            ArchivedMovies.getInstance().deleteMovie(videoFile.getIdentifyingString());
-            currentController = LOADING_CONTROLLER;
-            flipPanel();
-            searchRottenTomatoesAndFlipToResolvePanel(returnText == null ? videoFile.getVideoName() : returnText);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

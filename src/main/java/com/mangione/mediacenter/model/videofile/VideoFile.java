@@ -28,6 +28,7 @@ public class VideoFile implements Comparable<VideoFile> {
 
     private final String fullVideoPath;
     private final String videoName;
+    private String searchVideoName;
 
     private File imageFile;
     private BufferedImage image;
@@ -99,6 +100,7 @@ public class VideoFile implements Comparable<VideoFile> {
         videoName = stripMovieTypes(videoName);
         StringBuffer mixedCaseWithPeriods = getVideoNameWithSpaces(videoName);
         String mixedCase = mixedCaseWithPeriods.toString();
+        searchVideoName = mixedCase;
         if (mixedCase.startsWith("The ")) {
             mixedCase = mixedCase.substring(4) + ", The";
         }
@@ -135,5 +137,9 @@ public class VideoFile implements Comparable<VideoFile> {
 
     public File getCurrentDirectory() {
         return currentDirectory;
+    }
+
+    public String getSearchVideoName() {
+        return searchVideoName;
     }
 }

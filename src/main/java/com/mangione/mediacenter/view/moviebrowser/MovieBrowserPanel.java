@@ -61,7 +61,7 @@ public class MovieBrowserPanel extends GradientPanel {
                 if (repeat) {
                     currentRow = newRow;
                     currentSelectedRow = newRow;
-                    SwingUtilities.invokeLater(() -> {
+                    SwingUtilities.invokeAndWait(() -> {
                         invalidate();
                         repaint();
                     });

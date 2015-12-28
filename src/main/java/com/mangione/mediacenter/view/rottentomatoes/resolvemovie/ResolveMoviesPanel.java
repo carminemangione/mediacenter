@@ -32,7 +32,6 @@ public class ResolveMoviesPanel extends JPanel {
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setViewportView(moviesPanel);
         add(scrollPane, BorderLayout.CENTER);
-        requestFocus();
 
     }
 

@@ -33,7 +33,7 @@ public class MediaCenterView extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    public void popupMovieDetails(final Component movieDetails, Point topCenter, int viewHeight) {
+    public void popupMovieDetails(final Component movieDetails, Point topCenter) {
 
         popup = new JDialog(this, true);
         popup.setLayout(new BorderLayout());
@@ -65,8 +65,7 @@ public class MediaCenterView extends JFrame {
                 .addKeyEventDispatcher(keyEventDispatcher);
         popup.pack();
 
-        Point locationForPopup = new Point(topCenter.x - popup.getPreferredSize().width / 2,
-                topCenter.y);
+        Point locationForPopup = new Point(topCenter.x - popup.getPreferredSize().width / 2, topCenter.y);
         popup.setLocation(locationForPopup);
         popup.setVisible(true);
     }
@@ -82,7 +81,8 @@ public class MediaCenterView extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         final JMenu fileMenu = new JMenu("File");
         final JMenuItem videoDirectories = new JMenuItem("Manage Video Directories...");
-        videoDirectories.addActionListener(actionEvent -> new ManageVideoDirectoriesController(mediaCenterController).launchManageDirectoriesWindow(this));
+        videoDirectories.addActionListener(actionEvent -> new ManageVideoDirectoriesController(mediaCenterController).
+                launchManageDirectoriesWindow(this));
 
         fileMenu.add(videoDirectories);
 

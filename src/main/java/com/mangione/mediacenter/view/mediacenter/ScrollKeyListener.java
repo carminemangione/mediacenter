@@ -15,13 +15,12 @@ public class ScrollKeyListener implements KeyListener {
     private volatile boolean handlingScroll;
     private boolean lastEventWasKeyPressed = false;
     private long lastAutoKeyTimeMillis = 0;
-    private static int PAUSE_TIME_FOR_POPUP = 500;
+    private static int PAUSE_TIME_FOR_POPUP = 2000;
     private boolean selectionChangedSinceLastPopup = false;
 
     private Timer popupTimer = new Timer(PAUSE_TIME_FOR_POPUP, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-
             System.out.println("ScrollKeyListener.actionPerformed: " + selectionChangedSinceLastPopup);
             if (selectionChangedSinceLastPopup) {
                 movieSelectionController.popupMovieDetails();
@@ -73,8 +72,8 @@ public class ScrollKeyListener implements KeyListener {
                 movieSelectionController.killPopupWindow();
             } else if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_DOWN
                     || keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_RIGHT){
-                selectionChangedSinceLastPopup = true;
                 scrollOneLineOrHandleContinual(keyEvent);
+                selectionChangedSinceLastPopup = true;
             }
         }
     }
@@ -87,7 +86,6 @@ public class ScrollKeyListener implements KeyListener {
 
     private void scrollOneLineOrHandleContinual(KeyEvent keyEvent) {
         synchronized (this) {
-            popupTimer.stop();
             try {
                 if (!handlingScroll) {
                     handlingScroll = true;

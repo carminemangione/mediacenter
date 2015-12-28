@@ -13,7 +13,7 @@ import java.util.List;
  * Copyright Cognigtive Health Sciences, Inc. All rights reserved
  */
 public class ImageStats {
-    private final static int blockSize = 32;
+    private final static int BLOCK_SIZE = 64;
     private final int[] blockAverageValues;
     private int height;
     private int width;
@@ -22,7 +22,7 @@ public class ImageStats {
     public ImageStats(File imageFile) throws Exception {
         this.imageFile = imageFile;
 
-        List<Integer> blockAverageValues = new ArrayList<Integer>();
+        List<Integer> blockAverageValues = new ArrayList<>();
 
         BufferedImage bufferedImage = ImageIO.read(imageFile);
         if (bufferedImage != null) {
@@ -33,14 +33,14 @@ public class ImageStats {
             width = bufferedImage.getWidth();
             while (currentRowForBlock < height || currentColForBlock < width) {
                 int average = 0;
-                for (int row = 0; row < blockSize && currentRowForBlock + row < height; row++) {
-                    for (int col = 0; col < blockSize && currentColForBlock + col < width; col++) {
+                for (int row = 0; row < BLOCK_SIZE && currentRowForBlock + row < height; row++) {
+                    for (int col = 0; col < BLOCK_SIZE && currentColForBlock + col < width; col++) {
                         average += bufferedImage.getRGB(currentColForBlock + col, currentRowForBlock + row);
                     }
                 }
-                blockAverageValues.add(average / (blockSize * blockSize));
-                currentColForBlock += blockSize;
-                currentRowForBlock += blockSize;
+                blockAverageValues.add(average / (BLOCK_SIZE * BLOCK_SIZE));
+                currentColForBlock += BLOCK_SIZE;
+                currentRowForBlock += BLOCK_SIZE;
             }
         }
 

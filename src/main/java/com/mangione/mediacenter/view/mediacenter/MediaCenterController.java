@@ -24,6 +24,7 @@ public class MediaCenterController implements MediaCenterControllerInterface {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MediaCenter");
 
         movieSelectionController = new MovieSelectionController(videoFiles, this);
+        movieSelectionController.setVideoFiles(videoFiles);
         rtMainController = new RTMainController();
 
         final JPanel movieSelectionPanel = movieSelectionController.getMovieSelectionPanel();
@@ -40,7 +41,8 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     @Override
     public void videoSelectionChanged(VideoFile videoFile) {
         try {
-            rtMainController.loadMovie(videoFile);
+            if (rtMainController != null)
+                rtMainController.loadMovie(videoFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,13 +57,14 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     public void escapePressed() {
         mediaCenterView.removePopup();
         movieSelectionController.killPopupWindow();
+        rtMainController.killPopup();
     }
 
     @Override
     public void popupMovieDetails() {
         mediaCenterView.popupMovieDetails(rtMainController.getMainPanel(),
-                movieSelectionController.getTopCenterForMovieDetails(),
-                movieSelectionController.getHeightOfCurrentView());
+                movieSelectionController.getTopCenterForMovieDetails()
+        );
     }
 
     @Override

@@ -18,14 +18,12 @@ public class RTMainController implements MovieResolvedListener {
     private static final Dimension PREFERRED_SIZE = new Dimension(400, 516);
     private static final LoadingController LOADING_CONTROLLER = new LoadingController();
 
-
     private RottenTomatoesControllerInterface currentController;
     private String currentMovieInSearch;
-    private JPanel mainPanel = null;
+    private JPanel mainPanel;
     private volatile Thread movieLoadingThread;
     private final ResearchController researchController;
     private VideoFile videoFile;
-
 
     public RTMainController() throws Exception {
         mainPanel = new JPanel(new BorderLayout());
@@ -34,9 +32,7 @@ public class RTMainController implements MovieResolvedListener {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(SharedConstants.POPUP_BACKGROUND_COLOR);
         researchController = new ResearchController(this);
-
     }
-
 
     public synchronized void loadMovie(final VideoFile videoFile) throws SQLException {
         this.videoFile = videoFile;
@@ -53,7 +49,6 @@ public class RTMainController implements MovieResolvedListener {
                 e.printStackTrace();
             }
         }
-
     }
 
     public JPanel getMainPanel() {
@@ -68,6 +63,13 @@ public class RTMainController implements MovieResolvedListener {
             searchRottenTomatoesAndFlipToResolvePanel(returnText == null ? videoFile.getVideoName() : returnText);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void killPopup() {
+        if (movieLoadingThread != null) {
+            movieLoadingThread.interrupt();
+            movieLoadingThread = null;
         }
     }
 
@@ -129,6 +131,7 @@ public class RTMainController implements MovieResolvedListener {
             e.printStackTrace();
         }
     }
+
 
     private void flipPanel() {
         SwingUtilities.invokeLater(() -> {

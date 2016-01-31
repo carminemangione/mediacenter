@@ -1,10 +1,9 @@
 package com.mangione.imagedupfinder;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class ImageThumbnailFinder {
 
     public static void main(String[] args) {
@@ -18,17 +17,25 @@ public class ImageThumbnailFinder {
         System.out.println("processing " + imageFiles.size());
 
         Collections.sort(imageFiles);
-        int numFound = 0;
+        Set<ThumbNailFinder> possibleThumbs = new HashSet<>();
         for (int i = 0; i < imageFiles.size() - 1; i ++) {
             final ThumbNailFinder first = imageFiles.get(i);
             final ThumbNailFinder second = imageFiles.get(i + 1);
             if (first.sameNameButThumbnail(second)) {
-                numFound++;
+                if (first.isThumb()) {
+                    possibleThumbs.add(first);
+                    first.getImageFile().delete();
+                }
+                if (second.isThumb()) {
+                    possibleThumbs.add(second);
+                    second.getImageFile().delete();
+                }
                 System.out.println(first.getImageFile().getName() + " " + second.getImageFile().getName());
-            }
 
+            }
         }
-        System.out.println("numFound = " + numFound);
+
+        possibleThumbs.stream().forEach(System.out::println);
     }
 
     private static void recurseAndCollectFiles(File currentFile, List<ThumbNailFinder> foundFiles) {
@@ -62,6 +69,10 @@ public class ImageThumbnailFinder {
             return imageFile;
         }
 
+        public boolean isThumb() {
+            return imageFile.getName().contains("thumb");
+        }
+
         @Override
         public int compareTo(ThumbNailFinder o) {
             return o.getImageFile().getName().compareTo(imageFile.getName());
@@ -70,6 +81,21 @@ public class ImageThumbnailFinder {
         @Override
         public String toString() {
             return imageFile.getName();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            boolean equals = false;
+            if (o instanceof ThumbNailFinder) {
+                equals = ((ThumbNailFinder)o).getImageFile().getPath().equals(imageFile.getPath());
+            }
+
+            return equals;
+        }
+
+        @Override
+        public int hashCode() {
+            return imageFile.getParent().hashCode();
         }
     }
 

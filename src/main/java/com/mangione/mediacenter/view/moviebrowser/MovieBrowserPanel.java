@@ -41,12 +41,12 @@ public class MovieBrowserPanel extends GradientPanel {
         setOpaque(false);
     }
 
-    public void zoomToLetter(char charPressed) {
+    public void zoomToLetter(final char charPressed) {
         int newIndex = videoFiles.getIndexFirstVideoWithStartingCharacter(charPressed);
         currentRow = newIndex / NUMBER_OF_COLUMNS;
         currentSelectedRow = currentRow;
         currentColumn = newIndex % NUMBER_OF_COLUMNS;
-        repaint();
+        SwingUtilities.invokeLater(this::repaint);
     }
 
     public synchronized void arrowPressed(KeyEvent arrowPressedEvent, boolean repeat) throws Exception {
@@ -74,7 +74,7 @@ public class MovieBrowserPanel extends GradientPanel {
         }
     }
 
-    public VideoFile getCurrentVideoFile() throws IllegalArgumentException  {
+    public VideoFile getCurrentVideoFile() throws IllegalArgumentException {
         return videoFiles.getVideoFile(getIndexOfSelected());
     }
 
@@ -92,7 +92,7 @@ public class MovieBrowserPanel extends GradientPanel {
 
         horizontalBorder = (int) (screenSize.getWidth() * HORIZONTAL_BORDER);
         verticalBorder = (int) (screenSize.getHeight() * VERTICAL_BORDER);
-        topCenterForPopup = new Point(screenSize.width / 2, verticalBorder + (int)rowHeight);
+        topCenterForPopup = new Point(screenSize.width / 2, verticalBorder + (int) rowHeight);
 
         columnWidth = (int) (screenSize.getWidth() / NUMBER_OF_COLUMNS);
 
@@ -149,29 +149,29 @@ public class MovieBrowserPanel extends GradientPanel {
 
     private void animateRowChange(final int newRow) {
         currentSelectedRow = newRow;
-            new Thread() {
-                public void run() {
-                    animating = true;
-                    final boolean animateDown = newRow < currentRow;
+        new Thread() {
+            public void run() {
+                animating = true;
+                final boolean animateDown = newRow < currentRow;
 
-                    currentTopOfImage = 0;
-                    int moveEachStep = 1;
-                    int numberOfSteps = (int) rowHeight / moveEachStep;
-                    for (int i = 1; i < numberOfSteps; i++) {
-                        currentTopOfImage += (animateDown ? moveEachStep : -moveEachStep);
-                        repaint();
-                        try {
-                            Thread.sleep(2);
-                        } catch (InterruptedException e) {
-                            // nowarn
-                        }
-                    }
-                    currentTopOfImage = 0;
-                    currentRow = newRow;
+                currentTopOfImage = 0;
+                int moveEachStep = 1;
+                int numberOfSteps = (int) rowHeight / moveEachStep;
+                for (int i = 1; i < numberOfSteps; i++) {
+                    currentTopOfImage += (animateDown ? moveEachStep : -moveEachStep);
                     repaint();
-                    animating = false;
+                    try {
+                        Thread.sleep(2);
+                    } catch (InterruptedException e) {
+                        // nowarn
+                    }
                 }
-            }.start();
+                currentTopOfImage = 0;
+                currentRow = newRow;
+                repaint();
+                animating = false;
+            }
+        }.start();
 
     }
 

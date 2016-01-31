@@ -62,8 +62,12 @@ public class ScrollKeyListener implements KeyListener {
         char keyPressed = keyEvent.getKeyChar();
         if (Character.isDigit(keyPressed) || Character.isLetter(keyPressed)) {
 
-            movieSelectionController.zoomToLetter(keyPressed);
             selectionChangedSinceLastPopup = true;
+            try {
+                movieSelectionController.zoomToLetter(keyPressed);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             final int keyCode = keyEvent.getKeyCode();
             if (keyCode == KeyEvent.VK_SPACE) {

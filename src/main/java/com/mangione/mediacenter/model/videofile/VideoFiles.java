@@ -58,7 +58,7 @@ public class VideoFiles {
                 for (File file : files) {
                     if (file.isDirectory()) {
                         if (file.getName().toUpperCase().contains("VIDEO_TS")) {
-                            foundFile = new DvdVideoFile(file);
+                            foundFile = new VideoFile(file);
                         } else {
                             travelDownDirectoryTreeLookingForVideoFiles(file, videoFiles);
                         }

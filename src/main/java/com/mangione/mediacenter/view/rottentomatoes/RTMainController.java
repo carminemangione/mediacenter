@@ -43,7 +43,7 @@ public class RTMainController implements MovieResolvedListener {
             searchRottenTomatoesAndFlipToResolvePanel(videoName);
         } else {
             try {
-                currentController = new MovieDetailsController(this, detailsAndSynopsis);
+                currentController = new MovieDetailsController(detailsAndSynopsis);
                 flipPanel();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -115,7 +115,7 @@ public class RTMainController implements MovieResolvedListener {
             movieLoadingThread = new Thread() {
                 public void run() {
                     try {
-                        currentController = new MovieDetailsController(RTMainController.this, currentMovieInSearch, movieLink);
+                        currentController = new MovieDetailsController(currentMovieInSearch, movieLink);
                         flipPanel();
                     } catch (Exception e) {
                         e.printStackTrace();

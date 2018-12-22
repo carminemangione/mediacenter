@@ -51,13 +51,7 @@ public class AspectRatioBoxTest {
             final int maxWidth = 800;
             final int maxHeight = 1000;
             final AspectRatioBox result = aspectRatioBox.fitHeightThenWidth(maxWidth, maxHeight + extra);
-            assertEquals(aspectRatioBox, result);
-        }
-        {
-            final int maxWidth = 800;
-            final int maxHeight = 1000;
-            final AspectRatioBox result = aspectRatioBox.fitHeightThenWidth(maxWidth + extra, maxHeight);
-            assertEquals(aspectRatioBox, result);
+            assertEquals(new AspectRatioBox(maxWidth, maxHeight), result);
         }
     }
 }

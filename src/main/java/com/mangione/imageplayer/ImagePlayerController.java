@@ -10,10 +10,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 
 public class ImagePlayerController implements ButtonPanelControllerInterface, ImagePlayerControllerInterface {
@@ -34,7 +35,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
     private final static String[] EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif"};
 
 
-    public ImagePlayerController() {
+    private ImagePlayerController() {
 
         imageFileNameLabel.setForeground(Color.DARK_GRAY);
         imageFileNameLabel.setFont(imageFileNameLabel.getFont().deriveFont(Font.ITALIC, 9.0f));
@@ -43,6 +44,14 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
         recurseAndCollectFiles(currentFile);
         currentFile = new File("/Users/carmine/Pictures/Gallery Grabber");
         recurseAndCollectFiles(currentFile);
+        imageFiles.sort((o1, o2) -> {
+            try {
+                return o1.getCreationDate().compareTo(o2.getCreationDate());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return 0;
+            }
+        });
         Collections.sort(imageFiles);
 
         imagePanelController = new ImagePanelController(imageFiles.get(RANDOM.nextInt(imageFiles.size())).file.getPath());
@@ -80,7 +89,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         new ImagePlayerController();
     }
 
@@ -290,7 +299,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
         }
 
         private String getLeadingStringStrippedOfCopyNumber(String name) {
-            stripNameOfExtension(name);
+            name = stripNameOfExtension(name);
             int locationOfVersionNumber = name.length() - 1;
             while (locationOfVersionNumber >= 1 && Character.isDigit(name.charAt(locationOfVersionNumber - 1))) {
                 locationOfVersionNumber--;
@@ -311,6 +320,11 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
                 name = name.replace(extension, "");
             }
             return name.replace(".", "");
+        }
+
+        private Long getCreationDate() throws IOException {
+            BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+            return attr.creationTime().toMillis();
         }
 
 

@@ -5,7 +5,6 @@ import com.mangione.mediacenter.model.videofile.VideoFile;
 import com.mangione.mediacenter.model.videofile.VideoFiles;
 import com.mangione.mediacenter.view.SharedConstants;
 import com.mangione.mediacenter.view.moviebrowser.MovieSelectionController;
-import com.mangione.mediacenter.view.rottentomatoes.RTMainController;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -13,7 +12,6 @@ import java.awt.event.KeyEvent;
 public class MediaCenterController implements MediaCenterControllerInterface {
     private final MovieSelectionController movieSelectionController;
     private final MediaCenterView mediaCenterView;
-    private final RTMainController rtMainController;
 
     public static void main(String[] args) throws Exception {
         VideoFiles videoFiles = loadVideoFiles();
@@ -25,7 +23,6 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
         movieSelectionController = new MovieSelectionController(videoFiles, this);
         movieSelectionController.setVideoFiles(videoFiles);
-        rtMainController = new RTMainController();
 
         final JPanel movieSelectionPanel = movieSelectionController.getMovieSelectionPanel();
         mediaCenterView = new MediaCenterView(this, movieSelectionPanel);
@@ -40,12 +37,6 @@ public class MediaCenterController implements MediaCenterControllerInterface {
 
     @Override
     public void videoSelectionChanged(VideoFile videoFile) {
-        try {
-            if (rtMainController != null)
-                rtMainController.loadMovie(videoFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -57,14 +48,10 @@ public class MediaCenterController implements MediaCenterControllerInterface {
     public void escapePressed() {
         mediaCenterView.removePopup();
         movieSelectionController.killPopupWindow();
-        rtMainController.killPopup();
     }
 
     @Override
     public void popupMovieDetails() {
-        mediaCenterView.popupMovieDetails(rtMainController.getMainPanel(),
-                movieSelectionController.getTopCenterForMovieDetails()
-        );
     }
 
     @Override

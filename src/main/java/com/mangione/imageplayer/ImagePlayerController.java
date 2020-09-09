@@ -295,7 +295,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 
         private FileWithCompareString(File file) {
             this.file = file;
-            this.compareString = getLeadingStringStrippedOfCopyNumber(file.getName().toLowerCase());
+            this.compareString = getLeadingStringStrippedOfCopyNumber(file.getAbsolutePath().toLowerCase());
         }
 
         private String getLeadingStringStrippedOfCopyNumber(String name) {

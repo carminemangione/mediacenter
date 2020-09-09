@@ -43,5 +43,30 @@
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.11.2" level="project" />
+    <orderEntry type="library" name="Maven: javax.media:jmf:2.1.1e" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:13.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:mac:13.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:13.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:13.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:13.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:13.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:13.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:mac:13.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacv:1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:openblas:0.3.7-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:opencv:4.1.2-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:ffmpeg:4.2.1-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:flycapture:2.13.3.31-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:libdc1394:2.2.6-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:libfreenect:0.5.7-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:libfreenect2:0.2.0-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:librealsense:1.12.4-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:librealsense2:2.29.0-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:videoinput:0.200-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:artoolkitplus:2.3.1-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:flandmark:1.07-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:leptonica:1.78.0-1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:tesseract:4.1.0-1.5.2" level="project" />
   </component>
 </module>

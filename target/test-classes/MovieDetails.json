@@ -1,0 +1,46 @@
+{"id": 17414, "title": "Under One Roof", "year": 2002, "genres": ["Gay & Lesbian", "Comedy"], "mpaa_rating": "Unrated", "runtime": 74, "release_dates": {
+    "theater": "2002-01-01",
+    "dvd": "2003-04-08"
+}, "ratings": {
+    "critics_score": -1,
+    "audience_rating": "Spilled",
+    "audience_score": 26
+}, "synopsis": "", "posters": {
+    "thumbnail": "http://content9.flixster.com/movie/10/91/67/10916739_tmb.jpg",
+    "profile": "http://content9.flixster.com/movie/10/91/67/10916739_tmb.jpg",
+    "detailed": "http://content9.flixster.com/movie/10/91/67/10916739_tmb.jpg",
+    "original": "http://content9.flixster.com/movie/10/91/67/10916739_tmb.jpg"
+}, "abridged_cast": [
+    {
+        "name": "Jay Wong",
+        "id": "770724438"
+    },
+    {
+        "name": "Audrey Finer",
+        "id": "770724434"
+    },
+    {
+        "name": "Erik Ing",
+        "id": "770724435"
+    },
+    {
+        "name": "James Marks",
+        "id": "770724436"
+    },
+    {
+        "name": "James Quedado",
+        "id": "770724437"
+    }
+], "abridged_directors": [
+    {
+        "name": "Todd Wilson"
+    }
+], "studio": "TLA Releasing", "alternate_ids": {
+    "imdb": "0337738"
+}, "links": {
+    "self": "http://api.rottentomatoes.com/api/public/v1.0/movies/17414.json",
+    "alternate": "http://www.rottentomatoes.com/m/under_one_roof/",
+    "cast": "http://api.rottentomatoes.com/api/public/v1.0/movies/17414/cast.json",
+    "reviews": "http://api.rottentomatoes.com/api/public/v1.0/movies/17414/reviews.json",
+    "similar": "http://api.rottentomatoes.com/api/public/v1.0/movies/17414/similar.json"
+}}

@@ -18,8 +18,10 @@
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/mediacenter/view/moviebrowser/Rectangle.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/imagedupfinder/ImageStats.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/common/applicationdata/ApplicationDataLocation.java
+/Users/carmine/projects/imageplayer/src/main/java/com/mangione/EliminateThumbnails/ImageDupFinder.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/mediacenter/view/components/AspectRatioPreservedImagePanel.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/mediacenter/model/videofile/DvdVideoFile.java
+/Users/carmine/projects/imageplayer/src/main/java/com/mangione/imageplayer/FileLoader.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/imagedupfinder/TestImageStats.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/common/database/Transaction.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/mediacenter/model/mplayerx/LaunchMplayerXAndWaitForTerminate.java
@@ -38,6 +40,7 @@
 /Users/carmine/projects/imageplayer/src/main/java/test.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/imagedupfinder/ImageThumbnailFinder.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/imageplayer/ScrollTest.java
+/Users/carmine/projects/imageplayer/src/main/java/com/mangione/imageplayer/FileWithCompareString.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/mediacenter/view/managevideodirectories/ManageVideoDirectoriesControllerInterface.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/mediacenter/model/AspectRatioBox.java
 /Users/carmine/projects/imageplayer/src/main/java/com/mangione/mediacenter/model/videofile/VideoFiles.java

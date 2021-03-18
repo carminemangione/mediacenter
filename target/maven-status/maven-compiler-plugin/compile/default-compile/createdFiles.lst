@@ -1,11 +1,13 @@
 com/mangione/imageplayer/ImagePlayerPanel.class
 com/mangione/imageplayer/buttonpanel/ButtonPanel$3.class
+com/mangione/imageplayer/FileWithCompareString.class
 com/mangione/mediacenter/model/AspectRatioBox.class
 com/mangione/mediacenter/view/managevideodirectories/ManageVideoDirectoriesView.class
 com/mangione/imageplayer/ImagePlayerController$1.class
 com/mangione/mediacenter/model/VideoDirectories$3.class
 com/mangione/imageplayer/ImagePlayerController.class
 com/mangione/mediacenter/view/moviebrowser/MovieSelectionPanel.class
+com/mangione/EliminateThumbnails/ImageDupFinder$SortableFile.class
 com/mangione/imagedupfinder/ImageStats.class
 com/mangione/imageplayer/buttonpanel/ButtonPanelControllerInterface.class
 com/mangione/common/database/InsertQuery.class
@@ -26,9 +28,11 @@ com/mangione/mediacenter/model/VideoDirectories.class
 com/mangione/common/database/DatabaseException.class
 com/mangione/imagedupfinder/ImageThumbnailFinder$ThumbNailFinder.class
 com/mangione/mediacenter/model/VideoDirectories$1.class
+com/mangione/imageplayer/ImageLoaderThread.class
 com/mangione/mediacenter/view/moviebrowser/MovieBrowserPanel$1.class
 com/mangione/imageplayer/ImagePlayerControllerInterface.class
 com/mangione/imageplayer/ImagePanel.class
+com/mangione/EliminateThumbnails/ImageDupFinder.class
 com/mangione/common/database/Transaction.class
 com/mangione/imageplayer/buttonpanel/ButtonPanel$6.class
 com/mangione/imageplayer/ImagePanelController.class
@@ -42,7 +46,6 @@ com/mangione/mediacenter/model/process/BlockingExec$1.class
 com/mangione/mediacenter/view/mediacenter/MediaCenterControllerInterface.class
 com/mangione/mediacenter/model/MovieLinks.class
 com/mangione/imageplayer/ImagePanel$QuadDimension.class
-com/mangione/imageplayer/ImagePlayerController$FileWithCompareString.class
 com/mangione/mediacenter/view/components/GradientPanel.class
 com/mangione/common/applicationdata/ApplicationDataLocation.class
 com/mangione/mediacenter/view/mediacenter/ScrollKeyListener$1.class
@@ -58,6 +61,7 @@ com/mangione/imageplayer/buttonpanel/ButtonPanel$4.class
 com/mangione/mediacenter/view/mediacenter/ScrollKeyListener.class
 com/mangione/imageplayer/buttonpanel/ButtonPanel.class
 com/mangione/imageplayer/buttonpanel/ButtonPanel$1.class
+com/mangione/imageplayer/FileLoader.class
 com/mangione/mediacenter/view/moviebrowser/Rectangle.class
 com/mangione/imagedupfinder/TestImageStats.class
 com/mangione/mediacenter/view/SharedConstants.class
@@ -69,6 +73,7 @@ com/mangione/mediacenter/view/managevideodirectories/ManageVideoDirectoriesContr
 com/mangione/imagedupfinder/ImageThumbnailFinder.class
 com/mangione/imageplayer/buttonpanel/ButtonPanel$2.class
 com/mangione/mediacenter/model/database/MediaCenterDataSource.class
+com/mangione/EliminateThumbnails/ImageDupFinder$1.class
 com/mangione/mediacenter/model/VideoDirectories$4$1.class
 com/mangione/common/database/AbstractDataSource.class
 com/mangione/mediacenter/model/process/BlockingExec.class

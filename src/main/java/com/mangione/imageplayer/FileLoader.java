@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class FileLoader {
-	final static List<String> EXTENSIONS = Arrays.asList(".jpg", ".jpeg", ".png", ".gif", ".webp");
+	final static List<String> EXTENSIONS = Arrays.asList(".jpg", ".jpeg", ".png", ".gif", ".webp", ".mp4");
 	private final List<FileWithCompareString> availableImageFiles = Collections.synchronizedList(new ArrayList<>());
 	private final Object fileWaiterObject = new Object();
 	private final Random random = new Random();
@@ -42,7 +42,7 @@ public class FileLoader {
 	}
 
 	synchronized FileWithCompareString getPreviousFile() {
-		currentIndex = currentIndex > 0 ? currentIndex-- : availableImageFiles.size() - 1;
+		currentIndex = currentIndex > 0 ? currentIndex - 1 : availableImageFiles.size() - 1;
 		return availableImageFiles.get(currentIndex);
 	}
 

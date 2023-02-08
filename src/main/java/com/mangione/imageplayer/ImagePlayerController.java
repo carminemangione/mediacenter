@@ -1,9 +1,5 @@
 package com.mangione.imageplayer;
 
-import com.mangione.imageplayer.buttonpanel.ButtonPanelControllerInterface;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -11,12 +7,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
+import com.mangione.imageplayer.buttonpanel.ButtonPanelControllerInterface;
+
 
 public class ImagePlayerController implements ButtonPanelControllerInterface, ImagePlayerControllerInterface {
 	private final FileLoader fileLoader;
-	private final ImagePanelController imagePanelController;
 	private final JPanel imagePanelWithTitle;
 	private final JLabel imageFileNameLabel = new JLabel("<no image>", JLabel.CENTER);
+	private final JPanel containerPanel;
 	private boolean pausePressed;
 	private boolean running;
 	private Thread thread;
@@ -36,14 +37,15 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 		File rootDirectory = new File("/Volumes/Pictures");
 		fileLoader = new FileLoader(rootDirectory);
 		currentFile = fileLoader.getNextFile();
-		imagePanelController = new ImagePanelController(fileLoader.getNextFile().getFile().getAbsolutePath());
-
+		ImagePanelFactory imagePanelFactory = new ImagePanelFactory(fileLoader.getNextFile().getFile().getAbsolutePath());
+		containerPanel = new JPanel(new BorderLayout());
+		containerPanel.add(imagePanelFactory.getImagePanel(), BorderLayout.CENTER);
 		imagePanelWithTitle = new JPanel(new BorderLayout());
-		imagePanelWithTitle.add(imagePanelController.getImagePanel(), BorderLayout.CENTER);
+		imagePanelWithTitle.add(containerPanel, BorderLayout.CENTER);
 		imagePanelWithTitle.add(imageFileNameLabel, BorderLayout.SOUTH);
 
 		createAndDisplayPlayerFrame();
-		startPlayer(imagePanelController);
+		startPlayer();
 	}
 
 	public static void main(String[] args) {
@@ -92,7 +94,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 		if (thread.isAlive()) {
 			resume();
 		} else {
-			startPlayer(imagePanelController);
+			startPlayer();
 		}
 	}
 
@@ -103,7 +105,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 
 	@Override
 	public void decreasePlaybackSpeed() {
-		timeBetweenPhotos = Math.max(timeBetweenPhotos - 500, 500);
+		timeBetweenPhotos = Math.max(timeBetweenPhotos - 5000, 5000);
 	}
 
 	private void resume() {
@@ -113,26 +115,40 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 		}
 	}
 
-	private void startPlayer(final ImagePanelController imagePanelController) {
+	private void startPlayer() {
 		running = true;
 		thread = new Thread() {
 			@Override
 			public void run() {
 
 				while (running) {
-					try {
 						synchronized (ImagePlayerController.this) {
 							if (pausePressed) {
-								ImagePlayerController.this.wait();
+								try {
+									ImagePlayerController.this.wait();
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 							}
 						}
 
 						synchronized (this) {
 							if (lastFile == null || !lastFile.equals(currentFile)) {
-								SwingUtilities.invokeLater(() -> imageFileNameLabel.setText(String.format("%d of %d: %s", fileLoader.getCurrentIndex(),
-										fileLoader.getNumFilesLoaded(), currentFile.getFile().getName())));
-								imagePanelController.setImage(currentFile.getFile().getPath());
+								try {
+									final JComponent imagePanel = new ImagePanelFactory(currentFile.getFile().getPath()).getImagePanel();
+									SwingUtilities.invokeLater(() -> {
+										imageFileNameLabel.setText(String.format("%d of %d: %s", fileLoader.getCurrentIndex(),
+												fileLoader.getNumFilesLoaded(), currentFile.getFile().getName()));
+										containerPanel.removeAll();
+										containerPanel.add(imagePanel, BorderLayout.CENTER);
+									});
+									timeBetweenPhotos = currentFile.getFile().getName().endsWith(".mp4") ? 30000 : 5000;
+								} catch (Exception e) {
+									System.out.println("Could not load file: " + currentFile.getFile().getAbsolutePath());
+									timeBetweenPhotos = 0;
+								}
 								lastFile = currentFile;
+
 							}
 						}
 
@@ -141,12 +157,14 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 						if (timeSinceLastSwitch > timeBetweenPhotos) {
 							loadNextFile();
 						} else {
-							//noinspection BusyWait
-							Thread.sleep(10);
+
+							try {
+								//noinspection BusyWait
+								Thread.sleep(10);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 						}
-					} catch (Throwable e) {
-						e.printStackTrace();
-					}
 				}
 			}
 

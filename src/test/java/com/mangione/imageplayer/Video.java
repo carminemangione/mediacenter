@@ -1,13 +1,12 @@
 package com.mangione.imageplayer;
 
-import javafx.application.Platform;
+import java.awt.*;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.File;
+
+import javafx.application.Platform;
 
 public class Video {
-	private String Dir = System.getProperty("user.dir");
 	private final JFrame jframe;
 
 	public static void main(String[] args) {
@@ -26,8 +25,8 @@ public class Video {
 	}
 
 	public void start() {
-		final File file = new File("/Users/carmine/projects/imageplayer/src/test/resources/ThirstyDrearySwan-mobile.mp4");
-		final VideoPanel videoPanel = new VideoPanel(file);
+		final VideoPanel videoPanel = new VideoPanel(
+				"/Volumes/Pictures/allpics/20221211/qNaGJRS9EBhJ639TOuIvQZCu1JGsK-Iv_7_V9CQFlVA.gif.mp4");
 		SwingUtilities.invokeLater(() -> jframe.add(videoPanel.getPanel(), BorderLayout.CENTER));
 	}
 }

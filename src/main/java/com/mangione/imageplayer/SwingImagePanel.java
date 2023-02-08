@@ -6,13 +6,13 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 
-public class ImagePanel extends JPanel {
+public class SwingImagePanel extends JPanel {
 	private Dimension imageSize;
-	private String currentImageFile;
+	private final String currentImageFile;
 	private final JLabel jLabel;
 
 
-	ImagePanel(String currentImageFile) {
+	SwingImagePanel(String currentImageFile) {
 		setOpaque(true);
 		setBackground(Color.DARK_GRAY);
 		this.currentImageFile = currentImageFile;
@@ -60,19 +60,7 @@ public class ImagePanel extends JPanel {
 		}
 		return imageLoaderThread.getImageIcon();
 	}
-
-	public synchronized void setImage(final String imageFileName) {
-		currentImageFile = imageFileName;
-		try {
-			SwingUtilities.invokeLater(() -> {
-				jLabel.setIcon(getCurrentImage());
-				repaint();
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
+	
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);

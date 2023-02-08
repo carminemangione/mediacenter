@@ -13,40 +13,39 @@ import javafx.scene.paint.Color;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class VideoPanel {
 
 	private final JFXPanel jfxPanel;
 
-	public VideoPanel(File file) {
+	public VideoPanel(String file) {
 		jfxPanel = new JFXPanel();
-				Media media = new Media(file.toURI().toString());
-				MediaPlayer player = new MediaPlayer(media);
-				MediaView viewer = new MediaView(player);
-				player.setMute(true);
+		Media media = new Media("file:" + file);
+		MediaPlayer player = new MediaPlayer(media);
+		MediaView viewer = new MediaView(player);
+		player.setMute(true);
 
-				//change width and height to fit video
-				viewer.setPreserveRatio(true);
+		//change width and height to fit video
+		viewer.setPreserveRatio(true);
 
-				StackPane root = new StackPane();
-				root.getChildren().add(viewer);
+		StackPane root = new StackPane();
+		root.getChildren().add(viewer);
 
-				Platform.runLater(() -> {
-					DoubleProperty width = viewer.fitWidthProperty();
-					DoubleProperty height = viewer.fitHeightProperty();
-					width.bind(Bindings.selectDouble(viewer.sceneProperty(), "width"));
-					height.bind(Bindings.selectDouble(viewer.sceneProperty(), "height"));
-					viewer.setPreserveRatio(true);
-					player.setMute(true);
-					//set the Scene
-					Scene scenes = new Scene(root, 500, 500, Color.BLACK);
-					player.play();
-					player.setOnEndOfMedia(player::stop);
+		Platform.runLater(() -> {
+			DoubleProperty width = viewer.fitWidthProperty();
+			DoubleProperty height = viewer.fitHeightProperty();
+			width.bind(Bindings.selectDouble(viewer.sceneProperty(), "width"));
+			height.bind(Bindings.selectDouble(viewer.sceneProperty(), "height"));
+			viewer.setPreserveRatio(true);
+			player.setMute(true);
+			//set the Scene
+			Scene scenes = new Scene(root, 500, 500, Color.BLACK);
+			player.play();
+			player.setOnEndOfMedia(player::stop);
 
-					jfxPanel.setScene(scenes);
-					jfxPanel.setPreferredSize(new Dimension(400, 400));
-				});
+			jfxPanel.setScene(scenes);
+			jfxPanel.setPreferredSize(new Dimension(400, 400));
+		});
 	}
 
 	public JComponent getPanel() {

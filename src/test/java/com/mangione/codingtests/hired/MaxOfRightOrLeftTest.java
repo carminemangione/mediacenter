@@ -1,4 +1,4 @@
-package com.mangione.hired;
+package com.mangione.codingtests.hired;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

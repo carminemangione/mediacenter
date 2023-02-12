@@ -1,4 +1,4 @@
-package com.mangione.leetcode;
+package com.mangione.codingtests.leetcode;
 
 import java.util.HashSet;
 import java.util.Set;

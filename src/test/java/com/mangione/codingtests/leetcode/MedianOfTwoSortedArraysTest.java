@@ -1,8 +1,10 @@
-package com.mangione.leetcode;
+package com.mangione.codingtests.leetcode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+
+import com.mangione.codingtests.leetcode.MedianOfTwoSortedArrays;
 
 class MedianOfTwoSortedArraysTest {
 	@Test

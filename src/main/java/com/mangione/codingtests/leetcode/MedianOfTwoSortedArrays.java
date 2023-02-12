@@ -1,4 +1,4 @@
-package com.mangione.leetcode;
+package com.mangione.codingtests.leetcode;
 
 public class MedianOfTwoSortedArrays {
 	private final double median;

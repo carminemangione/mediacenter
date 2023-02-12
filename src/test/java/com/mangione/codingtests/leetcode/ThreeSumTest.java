@@ -1,4 +1,4 @@
-package com.mangione.leetcode;
+package com.mangione.codingtests.leetcode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import com.mangione.codingtests.leetcode.ThreeSumZero;
 
 class ThreeSumTest {
 	@Test

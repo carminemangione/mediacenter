@@ -1,4 +1,4 @@
-package com.mangione.hired;
+package com.mangione.codingtests.hired;
 
 public class MaxOfRightOrLeft {
 	private final String leftOrRight;

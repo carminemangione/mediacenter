@@ -1,7 +1,9 @@
-package com.mangione.leetcode;
+package com.mangione.codingtests.leetcode;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import com.mangione.codingtests.leetcode.LongestLengthOfSubstringWithoutRepeating;
 
 class LongestLengthOfSubstringWithoutRepeatingTest {
 	@Test

@@ -144,6 +144,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 									});
 									timeBetweenPhotos = currentFile.getFile().getName().endsWith(".mp4") ? 5000 : 5000;
 								} catch (Exception e) {
+									e.printStackTrace();
 									System.out.println("Could not load file: " + currentFile.getFile().getAbsolutePath());
 									timeBetweenPhotos = 0;
 								}

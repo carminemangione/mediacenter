@@ -20,8 +20,10 @@ public class VideoPanel {
 	private final JFXPanel jfxPanel;
 
 	public VideoPanel(String file) throws Exception {
+		Platform.setImplicitExit(false);
 		jfxPanel = new JFXPanel();
-		Media media = new Media(new File(file).toURI().toURL().toString());
+		File file1 = new File(file);
+		Media media = new Media(file1.toURI().toURL().toString());
 		MediaPlayer player = new MediaPlayer(media);
 		MediaView viewer = new MediaView(player);
 		player.setMute(true);

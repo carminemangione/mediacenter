@@ -33,8 +33,8 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 		imageFileNameLabel.setForeground(Color.DARK_GRAY);
 		imageFileNameLabel.setFont(imageFileNameLabel.getFont().deriveFont(Font.ITALIC, 9.0f));
 		imageFileNameLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
-		File rootDirectory = new File("temp");
-		//File rootDirectory = new File("/Volumes/Pictures");
+//		File rootDirectory = new File("temp");
+		File rootDirectory = new File("/Volumes/Pictures");
 		fileLoader = new FileLoader(rootDirectory);
 		currentFile = fileLoader.getNextFile();
 		ImagePanelFactory imagePanelFactory = new ImagePanelFactory(fileLoader.getNextFile().getFile().getAbsolutePath());
@@ -142,7 +142,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 										containerPanel.removeAll();
 										containerPanel.add(imagePanel, BorderLayout.CENTER);
 									});
-									timeBetweenPhotos = currentFile.getFile().getName().endsWith(".mp4") ? 5000 : 5000;
+									timeBetweenPhotos = currentFile.getFile().getName().endsWith(".mp4") ? 10000 : 5000;
 								} catch (Exception e) {
 									e.printStackTrace();
 									System.out.println("Could not load file: " + currentFile.getFile().getAbsolutePath());

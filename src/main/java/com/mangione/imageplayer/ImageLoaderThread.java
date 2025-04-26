@@ -26,6 +26,7 @@ public class ImageLoaderThread extends Thread {
 				BufferedImage image = ImageIO.read(new File(currentImageFile));
 				imageIcon = new ImageIcon(image);
 			} catch (Exception e) {
+				//noinspection CallToPrintStackTrace
 				e.printStackTrace();
 			}
 		}

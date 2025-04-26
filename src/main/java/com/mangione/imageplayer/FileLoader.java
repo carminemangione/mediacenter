@@ -31,6 +31,7 @@ public class FileLoader {
 		} else {
 			try {
 				synchronized (fileWaiterObject) {
+					//noinspection WaitWhileHoldingTwoLocks
 					fileWaiterObject.wait();
 				}
 				file = availableImageFiles.get(currentIndex);
@@ -78,7 +79,7 @@ public class FileLoader {
 		final List<FileWithCompareString> imageFiles = findImageFilesSorted(files, file -> !file.isDirectory());
 		synchronized (fileWaiterObject) {
 			availableImageFiles.addAll(imageFiles);
-			if (availableImageFiles.size() > 0) {
+			if (!availableImageFiles.isEmpty()) {
 				currentIndex = random.nextInt(availableImageFiles.size());
 				fileWaiterObject.notifyAll();
 			}

@@ -14,7 +14,6 @@ public class FileWithCompareString implements Comparable<FileWithCompareString> 
           this.compareString = getLeadingStringStrippedOfCopyNumber(file.getAbsolutePath().toLowerCase());
       }
 
-
       String getLeadingStringStrippedOfCopyNumber(String name) {
           name = stripNameOfExtension(name);
           int locationOfVersionNumber = name.length() - 1;
@@ -44,6 +43,7 @@ public class FileWithCompareString implements Comparable<FileWithCompareString> 
               }
               return compareTo;
           } catch (Throwable e) {
+              //noinspection CallToPrintStackTrace
               e.printStackTrace();
               return 0;
           }

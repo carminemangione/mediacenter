@@ -1,10 +1,9 @@
 package com.mangione.imageplayer;
 
-import java.awt.*;
+import javafx.application.Platform;
 
 import javax.swing.*;
-
-import javafx.application.Platform;
+import java.awt.*;
 
 public class Video {
 	private final JFrame jframe;
@@ -25,8 +24,13 @@ public class Video {
 	}
 
 	public void start() {
-		final VideoPanel videoPanel = new VideoPanel(
-				"/Volumes/Pictures/allpics/20221211/qNaGJRS9EBhJ639TOuIvQZCu1JGsK-Iv_7_V9CQFlVA.gif.mp4");
-		SwingUtilities.invokeLater(() -> jframe.add(videoPanel.getPanel(), BorderLayout.CENTER));
+		final VideoPanel videoPanel;
+		try {
+			videoPanel = new VideoPanel(
+					"/Volumes/Pictures/allpics/20221211/qNaGJRS9EBhJ639TOuIvQZCu1JGsK-Iv_7_V9CQFlVA.gif.mp4");
+			SwingUtilities.invokeLater(() -> jframe.add(videoPanel.getPanel(), BorderLayout.CENTER));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

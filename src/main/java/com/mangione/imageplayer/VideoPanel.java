@@ -13,14 +13,15 @@ import javafx.scene.paint.Color;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class VideoPanel {
 
 	private final JFXPanel jfxPanel;
 
-	public VideoPanel(String file) {
+	public VideoPanel(String file) throws Exception {
 		jfxPanel = new JFXPanel();
-		Media media = new Media("file:" + file);
+		Media media = new Media(new File(file).toURI().toURL().toString());
 		MediaPlayer player = new MediaPlayer(media);
 		MediaView viewer = new MediaView(player);
 		player.setMute(true);

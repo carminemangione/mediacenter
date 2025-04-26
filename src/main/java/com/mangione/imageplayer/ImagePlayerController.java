@@ -28,7 +28,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 	private FileWithCompareString currentFile;
 	private FileWithCompareString lastFile;
 
-	private ImagePlayerController() {
+	private ImagePlayerController() throws Exception {
 
 		imageFileNameLabel.setForeground(Color.DARK_GRAY);
 		imageFileNameLabel.setFont(imageFileNameLabel.getFont().deriveFont(Font.ITALIC, 9.0f));
@@ -48,7 +48,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 		startPlayer();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		new ImagePlayerController();
 	}
 

@@ -33,13 +33,13 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 		imageFileNameLabel.setForeground(Color.DARK_GRAY);
 		imageFileNameLabel.setFont(imageFileNameLabel.getFont().deriveFont(Font.ITALIC, 9.0f));
 		imageFileNameLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
-//		File rootDirectory = new File("temp");
+		//File rootDirectory = new File("temp");
 		File rootDirectory = new File("/Volumes/Pictures");
 		fileLoader = new FileLoader(rootDirectory);
 		currentFile = fileLoader.getNextFile();
-		ImagePanelFactory imagePanelFactory = new ImagePanelFactory(fileLoader.getNextFile().getFile().getAbsolutePath());
+		ImagePanelFactory playerPanel = new ImagePanelFactory(fileLoader.getNextFile().getFile().getAbsolutePath());
 		containerPanel = new JPanel(new BorderLayout());
-		containerPanel.add(imagePanelFactory.getImagePanel(), BorderLayout.CENTER);
+		containerPanel.add(playerPanel.getPlayerPanel().getPanel(), BorderLayout.CENTER);
 		imagePanelWithTitle = new JPanel(new BorderLayout());
 		imagePanelWithTitle.add(containerPanel, BorderLayout.CENTER);
 		imagePanelWithTitle.add(imageFileNameLabel, BorderLayout.SOUTH);
@@ -135,21 +135,20 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 						synchronized (this) {
 							if (lastFile == null || !lastFile.equals(currentFile)) {
 								try {
-									final JComponent imagePanel = new ImagePanelFactory(currentFile.getFile().getPath()).getImagePanel();
+									final PlayerPanel playerPanel = new ImagePanelFactory(currentFile.getFile().getPath()).getPlayerPanel();
 									SwingUtilities.invokeLater(() -> {
 										imageFileNameLabel.setText(String.format("%d of %d: %s", fileLoader.getCurrentIndex(),
 												fileLoader.getNumFilesLoaded(), currentFile.getFile().getName()));
 										containerPanel.removeAll();
-										containerPanel.add(imagePanel, BorderLayout.CENTER);
+										containerPanel.add(playerPanel.getPanel(), BorderLayout.CENTER);
 									});
-									timeBetweenPhotos = currentFile.getFile().getName().endsWith(".mp4") ? 10000 : 5000;
+									timeBetweenPhotos =  playerPanel.getDurationMillis();
 								} catch (Exception e) {
 									e.printStackTrace();
 									System.out.println("Could not load file: " + currentFile.getFile().getAbsolutePath());
 									timeBetweenPhotos = 0;
 								}
 								lastFile = currentFile;
-
 							}
 						}
 

@@ -1,18 +1,16 @@
 package com.mangione.imageplayer;
 
-import javax.swing.*;
-
 public class ImagePanelFactory {
-	private final JComponent imagePanel;
+	private final PlayerPanel playerPanel;
 
 	ImagePanelFactory(String imageToLoad) throws Exception {
 		if (imageToLoad.endsWith("mp4"))
-			imagePanel = new VideoPanel(imageToLoad).getPanel();
+			playerPanel = new VideoPanel(imageToLoad);
 		else
-			imagePanel = new SwingImagePanel(imageToLoad);
+			playerPanel = new SwingImagePanel(imageToLoad);
 	}
 
-	JComponent getImagePanel() {
-		return imagePanel;
+	PlayerPanel getPlayerPanel() {
+		return playerPanel;
 	}
 }

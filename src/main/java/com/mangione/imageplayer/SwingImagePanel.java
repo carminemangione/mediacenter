@@ -6,29 +6,32 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 
-public class SwingImagePanel extends JPanel {
+public class SwingImagePanel implements PlayerPanel {
 	private Dimension imageSize;
 	private final String currentImageFile;
 	private final JLabel jLabel;
 
+	private final JComponent panel;
+
 
 	SwingImagePanel(String currentImageFile) {
-		setOpaque(true);
-		setBackground(Color.DARK_GRAY);
+		panel = new JPanel();
+		panel.setOpaque(true);
+		panel.setBackground(Color.DARK_GRAY);
 		this.currentImageFile = currentImageFile;
-		setLayout(new BorderLayout());
+		panel.setLayout(new BorderLayout());
 
 		jLabel = new JLabel(new ImageIcon(currentImageFile));
 		jLabel.setOpaque(false);
-		add(jLabel, BorderLayout.CENTER);
-		addComponentListener(new ComponentAdapter() {
+		panel.add(jLabel, BorderLayout.CENTER);
+		panel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				SwingUtilities.invokeLater(() -> {
 					ImageIcon currentImage = getCurrentImage();
 					if (currentImage != null) {
 						jLabel.setIcon(currentImage);
-						repaint();
+						panel.repaint();
 					}
 				});
 			}
@@ -60,21 +63,26 @@ public class SwingImagePanel extends JPanel {
 		}
 		return imageLoaderThread.getImageIcon();
 	}
-	
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-	}
 
 	public Dimension getMaximumSize() {
 		return imageSize;
+	}
+
+	@Override
+	public JComponent getPanel() {
+		return panel;
+	}
+
+	@Override
+	public int getDurationMillis() {
+		return 5000;
 	}
 
 	private class QuadDimension {
 		private final Dimension size;
 
 		QuadDimension(Image currentImage) {
-			Dimension panelSize = getSize();
+			Dimension panelSize = panel.getSize();
 
 			double panelWidth = panelSize.getWidth();
 			double panelHeight = panelSize.getHeight();

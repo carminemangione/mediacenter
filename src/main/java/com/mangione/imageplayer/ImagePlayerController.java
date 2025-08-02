@@ -33,7 +33,7 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 		imageFileNameLabel.setForeground(Color.DARK_GRAY);
 		imageFileNameLabel.setFont(imageFileNameLabel.getFont().deriveFont(Font.ITALIC, 9.0f));
 		imageFileNameLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
-		//File rootDirectory = new File("temp");
+//		File rootDirectory = new File("temp");
 		File rootDirectory = new File("/Volumes/Pictures");
 		fileLoader = new FileLoader(rootDirectory);
 		currentFile = fileLoader.getNextFile();

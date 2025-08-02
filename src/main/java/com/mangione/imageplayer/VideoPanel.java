@@ -38,20 +38,20 @@ public class VideoPanel implements PlayerPanel {
 		root.getChildren().add(viewer);
 
 		player.setOnReady(() -> {
-			System.out.println("boop");
 			ready.set(true);
-			DoubleProperty width = viewer.fitWidthProperty();
-			DoubleProperty height = viewer.fitHeightProperty();
-			width.bind(Bindings.selectDouble(viewer.sceneProperty(), "width"));
-			height.bind(Bindings.selectDouble(viewer.sceneProperty(), "height"));
-			viewer.setPreserveRatio(true);
-			//set the Scene
-			Scene scenes = new Scene(root, 500, 500, Color.BLACK);
-			startPlayer(player, scenes);
 		});
 
 		//noinspection StatementWithEmptyBody
 		while (!ready.get());
+		System.out.println("Player Status: " + player.getStatus());
+		DoubleProperty width = viewer.fitWidthProperty();
+		DoubleProperty height = viewer.fitHeightProperty();
+		width.bind(Bindings.selectDouble(viewer.sceneProperty(), "width"));
+		height.bind(Bindings.selectDouble(viewer.sceneProperty(), "height"));
+		viewer.setPreserveRatio(true);
+		//set the Scene
+		Scene scenes = new Scene(root, 500, 500, Color.BLACK);
+		startPlayer(player, scenes);
 	}
 
 	private void startPlayer(MediaPlayer player, Scene scenes) {

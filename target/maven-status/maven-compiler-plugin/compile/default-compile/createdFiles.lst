@@ -23,6 +23,7 @@ com/mangione/imagedupfinder/ImageThumbnailFinder.class
 com/mangione/imagedupfinder/ImageThumbnailFinder$ThumbNailFinder.class
 com/mangione/imageplayer/SwingImagePanel$QuadDimension.class
 com/mangione/imageplayer/buttonpanel/ButtonPanel$2.class
+com/mangione/imageplayer/FileLoader$1.class
 com/mangione/imageplayer/ImageLoaderThread.class
 com/mangione/imageplayer/ImagePlayerControllerInterface.class
 com/mangione/imageplayer/ImagePlayerController$3.class

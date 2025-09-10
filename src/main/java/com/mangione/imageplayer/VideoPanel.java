@@ -43,7 +43,6 @@ public class VideoPanel implements PlayerPanel {
 
 		//noinspection StatementWithEmptyBody
 		while (!ready.get());
-		System.out.println("Player Status: " + player.getStatus());
 		DoubleProperty width = viewer.fitWidthProperty();
 		DoubleProperty height = viewer.fitHeightProperty();
 		width.bind(Bindings.selectDouble(viewer.sceneProperty(), "width"));

@@ -1,6 +1,7 @@
 com/mangione/imageplayer/SwingImagePanel.class
 com/mangione/imageplayer/ImagePlayerController$2.class
 com/mangione/imageplayer/ImagePlayerPanel.class
+com/mangione/imageplayer/FileLoader$2.class
 com/mangione/imageplayer/buttonpanel/ButtonPanel$3.class
 com/mangione/imageplayer/FileWithCompareString.class
 com/mangione/imageplayer/ImagePlayerController$1.class
@@ -16,7 +17,6 @@ com/mangione/imageplayer/buttonpanel/ButtonPanel$1.class
 com/mangione/imageplayer/FileLoader.class
 com/mangione/imageplayer/buttonpanel/ButtonPanel$5.class
 com/mangione/imagedupfinder/TestImageStats.class
-module-info.class
 com/mangione/imageplayer/VideoPanel.class
 com/mangione/imageplayer/PlayerPanel.class
 com/mangione/imagedupfinder/ImageThumbnailFinder.class

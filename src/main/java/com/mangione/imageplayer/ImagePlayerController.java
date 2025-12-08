@@ -29,7 +29,6 @@ public class ImagePlayerController implements ButtonPanelControllerInterface, Im
 	private FileWithCompareString lastFile;
 
 	private ImagePlayerController() throws Exception {
-
 		imageFileNameLabel.setForeground(Color.DARK_GRAY);
 		imageFileNameLabel.setFont(imageFileNameLabel.getFont().deriveFont(Font.ITALIC, 9.0f));
 		imageFileNameLabel.setBorder(new EmptyBorder(4, 4, 4, 4));

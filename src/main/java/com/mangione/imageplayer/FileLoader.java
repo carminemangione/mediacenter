@@ -20,32 +20,55 @@ public class FileLoader {
 	private final Object fileWaiterObject = new Object();
 	private final Random random = new Random();
 	private int currentIndex = 0;
+	private int currentNumberOfFiles;
 
 	FileLoader(File rootDirectory) throws IOException {
 		File loadedFile = new File(rootDirectory, "loadedDirectories.json");
+		List<String> imageFiles;
 		if (loadedFile.exists()) {
-			String directoriesJSON = FileUtils.readFileToString(loadedFile, "UTF-8");;
+			String directoriesJSON = FileUtils.readFileToString(loadedFile, "UTF-8");
 			loadedDirectories = Collections.synchronizedSet(
-					new Gson().fromJson(directoriesJSON,  new TypeToken<Set<String>>(){}.getType()));
+					new Gson().fromJson(directoriesJSON, new TypeToken<Set<String>>() {
+					}.getType()));
 			File imageFile = new File(rootDirectory, IMAGE_FILE_PATHS);
 			String imageFileJSON = FileUtils.readFileToString(imageFile, "UTF-8");
-			List<String> imageFiles = new Gson().fromJson(imageFileJSON, new TypeToken<List<String>>(){}.getType());
+			imageFiles = new Gson().fromJson(imageFileJSON, new TypeToken<List<String>>() {
+			}.getType());
 
 			availableImageFiles = Collections.synchronizedList(
 					imageFiles.stream()
 							.map(File::new)
 							.map(FileWithCompareString::new)
 							.collect(Collectors.toList()));
+			random();
 		} else {
 			loadedDirectories = Collections.synchronizedSet(new HashSet<>());
 			availableImageFiles = Collections.synchronizedList(new ArrayList<>());
-			final Thread thread = new Thread(() -> {
-				recurseAndCollectFiles(rootDirectory);
-				System.out.println("Loading thread finished");
+			imageFiles = Collections.synchronizedList(new ArrayList<>());
+		}
+		final Thread thread = new Thread(() -> {
+			processFilesInRootDirectory(rootDirectory, imageFiles);
+
+			System.out.println("Loading thread finished");
+			if (rootDirectory.isDirectory()) {
 				saveDirectoriesAndFilePaths(rootDirectory, loadedFile);
-			});
-			thread.setName("FileLoaderThread");
-			thread.start();
+
+			}
+		});
+		thread.setName("FileLoaderThread");
+		thread.start();
+	}
+
+	private void processFilesInRootDirectory(File rootDirectory, List<String> imageFiles) {
+		File[] files = rootDirectory.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (file.isDirectory() && !loadedDirectories.contains(file.getPath())) {
+					recurseAndCollectFiles(file);
+				} else if (file.isFile() && !imageFiles.contains(file.getAbsolutePath())) {
+					availableImageFiles.add(new FileWithCompareString(file));
+				}
+			}
 		}
 	}
 
@@ -71,6 +94,10 @@ public class FileLoader {
 	}
 
 	synchronized FileWithCompareString getNextFile() {
+		if (currentNumberOfFiles < availableImageFiles.size()) {
+			currentIndex = random.nextInt(availableImageFiles.size());
+			currentNumberOfFiles = availableImageFiles.size();
+		}
 		FileWithCompareString file;
 		if (!availableImageFiles.isEmpty()) {
 			file = availableImageFiles.get(currentIndex++);
@@ -110,17 +137,21 @@ public class FileLoader {
 
 	private void recurseAndCollectFiles(File currentFile) {
 		String directoryPath = currentFile.getPath();
-		if (currentFile.isDirectory() && !loadedDirectories.contains(directoryPath)) {
-			loadedDirectories.add(directoryPath);
-			final File[] files = currentFile.listFiles();
-			if (files != null) {
-				getImageFilesAndAddToList(files);
-				System.out.printf("Loaded directory %s : %d%n", currentFile.getAbsolutePath(), files.length);
-				System.out.println();
-				Arrays.stream(files)
-						.filter(File::isDirectory)
-						.forEach(this::recurseAndCollectFiles);
-			}
+		if (currentFile.isDirectory()) {
+			System.out.printf("Loading directory %s", currentFile.getAbsolutePath());
+				final File[] files = currentFile.listFiles();
+				if (files != null) {
+					if (!loadedDirectories.contains(directoryPath)) {
+						loadedDirectories.add(directoryPath);
+						getImageFilesAndAddToList(files);
+					}
+					System.out.printf("Loaded directory %s : %d%n", currentFile.getAbsolutePath(), files.length);
+					System.out.println();
+					Arrays.stream(files)
+							.filter(File::isDirectory)
+							.forEach(this::recurseAndCollectFiles);
+				}
+
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.mangione.imageplayer.video;
+package com.mangione.imageplayer.media.video;
 
 import javafx.embed.swing.JFXPanel;
 import java.awt.*;

@@ -1,127 +1,114 @@
 package com.mangione.imageplayer.player;
 
-import com.mangione.imageplayer.container.MediaContainerPanel;
-import com.mangione.imageplayer.file.FileLoader;
+import com.mangione.imageplayer.file.Playlist;
+import com.mangione.imageplayer.file.PlaylistEntry;
+import com.mangione.imageplayer.media.MediaTypeRegistry;
+import com.mangione.imageplayer.media.PlayableMedia;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
+import java.time.Duration;
+import java.util.Optional;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
+/**
+ * Moves through the playlist and shows each item. All loading runs on the worker so the Swing thread never blocks.
+ */
+public class ImagePlayerController {
+    private static final Duration SKIP_DELAY_AFTER_ERROR = Duration.ofMillis(500);
+    private static final Duration READY_TIMEOUT = Duration.ofSeconds(30);
 
-public class ImagePlayerController implements ImagePlayerControllerInterface, PlaybackListener {
-	private final FileLoader fileLoader;
-	private final MediaContainerPanel mediaContainerPanel;
-	private final PlaybackEngine playbackEngine;
-	private ImagePlayerPanel playerFrame;
+    private final Playlist playlist;
+    private final MediaTypeRegistry mediaTypes;
+    private final MediaDisplay display;
+    private final PlaybackEngine engine;
+    private final Executor worker;
+    private PlaylistEntry showing; // guarded by this
 
-	public ImagePlayerController(File rootDirectory) throws Exception {
-		fileLoader = new FileLoader(rootDirectory);
-		mediaContainerPanel = new MediaContainerPanel();
-		playbackEngine = new PlaybackEngine(this);
+    public ImagePlayerController(Playlist playlist, MediaTypeRegistry mediaTypes, MediaDisplay display,
+                                 PlaybackEngine engine, Executor worker) {
+        this.playlist = playlist;
+        this.mediaTypes = mediaTypes;
+        this.display = display;
+        this.engine = engine;
+        this.worker = worker;
+    }
 
-		createAndDisplayPlayerFrame();
-		fileLoader.getNextFile();
-		displayCurrentFile();
-		playbackEngine.start();
-	}
+    public void start() {
+        worker.execute(() -> {
+            try {
+                show(playlist.awaitCurrent());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+    }
 
-	@Override
-	public void onTimerExpired() {
-		fileLoader.getNextFile();
-		displayCurrentFile();
-	}
+    public KeyBindings keyBindings() {
+        return new KeyBindings()
+                .bind(KeyEvent.VK_EQUALS, engine::faster)
+                .bind(KeyEvent.VK_MINUS, engine::slower)
+                .bind(KeyEvent.VK_COMMA, () -> navigate(playlist::previous))
+                .bind(KeyEvent.VK_PERIOD, () -> navigate(playlist::next))
+                .bind(KeyEvent.VK_R, () -> navigate(playlist::jumpToRandom))
+                .bind(KeyEvent.VK_D, () -> navigate(this::deleteCurrent));
+    }
 
-	@Override
-	public void increasePlaybackSpeed() {
-		playbackEngine.increaseSpeed();
-	}
+    private void navigate(Supplier<Optional<PlaylistEntry>> move) {
+        worker.execute(() -> move.get().ifPresent(this::show));
+    }
 
-	@Override
-	public void decreasePlaybackSpeed() {
-		playbackEngine.decreaseSpeed();
-	}
+    // A timer that already fired can't be cancelled, so it only advances if nothing else was shown since
+    private void advanceFrom(PlaylistEntry from) {
+        synchronized (this) {
+            if (from != showing) return;
+        }
+        playlist.next().ifPresent(this::show);
+    }
 
-	private void displayCurrentFile() {
-		try {
-			PlayerPanel playerPanel = ImagePanelFactory.create(fileLoader.getCurrentFile().getFile().getPath());
-			playbackEngine.setDuration(playerPanel.getDurationMillis());
-			String status = String.format("%d of %d: %s",
-					fileLoader.getCurrentIndex(), fileLoader.getNumFilesLoaded(),
-					fileLoader.getCurrentFile().getFile().getName());
-			mediaContainerPanel.display(playerPanel, status);
-		} catch (Exception e) {
-			e.printStackTrace();
-			playbackEngine.setDuration(0);
-		}
-	}
+    private synchronized void scheduleAdvance(PlaylistEntry from, Optional<Duration> delay) {
+        if (from == showing) {
+            engine.scheduleAfter(delay, () -> advanceFrom(from));
+        }
+    }
 
-	private synchronized void createAndDisplayPlayerFrame() {
-		Dimension frameSize;
-		Point location;
-		boolean nextUndecorated;
-		float transparency;
+    private Optional<PlaylistEntry> deleteCurrent() {
+        return playlist.current()
+                .filter(entry -> entry.file().delete())
+                .flatMap(entry -> playlist.remove(entry.mediaFile()));
+    }
 
-		if (playerFrame == null) {
-			frameSize = new Dimension(300, 400);
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			location = new Point(Math.max(0, screenSize.width - frameSize.width), 0);
-			nextUndecorated = false;
-			transparency = 1.0f;
-		} else {
-			frameSize = playerFrame.getSize();
-			location = playerFrame.getLocation();
-			nextUndecorated = !playerFrame.isUndecorated();
-			transparency = playerFrame.getTransparency();
-			playerFrame.dispose();
-		}
+    private void show(PlaylistEntry entry) {
+        synchronized (this) {
+            showing = entry;
+            engine.cancel();
+        }
+        try {
+            PlayableMedia media = mediaTypes.create(entry.file());
+            display.display(media, describe(entry));
+            // The timer starts once a video knows its length; one that never gets ready is skipped
+            media.ready().toCompletableFuture().copy()
+                    .orTimeout(READY_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS)
+                    .whenComplete((ignored, error) -> {
+                        if (error == null) {
+                            scheduleAdvance(entry, media.getNaturalDuration());
+                        } else {
+                            //noinspection CallToPrintStackTrace
+                            error.printStackTrace();
+                            scheduleAdvance(entry, Optional.of(SKIP_DELAY_AFTER_ERROR));
+                        }
+                    });
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+            scheduleAdvance(entry, Optional.of(SKIP_DELAY_AFTER_ERROR));
+        }
+    }
 
-		playerFrame = new ImagePlayerPanel(mediaContainerPanel, nextUndecorated, frameSize, location, transparency);
-		playerFrame.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				SwingUtilities.invokeLater(ImagePlayerController.this::createAndDisplayPlayerFrame);
-			}
-		});
-		playerFrame.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent event) {
-				switch (event.getKeyCode()) {
-					case KeyEvent.VK_EQUALS:
-						increasePlaybackSpeed();
-						break;
-					case KeyEvent.VK_MINUS:
-						decreasePlaybackSpeed();
-						break;
-					case KeyEvent.VK_COMMA:
-						fileLoader.getPreviousFile();
-						displayCurrentFile();
-						break;
-					case KeyEvent.VK_PERIOD:
-						fileLoader.getNextFile();
-						displayCurrentFile();
-						break;
-					case KeyEvent.VK_T:
-						playerFrame.adjustTransparency(-0.02f);
-						break;
-					case KeyEvent.VK_Y:
-						playerFrame.adjustTransparency(0.02f);
-						break;
-					case KeyEvent.VK_D:
-						if (fileLoader.getCurrentFile().getFile().delete()) {
-							fileLoader.getNextFile();
-							displayCurrentFile();
-						}
-						break;
-					case KeyEvent.VK_R:
-						fileLoader.random();
-						fileLoader.getNextFile();
-						displayCurrentFile();
-						break;
-				}
-			}
-		});
-	}
+    private static String describe(PlaylistEntry entry) {
+        return String.format("%d of %d: %s", entry.position() + 1, entry.size(), entry.file().getName());
+    }
 }

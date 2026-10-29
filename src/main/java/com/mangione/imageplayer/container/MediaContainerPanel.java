@@ -1,6 +1,7 @@
 package com.mangione.imageplayer.container;
 
-import com.mangione.imageplayer.player.PlayerPanel;
+import com.mangione.imageplayer.player.MediaDisplay;
+import com.mangione.imageplayer.media.PlayableMedia;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -8,14 +9,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class MediaContainerPanel extends JPanel {
+public class MediaContainerPanel extends JPanel implements MediaDisplay {
     private static final Icon MUTED_ICON = new VolumeIcon(true);
     private static final Icon UNMUTED_ICON = new VolumeIcon(false);
 
     private final JLabel statusLabel;
     private final JLabel volumeLabel;
     private final JPanel mediaSlot;
-    private PlayerPanel currentPlayerPanel;
+    private PlayableMedia currentMedia;
     private boolean muted = true;
 
     public MediaContainerPanel() {
@@ -49,28 +50,33 @@ public class MediaContainerPanel extends JPanel {
         add(statusBar, BorderLayout.SOUTH);
     }
 
-    public void display(PlayerPanel playerPanel, String status) {
+    @Override
+    public void display(PlayableMedia media, String status) {
         SwingUtilities.invokeLater(() -> {
-            if (currentPlayerPanel != null) {
-                currentPlayerPanel.dispose();
+            if (currentMedia != null) {
+                currentMedia.dispose();
             }
-            currentPlayerPanel = playerPanel;
+            currentMedia = media;
             muted = true;
             volumeLabel.setIcon(MUTED_ICON);
-            volumeLabel.setVisible(playerPanel.hasAudio());
+            volumeLabel.setVisible(false);
+            // A video only knows whether it has sound once it is ready, which may be after it is shown
+            media.ready().thenRun(() -> SwingUtilities.invokeLater(() -> {
+                if (currentMedia == media) volumeLabel.setVisible(media.hasAudio());
+            }));
 
             statusLabel.setText(status);
             mediaSlot.removeAll();
-            mediaSlot.add(playerPanel.getPanel(), BorderLayout.CENTER);
+            mediaSlot.add(media.getComponent(), BorderLayout.CENTER);
             mediaSlot.revalidate();
             mediaSlot.repaint();
         });
     }
 
     private void toggleMute() {
-        if (currentPlayerPanel == null) return;
+        if (currentMedia == null) return;
         muted = !muted;
-        currentPlayerPanel.setMuted(muted);
+        currentMedia.setMuted(muted);
         volumeLabel.setIcon(muted ? MUTED_ICON : UNMUTED_ICON);
     }
 }

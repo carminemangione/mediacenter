@@ -14,6 +14,7 @@ public class MediaContainerPanel extends JPanel implements MediaDisplay {
     private static final Icon UNMUTED_ICON = new VolumeIcon(false);
 
     private final JLabel statusLabel;
+    private final JLabel loadingLabel;
     private final JLabel volumeLabel;
     private final JPanel mediaSlot;
     private PlayableMedia currentMedia;
@@ -29,6 +30,10 @@ public class MediaContainerPanel extends JPanel implements MediaDisplay {
         statusLabel.setForeground(Color.DARK_GRAY);
         statusLabel.setFont(statusLabel.getFont().deriveFont(Font.ITALIC, 9.0f));
 
+        loadingLabel = new JLabel("Loading library…");
+        loadingLabel.setForeground(Color.DARK_GRAY);
+        loadingLabel.setFont(statusLabel.getFont());
+
         // A JLabel rather than a JButton so clicking it doesn't steal keyboard focus from the frame
         volumeLabel = new JLabel(MUTED_ICON);
         volumeLabel.setToolTipText("Click to toggle sound");
@@ -43,6 +48,7 @@ public class MediaContainerPanel extends JPanel implements MediaDisplay {
 
         JPanel statusBar = new JPanel(new BorderLayout(4, 0));
         statusBar.setBorder(new EmptyBorder(4, 4, 4, 4));
+        statusBar.add(loadingLabel, BorderLayout.WEST);
         statusBar.add(statusLabel, BorderLayout.CENTER);
         statusBar.add(volumeLabel, BorderLayout.EAST);
 
@@ -71,6 +77,13 @@ public class MediaContainerPanel extends JPanel implements MediaDisplay {
             mediaSlot.revalidate();
             mediaSlot.repaint();
         });
+    }
+
+    /**
+     * Hides the loading status; safe to call from any thread.
+     */
+    public void libraryLoaded() {
+        SwingUtilities.invokeLater(() -> loadingLabel.setVisible(false));
     }
 
     private void toggleMute() {

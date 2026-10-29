@@ -27,31 +27,54 @@ public class MediaLibrary {
     }
 
     public void loadInBackground() {
-        Thread thread = new Thread(this::load, "MediaLibraryLoader");
+        loadInBackground(() -> {
+        });
+    }
+
+    /**
+     * Starts loading on a daemon thread and calls onFinished on that thread once loading is done.
+     */
+    public void loadInBackground(Runnable onFinished) {
+        Thread thread = new Thread(() -> {
+            load();
+            onFinished.run();
+        }, "MediaLibraryLoader");
         thread.setDaemon(true);
         thread.start();
     }
 
-    void load() {
+    private void load() {
         if (!rootDirectory.isDirectory()) {
             System.err.printf("Not a directory: %s%n", rootDirectory.getAbsolutePath());
             return;
         }
+        // A directory the OS won't let us list (e.g. a network volume without permission) looks empty, not missing
+        if (rootDirectory.listFiles() == null) {
+            System.err.printf("Can't read: %s%n", rootDirectory.getAbsolutePath());
+            return;
+        }
+        long start = System.currentTimeMillis();
         MediaCache.Snapshot cached = cache.load();
+        System.out.printf("Read cache: %d files, %d directories in %d ms%n", cached.filePaths().size(),
+                cached.directories().size(), System.currentTimeMillis() - start);
         Set<String> knownFiles = new HashSet<>(cached.filePaths());
         Set<String> loadedDirectories = new HashSet<>(cached.directories());
 
+        // Trust the cache rather than stat each path: on a network volume that takes hours, and the player
+        // drops a file that has gone missing when it fails to load
         playlist.addAll(cached.filePaths().stream()
                 .map(File::new)
-                .filter(File::isFile)
                 .filter(isMedia)
                 .map(MediaFile::new)
                 .toList());
 
         // Files directly in the root are always rechecked; subdirectories are skipped once loaded
         addNewFilesIn(rootDirectory, knownFiles);
-        subdirectoriesOf(rootDirectory).forEach(directory -> scan(directory, loadedDirectories, knownFiles));
+        subdirectoriesOf(rootDirectory)
+                .filter(directory -> !loadedDirectories.contains(directory.getPath()))
+                .forEach(directory -> scan(directory, loadedDirectories, knownFiles));
 
+        System.out.println("Saving cache");
         cache.save(new MediaCache.Snapshot(loadedDirectories, playlist.paths()));
         System.out.println("Loading thread finished");
     }

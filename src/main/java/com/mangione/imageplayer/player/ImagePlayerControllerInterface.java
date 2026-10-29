@@ -1,4 +1,4 @@
-package com.mangione.imageplayer;
+package com.mangione.imageplayer.player;
 
 /**
  * User: carminemangione

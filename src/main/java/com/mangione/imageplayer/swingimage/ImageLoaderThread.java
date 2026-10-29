@@ -1,4 +1,4 @@
-package com.mangione.imageplayer;
+package com.mangione.imageplayer.swingimage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

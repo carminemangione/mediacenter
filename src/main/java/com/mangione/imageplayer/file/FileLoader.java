@@ -1,4 +1,4 @@
-package com.mangione.imageplayer;
+package com.mangione.imageplayer.file;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,8 +21,9 @@ public class FileLoader {
 	private final Random random = new Random();
 	private int currentIndex = 0;
 	private int currentNumberOfFiles;
+	private FileWithCompareString currentFile;
 
-	FileLoader(File rootDirectory) throws IOException {
+	public FileLoader(File rootDirectory) throws IOException {
 		File loadedFile = new File(rootDirectory, "loadedDirectories.json");
 		List<String> imageFiles;
 		if (loadedFile.exists()) {
@@ -62,11 +63,13 @@ public class FileLoader {
 	private void processFilesInRootDirectory(File rootDirectory, List<String> imageFiles) {
 		File[] files = rootDirectory.listFiles();
 		if (files != null) {
+			getImageFilesAndAddToList(Arrays.stream(files)
+					.filter(File::isFile)
+					.filter(file -> !imageFiles.contains(file.getAbsolutePath()))
+					.toArray(File[]::new));
 			for (File file : files) {
 				if (file.isDirectory() && !loadedDirectories.contains(file.getPath())) {
 					recurseAndCollectFiles(file);
-				} else if (file.isFile() && !imageFiles.contains(file.getAbsolutePath())) {
-					availableImageFiles.add(new FileWithCompareString(file));
 				}
 			}
 		}
@@ -93,45 +96,51 @@ public class FileLoader {
 		}
 	}
 
-	synchronized FileWithCompareString getNextFile() {
+	public synchronized void getNextFile() {
 		if (currentNumberOfFiles < availableImageFiles.size()) {
 			currentIndex = random.nextInt(availableImageFiles.size());
 			currentNumberOfFiles = availableImageFiles.size();
 		}
 		FileWithCompareString file;
 		if (!availableImageFiles.isEmpty()) {
-			file = availableImageFiles.get(currentIndex++);
+			currentFile = availableImageFiles.get(currentIndex++);
+			file = currentFile;
 			if (currentIndex == availableImageFiles.size()) {
 				currentIndex = 0;
 			}
 		} else {
 			try {
 				synchronized (fileWaiterObject) {
-					//noinspection WaitWhileHoldingTwoLocks
-					fileWaiterObject.wait();
+					while (availableImageFiles.isEmpty()) {
+						//noinspection WaitWhileHoldingTwoLocks
+						fileWaiterObject.wait();
+					}
 				}
-				file = availableImageFiles.get(currentIndex);
+				currentFile = availableImageFiles.get(currentIndex);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
 		}
-		return file;
 	}
 
-	synchronized FileWithCompareString getPreviousFile() {
+	public synchronized void getPreviousFile() {
 		currentIndex = currentIndex > 0 ? currentIndex - 1 : availableImageFiles.size() - 1;
-		return availableImageFiles.get(currentIndex);
+		currentFile = availableImageFiles.get(currentIndex);
 	}
 
-	int getCurrentIndex() {
+	public synchronized FileWithCompareString getCurrentFile() {
+		return currentFile;
+	}
+
+	public int getCurrentIndex() {
 		return currentIndex;
 	}
 
-	int getNumFilesLoaded() {
+	public int getNumFilesLoaded() {
 		return availableImageFiles.size();
 	}
 
-	void random() {
+	public void random() {
 		currentIndex = random.nextInt(availableImageFiles.size());
 	}
 
@@ -139,18 +148,19 @@ public class FileLoader {
 		String directoryPath = currentFile.getPath();
 		if (currentFile.isDirectory()) {
 			System.out.printf("Loading directory %s", currentFile.getAbsolutePath());
-				final File[] files = currentFile.listFiles();
-				if (files != null) {
-					if (!loadedDirectories.contains(directoryPath)) {
-						loadedDirectories.add(directoryPath);
-						getImageFilesAndAddToList(files);
-					}
-					System.out.printf("Loaded directory %s : %d%n", currentFile.getAbsolutePath(), files.length);
-					System.out.println();
-					Arrays.stream(files)
-							.filter(File::isDirectory)
-							.forEach(this::recurseAndCollectFiles);
+			System.out.println();
+			final File[] files = currentFile.listFiles();
+			if (files != null) {
+				if (!loadedDirectories.contains(directoryPath)) {
+					loadedDirectories.add(directoryPath);
+					getImageFilesAndAddToList(files);
 				}
+				System.out.printf("Loaded directory %s : %d%n", currentFile.getAbsolutePath(), files.length);
+				System.out.println();
+				Arrays.stream(files)
+						.filter(File::isDirectory)
+						.forEach(this::recurseAndCollectFiles);
+			}
 
 		}
 	}
@@ -181,7 +191,6 @@ public class FileLoader {
 		FileWithCompareString fileWithCompareString = null;
 		String name = file.getName();
 		boolean imageFile = EXTENSIONS.stream().anyMatch(name::endsWith);
-		//noinspection SpellCheckingInspection
 		if (imageFile && !name.contains("WICThumbs") && !name.contains("DFTTH")) {
 			fileWithCompareString = new FileWithCompareString(file);
 		}

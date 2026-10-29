@@ -1,15 +1,15 @@
-package com.mangione.imageplayer;
+package com.mangione.imageplayer.file;
 
 import java.io.File;
 
-import static com.mangione.imageplayer.FileLoader.EXTENSIONS;
+import static com.mangione.imageplayer.file.FileLoader.EXTENSIONS;
 
 public class FileWithCompareString implements Comparable<FileWithCompareString> {
       private final File file;
       private final String compareString;
       private Long number;
 
-      FileWithCompareString(File file) {
+      public FileWithCompareString(File file) {
           this.file = file;
           this.compareString = getLeadingStringStrippedOfCopyNumber(file.getAbsolutePath().toLowerCase());
       }

@@ -1,5 +1,6 @@
 package com.mangione.imageplayer;
 
+import com.mangione.imageplayer.video.VideoController;
 import javafx.application.Platform;
 
 import javax.swing.*;
@@ -24,11 +25,10 @@ public class Video {
 	}
 
 	public void start() {
-		final VideoPanel videoPanel;
 		try {
-			videoPanel = new VideoPanel(
+			VideoController controller = new VideoController(
 					"/Volumes/Pictures/allpics/20221211/qNaGJRS9EBhJ639TOuIvQZCu1JGsK-Iv_7_V9CQFlVA.gif.mp4");
-			SwingUtilities.invokeLater(() -> jframe.add(videoPanel.getPanel(), BorderLayout.CENTER));
+			SwingUtilities.invokeLater(() -> jframe.add(controller.getPanel(), BorderLayout.CENTER));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

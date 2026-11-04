@@ -15,3 +15,7 @@ out/
 # Scratch
 temp/
 ~/
+
+# Local tool config
+.java-version
+.claude/

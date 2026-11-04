@@ -92,15 +92,6 @@ public class ImageMedia implements PlayableMedia {
     }
 
     @Override
-    public boolean hasAudio() {
-        return false;
-    }
-
-    @Override
-    public void setMuted(boolean muted) {
-    }
-
-    @Override
     public void dispose() {
         rawImage.getImage().flush();
     }

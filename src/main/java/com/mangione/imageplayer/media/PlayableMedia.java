@@ -24,9 +24,15 @@ public interface PlayableMedia {
      */
     Optional<Duration> getNaturalDuration();
 
-    boolean hasAudio();
+    /**
+     * Media is silent unless it says otherwise; the sound toggle is only shown when this is true.
+     */
+    default boolean hasAudio() {
+        return false;
+    }
 
-    void setMuted(boolean muted);
+    default void setMuted(boolean muted) {
+    }
 
     default void dispose() {
     }

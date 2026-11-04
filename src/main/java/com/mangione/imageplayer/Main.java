@@ -29,8 +29,6 @@ public class Main {
                 .register(ImageMedia::animated, "gif")
                 .register(VideoMedia::new, "mp4");
         Playlist playlist = new Playlist(new Random());
-        MediaLibrary library = new MediaLibrary(rootDirectory, new MediaCache(rootDirectory), playlist,
-                mediaTypes::isSupported);
         ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor(runnable -> {
             Thread thread = new Thread(runnable, "MediaWorker");
             thread.setDaemon(true);
@@ -47,7 +45,8 @@ public class Main {
                     .bind(KeyEvent.VK_Y, () -> frame.adjustTransparency(TRANSPARENCY_STEP)));
             frame.show();
             controller.start();
+            new MediaLibrary(rootDirectory, new MediaCache(rootDirectory), playlist, mediaTypes::isSupported)
+                    .loadInBackground(container::libraryLoaded);
         });
-        library.loadInBackground();
     }
 }

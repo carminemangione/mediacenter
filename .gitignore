@@ -4,3 +4,14 @@ imageplayer.iml
 imageplayer.iws
 .idea
 *.class
+# Build output
+target/
+out/
+
+# IDE / OS
+.idea/
+.DS_Store
+
+# Scratch
+temp/
+~/
